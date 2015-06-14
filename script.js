@@ -14,7 +14,8 @@ Bishop Thomas Grant Catholic Secondary School,0.72\n\
 La Retraite Roman Catholic Girls' School,0.8"
 
 var drawBar = function(records) {
-    filteredData = _.filter(records, function(school) {
+    console.log(records);
+    filteredData = _.filter(records.data, function(school) {
         return school['PTAC5EM_PTQ_parsed'] < 0.6;
     });
     
