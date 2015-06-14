@@ -13,22 +13,22 @@ St Martin in the Fields High School for Girls,0.68\n\
 Bishop Thomas Grant Catholic Secondary School,0.72\n\
 La Retraite Roman Catholic Girls' School,0.8"
 
-Papa.parse('http://cghall.github.io/eduvis/Lambeth_GCSE_score.csv', {download: true, header: true});
+var drawBar = function(records) {
+    filteredData = _.filter(records, function(school) {
+        return school['PTAC5EM_PTQ_parsed'] < 0.6;
+    });
+    
+    var data = {
+        labels: _.pluck(filteredData, 'SCHNAME'),
+        datasets: [
+            {
+                data: _.pluck(filteredData, 'PTAC5EM_PTQ_parsed')
+            }
+        ]
+    };
 
-var csv = Papa.parse(csvString, {header: true});
-
-filteredData = _.filter(csv.data, function(school) {
-    return school['PTAC5EM_PTQ_parsed'] < 0.6;
-});
-
-var data = {
-    labels: _.pluck(filteredData, 'SCHNAME'),
-    datasets: [
-        {
-            data: _.pluck(filteredData, 'PTAC5EM_PTQ_parsed')
-        }
-    ]
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myBarChart = new Chart(ctx).Bar(data, {});
 };
 
-var ctx = document.getElementById("myChart").getContext("2d");
-var myBarChart = new Chart(ctx).Bar(data, {});
+Papa.parse('http://cghall.github.io/eduvis/Lambeth_GCSE_score.csv', {download: true, header: true}, drawBar);
