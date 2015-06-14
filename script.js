@@ -24,5 +24,5 @@ var drawBar = function(records) {
     var myBarChart = new Chart(ctx).Bar(data, {});
 };
 
-Papa.parse('http://cghall.github.io/eduvis/School_data.csv',
+Papa.parse('School_data.csv',
            {download: true, header: true, complete: drawBar, skipEmptyLines: true});
