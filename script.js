@@ -7,13 +7,15 @@ var drawBar = function(records) {
         return school['LEA'] == 208;
     });
     
+    sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ_parsed');    
+
     console.log('plucking data...');
 
     var data = {
-        labels: _.pluck(filteredData, 'SCHNAME'),
+        labels: _.pluck(sortedData, 'SCHNAME'),
         datasets: [
             {
-                data: _.pluck(filteredData, 'PTAC5EM_PTQ_parsed')
+                data: _.pluck(sortedData, 'PTAC5EM_PTQ_parsed')
             }
         ]
     };
