@@ -31,4 +31,4 @@ var drawBar = function(records) {
     var myBarChart = new Chart(ctx).Bar(data, {});
 };
 
-Papa.parse('http://cghall.github.io/eduvis/Lambeth_GCSE_score.csv', {download: true, header: true}, drawBar);
+Papa.parse('http://cghall.github.io/eduvis/Lambeth_GCSE_score.csv', {download: true, header: true, complete: drawBar});
