@@ -1,9 +1,9 @@
 var drawBar = function(records, label_col, value_col) {
     var data = {
-        labels: _.pluck(filteredRecords, label_col),
+        labels: _.pluck(records, label_col),
         datasets: [
             {
-                data: _.pluck(filteredRecords, value_col)
+                data: _.pluck(records, value_col)
             }
         ]
     };
@@ -16,7 +16,7 @@ var example_label_col = 'SCHNAME';
 var example_value_col = 'PTAC5EM_PTQ_parsed';
 var example_filter = function(school) {
     return school['LEA'] == 208 && school['PTAC5EM_PTQ_parsed'] < 0.6;
-});
+};
 
 papaConfig = {
     download: true,
