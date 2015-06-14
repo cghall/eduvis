@@ -1,7 +1,7 @@
 var drawBar = function(records) {
     console.log(records);
 
-    console.log('filterting records...);    
+    console.log('filterting records...');    
 
     filteredData = _.filter(records.data, function(school) {
         return school['LEA'] == 208;
