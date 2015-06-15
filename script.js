@@ -1,7 +1,8 @@
 var LEA = "Southwark (210)"
 
 function getLEA(sel) {
-    var LEA = sel.value;  
+    var LEA = sel.value;
+    console.log(LEA)
 }
 
 console.log(LEA)
