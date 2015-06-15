@@ -7,7 +7,7 @@ var drawBar = function(records) {
         return school['LEA'] == 208;
     });
     
-    sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ_parsed');    
+    sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');    
 
     console.log('plucking data...');
 
@@ -15,7 +15,7 @@ var drawBar = function(records) {
         labels: _.pluck(sortedData, 'SCHNAME'),
         datasets: [
             {
-                data: _.pluck(sortedData, 'PTAC5EM_PTQ_parsed')
+                data: _.pluck(sortedData, 'PTAC5EM_PTQ')
             }
         ]
     };
