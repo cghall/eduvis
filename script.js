@@ -2,13 +2,15 @@ function getLEA(sel) {
     var LEA = sel.value;  
 }
 
+console.log(LEA)
+
 var drawBar = function(records) {
     console.log(records);
 
     console.log('filterting records...');    
 
     filteredData = _.filter(records.data, function(school) {
-        return school['LEA'] === LEA;
+        return school['LEA'] === 'Southwark (210)';
     });
     
     sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');
