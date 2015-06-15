@@ -1,4 +1,4 @@
-var LEA
+var LEA = "Southwark (210)"
 
 function getLEA(sel) {
     var LEA = sel.value;  
