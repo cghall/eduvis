@@ -1,3 +1,5 @@
+LEA = ()
+
 function getLEA(sel) {
     var LEA = sel.value;  
 }
