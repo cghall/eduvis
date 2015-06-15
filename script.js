@@ -13,7 +13,7 @@ var drawBar = function(records) {
     console.log('filterting records...');    
 
     filteredData = _.filter(records.data, function(school) {
-        return school['LEA'] === 'Southwark (210)';
+        return school['LEA'] === LEA;
     });
     
     sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');
