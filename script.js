@@ -4,7 +4,7 @@ var drawBar = function(records) {
     console.log('filterting records...');    
 
     filteredData = _.filter(records.data, function(school) {
-        return school['LEA'] == 208;
+        return school['LEA'] == 'Lambeth (208)';
     });
     
     sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');    
