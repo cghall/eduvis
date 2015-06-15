@@ -7,7 +7,7 @@ var drawBar = function(records) {
         return school['LEA'] === 'Lambeth (208)';
     });
     
-    sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');    
+    sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');
 
     console.log('plucking data...');
 
