@@ -2,11 +2,23 @@ var LEA = "Southwark (210)"
 
 function getLEA(sel) {
     var LEA = sel.value;
-    console.log(LEA)
-    myBarChart.update()
+    console.log(LEA);
+    filteredData = _.filter(records.data, function(school) {
+        return school['LEA'] === LEA
+});
+    sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');
+    var data = {
+        labels: _.pluck(sortedData, 'SCHNAME'),
+        datasets: [
+            {
+                data: _.pluck(sortedData, 'PTAC5EM_PTQ')
+            }
+        ]
+    };
+    myBarChart.update();
 }
 
-console.log(LEA)
+
 
 var drawBar = function(records) {
     console.log(records);
