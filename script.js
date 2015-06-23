@@ -1,6 +1,6 @@
 var drawBar = function(records, label_col, value_col){
     var data = {
-        labels: _pluck(filteredRecords, label_col),
+        labels: _.pluck(filteredRecords, label_col),
         datasets: [
             {
                 data: _.pluck(filteredRecords, value_col)
