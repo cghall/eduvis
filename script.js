@@ -1,40 +1,37 @@
-var LEA = "Southwark (210)"
+var drawBar = function(records, label_col, value_col){
+    var data = {
+        labels: _pluck(filteredRecords, label_col),
+        datasets: [
+            {
+                data: _.pluck(filteredRecords, value_col)
+            }
+        ]
+    };
+    var ctx = document.getElementById("myChart").getContext("2d");
+    new Chart(ctx).Bar(data, {});
+};
+
+var label_col = 'SCHNAME';
+var value_col = 'PTAC5EM_PTQ';
+var LEA = 'Southwark (210)';
+var filter = function(school) {
+    return school['LEA'] == LEA;
+};
 
 function getLEA(sel) {
     var LEA = sel.value;
     console.log(LEA)
-    myBarChart.update()
+    drawBar(schools, label_col, value_col);
 }
 
-console.log(LEA)
-
-var drawBar = function(records) {
-    console.log(records);
-
-    console.log('filterting records...');    
-
-    filteredData = _.filter(records.data, function(school) {
-        return school['LEA'] === LEA;
-    });
-    
-    sortedData = _.sortBy(filteredData, 'PTAC5EM_PTQ');
-
-    console.log('plucking data...');
-
-    var data = {
-        labels: _.pluck(sortedData, 'SCHNAME'),
-        datasets: [
-            {
-                data: _.pluck(sortedData, 'PTAC5EM_PTQ')
-            }
-        ]
-    };
-
-    console.log('drawing chart...');
-
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myBarChart = new Chart(ctx).Bar(data, {});
+papaConfig = {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(result) {
+        var schools = _.filter(result.data, filter);
+        drawBar(schools, label_col, value_col);
+    }
 };
 
-Papa.parse('http://cghall.github.io/eduvis/School_data.csv',
-           {download: true, header: true, complete: drawBar, skipEmptyLines: true});
+Papa.parse('School_data.csv', papaConfig);
