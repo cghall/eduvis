@@ -7,6 +7,20 @@ var selectedLEA = function() {
     return document.getElementById('LEA').value;
 }
 
+var updateLeaOptions = function() {
+    var select = document.getElementById('LEA'); 
+    var options = _.uniq(_.pluck(allSchools, 'LEA')); 
+    options.sort();
+
+    for (var i = 0; i < options.length; i++) {
+        var opt = options[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);
+    }
+}
+
 var updateBar = function() {
     selectedSchools = _.where(allSchools, { LEA: selectedLEA() });
     drawBar(selectedSchools, labelCol, valueCol);
@@ -39,6 +53,7 @@ papaConfig = {
     skipEmptyLines: true,
     complete: function(result) {
         allSchools = result.data;
+        updateLeaOptions();
         updateBar();
     }
 };
