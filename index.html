@@ -3,14 +3,25 @@
     <head>
         <meta charset="utf-8">
         <title>Eduvis</title>
+
+        <link rel="stylesheet" href="style.css">
+
     	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
     	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.1/papaparse.js"></script>
     	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     </head>
     <body>
-    	<canvas id="myChart" width="800" height="600"></canvas>
+        <div id="loading">
+            <object id='loading-svg' type="image/svg+xml" data="cube.svg">Your browser does not support SVG</object>
+            <br>
+            Loading schools data...
+        </div>
 
-        <select id="LEA"></select>
+        <div id="main-content">
+        	<canvas id="myChart" width="800" height="600"></canvas>
+
+            <select id="LEA"></select>
+        </div>
 
     	<script src="script.js"></script>
     </body>

@@ -3,6 +3,13 @@ var labelCol = 'SCHNAME';
 var valueCol = 'PTAC5EM_PTQ';
 var barChart;
 
+var finishLoading = function() {
+    var loading = document.getElementById('loading');
+    loading.parentNode.removeChild(loading);
+    var mainContent = document.getElementById('main-content');
+    mainContent.style.visibility= 'visible';
+}
+
 var selectedLEA = function() {
     return document.getElementById('LEA').value;
 }
@@ -55,6 +62,7 @@ papaConfig = {
         allSchools = result.data;
         updateLeaOptions();
         updateBar();
+        finishLoading();
     }
 };
 
