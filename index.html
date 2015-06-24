@@ -3,18 +3,15 @@
     <head>
         <meta charset="utf-8">
         <title>Eduvis</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.1/papaparse.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.1/papaparse.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     </head>
     <body>
-	<canvas id="myChart" width="800" height="600"></canvas>
-	<script src="script.js"></script>
+    	<canvas id="myChart" width="800" height="600"></canvas>
+
+        <select id="LEA"></select>
+
+    	<script src="script.js"></script>
     </body>
-    <select id="LEA" onchange="getLEA(this)">
-        <option value="Lambeth (208)">Lambeth (208)</option>
-        <option value="Lewisham (209)">Lewisham (209)</option>
-        <option value="Southwark (210)">Southwark (210)</option>
-        <option value="Birmingham (330)">Birmingham (330)</option>
-    </select>
 </html>

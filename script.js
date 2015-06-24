@@ -1,36 +1,60 @@
-var drawBar = function(records, label_col, value_col){
+var allSchools = [];
+var labelCol = 'SCHNAME';
+var valueCol = 'PTAC5EM_PTQ';
+var barChart;
+
+var selectedLEA = function() {
+    return document.getElementById('LEA').value;
+}
+
+var updateLeaOptions = function() {
+    var select = document.getElementById('LEA'); 
+    var options = _.uniq(_.pluck(allSchools, 'LEA')); 
+    options.sort();
+
+    for (var i = 0; i < options.length; i++) {
+        var opt = options[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);
+    }
+}
+
+var updateBar = function() {
+    selectedSchools = _.where(allSchools, { LEA: selectedLEA() });
+    drawBar(selectedSchools, labelCol, valueCol);
+}
+
+document.getElementById('LEA').onchange = updateBar;
+
+
+var drawBar = function(records, labelCol, valueCol) {
     var data = {
-        labels: _.pluck(filteredRecords, label_col),
+        labels: _.pluck(records, labelCol),
         datasets: [
             {
-                data: _.pluck(filteredRecords, value_col)
+                data: _.pluck(records, valueCol)
             }
         ]
     };
     var ctx = document.getElementById("myChart").getContext("2d");
-    new Chart(ctx).Bar(data, {});
+
+    if (barChart) {
+        barChart.destroy();
+    }
+    barChart = new Chart(ctx).Bar(data, {});
 };
 
-var label_col = 'SCHNAME';
-var value_col = 'PTAC5EM_PTQ';
-var LEA = 'Southwark (210)';
-var filter = function(school) {
-    return school['LEA'] == LEA;
-};
-
-function getLEA(sel) {
-    var LEA = sel.value;
-    console.log(LEA)
-    drawBar(schools, label_col, value_col);
-}
 
 papaConfig = {
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function(result) {
-        var schools = _.filter(result.data, filter);
-        drawBar(schools, label_col, value_col);
+        allSchools = result.data;
+        updateLeaOptions();
+        updateBar();
     }
 };
 
