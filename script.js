@@ -30,6 +30,7 @@ var updateLeaOptions = function() {
 
 var updateBar = function() {
     selectedSchools = _.where(allSchools, { LEA: selectedLEA() });
+    selectedSchools = _.sortBy(selectedSchools, valueCol);
     drawBar(selectedSchools, labelCol, valueCol);
 }
 
