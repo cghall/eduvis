@@ -51,7 +51,12 @@ var drawBar = function(records, labelCol, valueCol) {
     if (barChart) {
         barChart.destroy();
     }
-    barChart = new Chart(ctx).Bar(data, {});
+    barChart = new Chart(ctx).Bar(data, {
+        scaleOverride: true,
+        scaleSteps: 10,
+        scaleStepWidth: 0.1,
+        scaleStartValue: 0,
+    });
 };
 
 
