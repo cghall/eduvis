@@ -66,7 +66,7 @@ var viewModel = function() {
 
     self.selectedSchoolsSeriesWithColour = ko.computed(function() {
         var data = self.selectedSchoolsSeries().slice(0);
-        if (self.focusedSchoolIndex() >= 0) {
+        if (self.focusedSchoolIndex() >= 0 && data[self.focusedSchoolIndex()]) {
             data[self.focusedSchoolIndex()] = { y: data[self.focusedSchoolIndex()], color: 'orange' };
         }
         return data;
