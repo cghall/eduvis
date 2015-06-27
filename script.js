@@ -44,6 +44,7 @@ var drawBar = function(records, labelCol, valueCol) {
         datasets: [
             {
                 data: _.pluck(records, valueCol)
+                fillColor: "rgba(34,83,120,1)"
             }
         ]
     };
