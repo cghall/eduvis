@@ -1,7 +1,7 @@
 var average = function(numbers) {
     var sum = 0;
     for (var i = 0; i < numbers.length; i++) {
-         sum += numbers[i];
+         sum += numbers[i] || 0;
     }
     return sum / numbers.length;
 }
@@ -18,15 +18,6 @@ var viewModel = function() {
 
     self.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',
                                               'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ']);
-
-    self.setAllData = function(data) {
-        data.forEach(function(record) {
-            self.measureOptions().forEach(function(measure) {
-                record[measure] = parseFloat(record[measure]) || 0;
-            });
-        });
-        self.allData(data);
-    };
 
     self.leaOptions = ko.computed(function() {
         var leaOptions = _.uniq(_.pluck(self.allData(), 'LEA'));
@@ -56,9 +47,14 @@ var viewModel = function() {
         return _.pluck(self.selectedSchools(), 'SCHNAME');
     });
 
+    self.selectedSchoolsNamesAlphabetical = ko.computed(function() {
+        var names = self.selectedSchoolsNames().slice(0);
+        names.sort();
+        return names;
+    });
+
     self.selectedSchoolsSeries = ko.computed(function() {
         var series = _.pluck(self.selectedSchools(), self.selectedMeasure());
-        series.sort();
         return series;
     });
 
@@ -98,7 +94,10 @@ var viewModel = function() {
             series: [{
                 showInLegend: false,
                 name: self.selectedMeasure(),
-                data: self.selectedSchoolsSeriesWithColour()
+                data: self.selectedSchoolsSeriesWithColour(),
+                animation: {
+                    duration: 300
+                }
             }]
         });
         self.columnChart(chart);
@@ -171,11 +170,12 @@ ko.applyBindings(viewModel);
 
 papaConfig = {
     download: true,
+    dynamicTyping: true,
     header: true,
     skipEmptyLines: true,
     complete: function(result) {
         viewModel.schoolDataLoaded(true);
-        viewModel.setAllData(result.data);
+        viewModel.allData(result.data);
     }
 };
 
