@@ -1,7 +1,7 @@
 var allSchools = [];
 var labelCol = 'SCHNAME';
 var valueOptions = ['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ', 'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ'];
-var barChart;
+
 
 var finishLoading = function() {
     var loading = document.getElementById('loading');
@@ -49,34 +49,39 @@ var updateValueOptions = function() {
 var updateBar = function() {
     selectedSchools = _.where(allSchools, { LEA: selectedLEA() });
     selectedSchools = _.sortBy(selectedSchools, selectedValue());
-    //selectedSchools = _.filter(selectedSchools, _.isNaN(valueCol))
     drawBar(selectedSchools, labelCol, selectedValue());
 }
 
 document.getElementById('LEA').onchange = updateBar;
 document.getElementById('Measure').onchange = updateBar;
 
-
 var drawBar = function(records, labelCol, selectedValue) {
-    var data = {
-        labels: _.pluck(records, labelCol),
-        datasets: [
-            {
-                data: _.pluck(records, selectedValue),
-                fillColor: "rgba(34,83,120,1)",
-            }
-        ]
-    };
-    var ctx = document.getElementById("myChart").getContext("2d");
+    var dataStrings = _.pluck(records, selectedValue);
+    var dataInts = dataStrings.map(function(item) {
+        return parseFloat(item) || 0;
+    });
 
-    if (barChart) {
-        barChart.destroy();
-    }
-    barChart = new Chart(ctx).Bar(data, {
-        scaleOverride: true,
-        scaleSteps: 10,
-        scaleStepWidth: 0.1,
-        scaleStartValue: 0,
+    var chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'myChart',
+            type: 'bar'
+        },
+        title: {
+            text: 'Result heading'
+        },
+        xAxis: {
+            categories: _.pluck(records, labelCol)
+        },
+        yAxis: {
+            title: {
+                text: selectedValue
+            }
+        },
+        series: [{
+            showInLegend: false,
+            name: selectedValue,
+            data: dataInts
+        }]
     });
 };
 

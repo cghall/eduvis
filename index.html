@@ -17,16 +17,35 @@
             Loading schools data...
         </div>
 
-        <div id="main-content">
-        	<canvas id="myChart" width="800" height="600"></canvas>
+        <div id="main-content" class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div id="myChart" style="width:100%; height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
 
-            <select id="LEA"></select>
-            <select id="Measure"></select>
+                <div class="col-md-4">
+                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Selection</h3>
+                        </div>
+                        <div class="panel-body">
+                            <label control-label>LEA<select id="LEA" class="form-control"></select></label>
+                            <label control-label>Measure<select id="Measure" class="form-control"></select></label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+        <script src="http://code.highcharts.com/highcharts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.1/papaparse.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
