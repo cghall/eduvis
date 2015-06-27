@@ -88,6 +88,7 @@ papaConfig = {
     complete: function(result) {
         allSchools = result.data;
         updateLeaOptions();
+        updateValueOptions();
         updateBar();
         finishLoading();
     }
