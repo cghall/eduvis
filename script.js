@@ -48,9 +48,9 @@ var updateValueOptions = function() {
 
 var updateBar = function() {
     selectedSchools = _.where(allSchools, { LEA: selectedLEA() });
-    selectedSchools = _.sortBy(selectedSchools, selectedValue);
+    selectedSchools = _.sortBy(selectedSchools, selectedValue());
     //selectedSchools = _.filter(selectedSchools, _.isNaN(valueCol))
-    drawBar(selectedSchools, labelCol, selectedValue);
+    drawBar(selectedSchools, labelCol, selectedValue());
 }
 
 document.getElementById('LEA').onchange = updateBar;
