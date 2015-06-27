@@ -143,7 +143,8 @@ var drawBar = function(records, labelCol) {
     chart = new Highcharts.Chart({
         chart: {
             renderTo: 'myChart',
-            type: 'bar'
+            type: 'bar',
+            marginLeft: 300
         },
         title: {
             text: 'Result heading'
@@ -160,7 +161,7 @@ var drawBar = function(records, labelCol) {
         },
         series: [{
             showInLegend: false,
-            name: selectedValue,
+            name: selectedValue(),
             data: dataInts
         }]
     });
