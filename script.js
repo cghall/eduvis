@@ -57,12 +57,12 @@ document.getElementById('LEA').onchange = updateBar;
 document.getElementById('Measure').onchange = updateBar;
 
 
-var drawBar = function(records, labelCol, valueCol) {
+var drawBar = function(records, labelCol, selectedValue) {
     var data = {
         labels: _.pluck(records, labelCol),
         datasets: [
             {
-                data: _.pluck(records, valueCol),
+                data: _.pluck(records, selectedValue),
                 fillColor: "rgba(34,83,120,1)",
             }
         ]
