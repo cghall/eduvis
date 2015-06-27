@@ -153,7 +153,7 @@ var drawBar = function(records, labelCol) {
         },
         yAxis: {
             title: {
-                text: selectedValue
+                text: selectedValue()
             },
             plotLines: averagePlotLines(selectedValue),
             max: 1
