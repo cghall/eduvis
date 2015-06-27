@@ -113,8 +113,10 @@ var viewModel = function() {
             value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount()*0.9)],
             zIndex: 5,
             label: {
-                verticalAlign: 'top',
-                text: 'top 10%'
+                text: 'top 10%',
+                align: 'right',
+                verticalAlign: 'bottom',
+                y: -5
             }
         };
     });
@@ -127,10 +129,8 @@ var viewModel = function() {
             value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount()*0.1)],
             zIndex: 5,
             label: {
-                align: 'right',
-                verticalAlign: 'bottom',
                 text: 'bottom 10%',
-                y: -5
+                verticalAlign: 'top',
             }
         };
     });
