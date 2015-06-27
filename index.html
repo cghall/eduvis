@@ -11,13 +11,13 @@
 
     </head>
     <body>
-        <div id="loading">
+        <div id="loading" data-bind="visible: !schoolDataLoaded()">
             <object id='loading-svg' type="image/svg+xml" data="cube.svg">Your browser does not support SVG</object>
             <br>
             Loading schools data...
         </div>
 
-        <div id="main-content" class="container-fluid">
+        <div id="main-content" class="container-fluid" data-bind="visible: schoolDataLoaded">
             <div class="row">
                 <div class="col-md-8">
                     <div class="panel panel-default">
@@ -36,11 +36,11 @@
                         <div class="panel-body">
                             <label control-label>
                                 LEA
-                                <select id="LEA" class="form-control"></select>
+                                <select id="LEA" class="form-control" data-bind="options: leaOptions, value: selectedLea"></select>
                             </label><br>
                             <label control-label>
                                 Measure
-                                <select id="Measure" class="form-control"></select>
+                                <select id="Measure" class="form-control" data-bind="options: measureOptions, value: selectedMeasure"></select>
                             </label>
                         </div>
 
@@ -50,15 +50,15 @@
                         <div class="panel-body">
                             <div class="checkbox">
                                 <label>
-                                    <input id="nat-avg" type="checkbox" value="">
+                                    <input id="nat-avg" type="checkbox" value="" data-bind="checked: showNationalAverage">
                                     National
                                 </label><br>
                                 <label>
-                                    <input id="top-avg" type="checkbox" value="">
+                                    <input id="top-avg" type="checkbox" value="" data-bind="checked: showTop10Percent">
                                     Top 10%
                                 </label><br>
                                 <label>
-                                    <input id="bot-avg" type="checkbox" value="">
+                                    <input id="bot-avg" type="checkbox" value="" data-bind="checked: showBottom10Percent">
                                     Bottom 10%
                                 </label>
                             </div>
@@ -74,6 +74,7 @@
         <script src="http://code.highcharts.com/highcharts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.1/papaparse.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
 
     	<script src="script.js"></script>
     </body>
