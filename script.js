@@ -9,6 +9,7 @@ var average = function(numbers) {
 var viewModel = function() {
     var self = this;
 
+    self.columnChart = ko.observable();
     self.schoolDataLoaded = ko.observable(false);
     self.allData = ko.observable({});
     self.schoolCount = ko.computed(function() {
@@ -18,29 +19,30 @@ var viewModel = function() {
     self.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',
                                               'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ']);
 
+    self.setAllData = function(data) {
+        data.forEach(function(record) {
+            self.measureOptions().forEach(function(measure) {
+                  record[measure] = parseFloat(record[measure]) || 0;
+            });
+        });
+        self.allData(data);
+    };
+
     self.leaOptions = ko.computed(function() {
         var leaOptions = _.uniq(_.pluck(self.allData(), 'LEA'));
         leaOptions.sort();
         return leaOptions;
     });
 
-    self.columnChart = ko.observable();
-
     self.selectedMeasure = ko.observable();
-
     self.selectedLea = ko.observable();
 
     self.showNationalAverage = ko.observable(false);
-
     self.showTop10Percent = ko.observable(false);
-
     self.showBottom10Percent = ko.observable(false);
 
     self.allDataSelectedMeasure = ko.computed(function() {
-        var dataStrings = _.pluck(self.allData(), self.selectedMeasure());
-        var series = dataStrings.map(function(item) {
-            return parseFloat(item) || 0;
-        });
+        var series = _.pluck(self.allData(), self.selectedMeasure());
         series.sort();
         return series;
     });
@@ -55,10 +57,7 @@ var viewModel = function() {
     });
 
     self.selectedSchoolsSeries = ko.computed(function() {
-        var dataStrings = _.pluck(self.selectedSchools(), self.selectedMeasure());
-        var series = dataStrings.map(function(item) {
-            return parseFloat(item) || 0;
-        });
+        var series = _.pluck(self.selectedSchools(), self.selectedMeasure());
         series.sort();
         return series;
     });
@@ -71,7 +70,7 @@ var viewModel = function() {
                 marginLeft: 300
             },
             title: {
-                text: 'Result heading'
+                text: self.selectedMeasure() + ' for LEA ' + self.selectedLea()
             },
             xAxis: {
                 categories: self.selectedSchoolsNames()
@@ -162,7 +161,7 @@ papaConfig = {
     skipEmptyLines: true,
     complete: function(result) {
         viewModel.schoolDataLoaded(true);
-        viewModel.allData(result.data);
+        viewModel.setAllData(result.data);
     }
 };
 
