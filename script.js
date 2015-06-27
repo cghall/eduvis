@@ -22,7 +22,7 @@ var viewModel = function() {
     self.setAllData = function(data) {
         data.forEach(function(record) {
             self.measureOptions().forEach(function(measure) {
-                  record[measure] = parseFloat(record[measure]) || 0;
+                record[measure] = parseFloat(record[measure]) || 0;
             });
         });
         self.allData(data);
@@ -62,6 +62,20 @@ var viewModel = function() {
         return series;
     });
 
+    self.focusedSchool = ko.observable();
+
+    self.focusedSchoolIndex = ko.computed(function() {
+        return self.selectedSchoolsNames().indexOf(self.focusedSchool());
+    });
+
+    self.selectedSchoolsSeriesWithColour = ko.computed(function() {
+        var data = self.selectedSchoolsSeries().slice(0);
+        if (self.focusedSchoolIndex() >= 0) {
+            data[self.focusedSchoolIndex()] = { y: data[self.focusedSchoolIndex()], color: 'orange' };
+        }
+        return data;
+    });
+
     self.updateBar = ko.computed( function() {
         var chart = new Highcharts.Chart({
             chart: {
@@ -84,7 +98,7 @@ var viewModel = function() {
             series: [{
                 showInLegend: false,
                 name: self.selectedMeasure(),
-                data: self.selectedSchoolsSeries()
+                data: self.selectedSchoolsSeriesWithColour()
             }]
         });
         self.columnChart(chart);
