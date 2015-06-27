@@ -95,7 +95,7 @@ var averagePlotLines = function() {
             id: 'top',
             color: '#0000FF',
             width: 2,
-            value: average(_.last(dataAscending, dataAscending.length/10)),
+            value: dataAscending[dataAscending.length - Math.floor(dataAscending.length/10)],
             zIndex: 5,
             label: {
                 verticalAlign: 'top',
@@ -108,7 +108,7 @@ var averagePlotLines = function() {
             id: 'bot',
             color: '#00FF00',
             width: 2,
-            value: average(_.first(dataAscending, dataAscending.length/10)),
+            value: dataAscending[Math.floor(dataAscending.length/10)],
             zIndex: 5,
             label: {
                 align: 'right',
