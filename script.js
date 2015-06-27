@@ -1,6 +1,6 @@
 var allSchools = [];
 var labelCol = 'SCHNAME';
-var valueCol = 'PTAC5EM_PTQ';
+var valueOptions = ['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ', 'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ'];
 var barChart;
 
 var finishLoading = function() {
@@ -28,14 +28,33 @@ var updateLeaOptions = function() {
     }
 }
 
+var selectedValue = function() {
+    return document.getElementById('Measure').value;
+}
+
+var updateValueOptions = function() {
+    var select = document.getElementById('Measure'); 
+    var options = valueOptions; 
+    options.sort();
+
+    for (var i = 0; i < options.length; i++) {
+        var opt = options[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);
+    }
+}
+
 var updateBar = function() {
     selectedSchools = _.where(allSchools, { LEA: selectedLEA() });
-    selectedSchools = _.sortBy(selectedSchools, valueCol);
+    selectedSchools = _.sortBy(selectedSchools, selectedValue);
     //selectedSchools = _.filter(selectedSchools, _.isNaN(valueCol))
-    drawBar(selectedSchools, labelCol, valueCol);
+    drawBar(selectedSchools, labelCol, selectedValue);
 }
 
 document.getElementById('LEA').onchange = updateBar;
+document.getElementById('Measure').onchange = updateBar;
 
 
 var drawBar = function(records, labelCol, valueCol) {
@@ -43,8 +62,8 @@ var drawBar = function(records, labelCol, valueCol) {
         labels: _.pluck(records, labelCol),
         datasets: [
             {
-                data: _.pluck(records, valueCol)
-                fillColor: "rgba(34,83,120,1)"
+                data: _.pluck(records, valueCol),
+                fillColor: "rgba(34,83,120,1)",
             }
         ]
     };
