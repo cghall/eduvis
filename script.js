@@ -31,7 +31,7 @@ var viewModel = function() {
 
     self.selectedMeasureDescription = ko.computed(function() {
         var measure = _.findWhere(self.metaData(), { 'Metafile heading': self.selectedMeasure() });
-        return measure ? measure['Metafile description'] : '';
+        return measure ? measure['Metafile description'] : '...';
     });
 
     self.showNationalAverage = ko.observable(false);

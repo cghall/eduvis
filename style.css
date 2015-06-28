@@ -1,7 +1,3 @@
-body {
-    margin-top: 20px;
-}
-
 #loading {
 	text-align: center;
 	font-family: 'Arial Black', Gadget, sans-serif;
@@ -11,3 +7,20 @@ body {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+div.overlay {
+  background: #FFF; 
+  width:      100%;
+  height:     100%; 
+  z-index:    10;
+  top:        0; 
+  left:       0; 
+  position:   fixed; 
+}
+
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:6px !important; 
+    padding-bottom:0 !important;
+    height: 32px;
+}
+.navbar {min-height:32px !important;}
