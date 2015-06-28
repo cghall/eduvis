@@ -12,6 +12,7 @@ var viewModel = function() {
     self.columnChart = ko.observable();
     self.schoolDataLoaded = ko.observable(false);
     self.allData = ko.observable({});
+    self.metaData = ko.observable({});
     self.schoolCount = ko.computed(function() {
         return self.allData().length;
     });
@@ -27,6 +28,11 @@ var viewModel = function() {
 
     self.selectedMeasure = ko.observable();
     self.selectedLea = ko.observable();
+
+    self.selectedMeasureDescription = ko.computed(function() {
+        var measure = _.findWhere(self.metaData(), { 'Metafile heading': self.selectedMeasure() });
+        return measure ? measure['Metafile description'] : '';
+    });
 
     self.showNationalAverage = ko.observable(false);
     self.showTop10Percent = ko.observable(false);
@@ -106,7 +112,7 @@ var viewModel = function() {
     self.nationalAverageLine = ko.computed(function() {
         return self.showNationalAverage() && {
             id: 'nat',
-            color: '#FF0000',
+            color: 'rgb(255, 204, 0)',
             width: 2,
             value: average(self.allDataSelectedMeasure()),
             zIndex: 5,
@@ -121,7 +127,7 @@ var viewModel = function() {
     self.top10Line = ko.computed(function() {
         return self.showTop10Percent() && {
             id: 'top',
-            color: '#0000FF',
+            color: 'rgb(51, 204, 51)',
             width: 2,
             value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount()*0.9)],
             zIndex: 5,
@@ -137,7 +143,7 @@ var viewModel = function() {
     self.bottom10Line = ko.computed(function() {
         return self.showBottom10Percent() && {
             id: 'bot',
-            color: '#00FF00',
+            color: 'rgb(255, 51, 0)',
             width: 2,
             value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount()*0.1)],
             zIndex: 5,
@@ -172,11 +178,22 @@ papaConfig = {
     download: true,
     dynamicTyping: true,
     header: true,
-    skipEmptyLines: true,
-    complete: function(result) {
-        viewModel.schoolDataLoaded(true);
-        viewModel.allData(result.data);
-    }
+    skipEmptyLines: true
 };
 
-Papa.parse('School_data.csv', papaConfig);
+var metaComplete = function(result) {
+    viewModel.metaData(result.data);
+}
+
+var dataComplete = function(result) {
+    viewModel.schoolDataLoaded(true);
+    viewModel.allData(result.data);
+}
+
+var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
+
+var dataPapaConfig = _.extend({ complete: dataComplete }, papaConfig);
+
+Papa.parse('ks4_meta.csv', metaPapaConfig);
+
+Papa.parse('School_data.csv', dataPapaConfig);
