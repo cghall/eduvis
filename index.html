@@ -35,7 +35,7 @@
         </nav>
 
         <!-- LOADING SCREEN -->
-        <aside class="loading-screen" style="position:fixed; top:0; right:0; bottom:0; left:0; z-index:9999" data-bind="visible: !schoolDataLoaded()">
+        <div class="loading-screen" data-bind="visible: !schoolDataLoaded()">
             <div class="col-xs-8 col-xs-offset-2" style="position:absolute; top:50%; margin-top:-7em">
                 <div class="page-header">
                     <hgroup style="text-align:center">
@@ -52,7 +52,7 @@
                     <i class="glyphicon glyphicon-pencil"></i><a href="#">BLOG</a>
                 </p>
             </div>
-        </aside>
+        </div>
 
         <!-- MAIN CONTENT -->
         <div id="main-content" class="container-fluid" data-bind="visible: schoolDataLoaded">
