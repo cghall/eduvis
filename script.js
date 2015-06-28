@@ -216,7 +216,6 @@ var viewModel = new viewModel();
 ko.applyBindings(viewModel);
 
 papaConfig = {
-    // download: true,
     dynamicTyping: true,
     header: true,
     skipEmptyLines: true
