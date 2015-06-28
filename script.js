@@ -1,3 +1,17 @@
+var queryStringOptions = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p = a[i].split('=', 2);
+        if (p.length == 1)
+            b[p[0]] = "";
+        else
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+})(window.location.search.substr(1).split('&'));
+
 var average = function(numbers) {
     var sum = 0;
     for (var i = 0; i < numbers.length; i++) {
@@ -168,6 +182,33 @@ var viewModel = function() {
         });
     });
 
+    self.currentOptionsQueryStringURL = ko.computed(function() {
+        baseUrl = [location.protocol, '//', location.host, location.pathname, '?'].join('');
+        options = {
+            measure: self.selectedMeasure(),
+            lea: self.selectedLea(),
+            focusedSchool: self.focusedSchool,
+            showNatAvg: self.showNationalAverage(),
+            showTop10: self.showTop10Percent(),
+            showBottom10: self.showBottom10Percent()
+        };
+        return baseUrl + $.param(options);
+    });
+
+    self.setFromSelectionOptions = function(options) {
+        if ('measure' in options && _.contains(self.measureOptions(), options.measure)) {
+            self.selectedMeasure(options.measure);
+        }
+        if ('lea' in options && _.contains(self.leaOptions(), options.lea)) {
+            self.selectedLea(options.lea);
+        }
+        if ('focusedSchool' in options && _.contains(self.selectedSchoolsNames(), options.focusedSchool)) {
+            self.focusedSchool(options.focusedSchool);
+        }
+        self.showNationalAverage('showNatAvg' in options && options.showNatAvg === 'true');
+        self.showTop10Percent('showTop10' in options && options.showTop10 === 'true');
+        self.showBottom10Percent('showBottom10' in options && options.showBottom10 === 'true');
+    };
 };
 
 var viewModel = new viewModel();
@@ -188,6 +229,7 @@ var metaComplete = function(result) {
 var dataComplete = function(result) {
     viewModel.schoolDataLoaded(true);
     viewModel.allData(result.data);
+    viewModel.setFromSelectionOptions(queryStringOptions);
 }
 
 var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);

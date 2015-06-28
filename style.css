@@ -12,4 +12,10 @@
     padding-bottom:0 !important;
     height: 32px;
 }
-.navbar {min-height:32px !important;}
+.navbar {
+	min-height:32px !important;
+}
+
+.modal-body span {
+    word-wrap: break-word;
+}
