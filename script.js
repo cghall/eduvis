@@ -216,7 +216,7 @@ var viewModel = new viewModel();
 ko.applyBindings(viewModel);
 
 papaConfig = {
-    download: true,
+    // download: true,
     dynamicTyping: true,
     header: true,
     skipEmptyLines: true
@@ -236,6 +236,23 @@ var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
 
 var dataPapaConfig = _.extend({ complete: dataComplete }, papaConfig);
 
-Papa.parse('ks4_meta.csv', metaPapaConfig);
+$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "School_data.csv",
+        dataType: "text",
+        success: function(data) {
+            Papa.parse(data, dataPapaConfig);
+        }
+    });
 
-Papa.parse('School_data.csv', dataPapaConfig);
+    $.ajax({
+        type: "GET",
+        url: "ks4_meta.csv",
+        dataType: "text",
+        success: function(data) {
+            Papa.parse(data, metaPapaConfig);
+        }
+    });
+});
+
