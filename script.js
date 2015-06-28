@@ -192,6 +192,7 @@ var viewModel = function() {
             showTop10: self.showTop10Percent(),
             showBottom10: self.showBottom10Percent()
         };
+        options =_.pick(options, _.identity)
         return baseUrl + $.param(options);
     });
 
