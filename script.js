@@ -290,7 +290,7 @@ var dataComplete = function(result) {
     myViewModel.schoolDataLoaded(true);
     myViewModel.allData(result.data);
     myViewModel.setFromSelectionOptions(queryStringOptions);
-    history.pushState({}, '', location.pathname);
+    history.pushState({}, '', [location.protocol, '//', location.host, location.pathname].join(''));
 };
 
 var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
