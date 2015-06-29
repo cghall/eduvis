@@ -1,4 +1,15 @@
-var queryStringOptions = (function(a) {
+function bakeCookie(name, value) {
+    document.cookie = [name, '=', JSON.stringify(value) + ';'].join('');
+}
+
+function readCookie(name) {
+    var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+    result && (result = JSON.parse(result[1]));
+    return result;
+}
+
+var parseQueryString = function(a) {
+    a = a.split('&');
     if (a == "") return {};
     var b = {};
     for (var i = 0; i < a.length; ++i)
@@ -10,7 +21,9 @@ var queryStringOptions = (function(a) {
             b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
     return b;
-})(window.location.search.substr(1).split('&'));
+};
+
+var queryStringOptions = parseQueryString(window.location.search.substr(1));
 
 var average = function(numbers) {
     var sum = 0;
@@ -25,6 +38,7 @@ var viewModel = function() {
 
     self.columnChart = ko.observable();
     self.schoolDataLoaded = ko.observable(false);
+    self.cookieLoaded = ko.observable(false);
     self.allData = ko.observable({});
     self.metaData = ko.observable({});
     self.schoolCount = ko.computed(function() {
@@ -192,8 +206,12 @@ var viewModel = function() {
             showBottom10: self.showBottom10Percent()
         };
         options =_.pick(options, _.identity);
+        var queryString = baseUrl + $.param(options);
 
-        return baseUrl + $.param(options);
+        if (self.cookieLoaded()) {
+            bakeCookie('graph', queryString);
+        }
+        return queryString;
     });
 
     self.shortenedUrl = ko.observable('');
@@ -232,7 +250,13 @@ var viewModel = function() {
         });
     };
 
-    self.setFromSelectionOptions = function(options) {
+    self.setFromSelectionOptions = function(options)  {
+        var cookieString = readCookie('graph');
+        var cookieOptions = parseQueryString(cookieString.substring(cookieString.indexOf('?') + 1));
+
+        options = $.isEmptyObject(options) ? cookieOptions : options;
+        self.cookieLoaded(true);
+
         if ('measure' in options && _.contains(self.measureOptions(), options.measure)) {
             self.selectedMeasure(options.measure);
         }
@@ -293,4 +317,3 @@ $(document).ready(function() {
         }
     });
 });
-
