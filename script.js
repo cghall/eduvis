@@ -1,97 +1,258 @@
-var allSchools = [];
-var labelCol = 'SCHNAME';
-var valueOptions = ['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ', 'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ'];
-var barChart;
-
-var finishLoading = function() {
-    var loading = document.getElementById('loading');
-    loading.parentNode.removeChild(loading);
-    var mainContent = document.getElementById('main-content');
-    mainContent.style.visibility= 'visible';
-}
-
-var selectedLEA = function() {
-    return document.getElementById('LEA').value;
-}
-
-var updateLeaOptions = function() {
-    var select = document.getElementById('LEA'); 
-    var options = _.uniq(_.pluck(allSchools, 'LEA')); 
-    options.sort();
-
-    for (var i = 0; i < options.length; i++) {
-        var opt = options[i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        select.appendChild(el);
+var queryStringOptions = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p = a[i].split('=', 2);
+        if (p.length == 1)
+            b[p[0]] = "";
+        else
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
-}
+    return b;
+})(window.location.search.substr(1).split('&'));
 
-var selectedValue = function() {
-    return document.getElementById('Measure').value;
-}
-
-var updateValueOptions = function() {
-    var select = document.getElementById('Measure'); 
-    var options = valueOptions; 
-    options.sort();
-
-    for (var i = 0; i < options.length; i++) {
-        var opt = options[i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        select.appendChild(el);
+var average = function(numbers) {
+    var sum = 0;
+    for (var i = 0; i < numbers.length; i++) {
+         sum += numbers[i] || 0;
     }
+    return sum / numbers.length;
 }
 
-var updateBar = function() {
-    selectedSchools = _.where(allSchools, { LEA: selectedLEA() });
-    selectedSchools = _.sortBy(selectedSchools, selectedValue());
-    //selectedSchools = _.filter(selectedSchools, _.isNaN(valueCol))
-    drawBar(selectedSchools, labelCol, selectedValue());
-}
+var viewModel = function() {
+    var self = this;
 
-document.getElementById('LEA').onchange = updateBar;
-document.getElementById('Measure').onchange = updateBar;
-
-
-var drawBar = function(records, labelCol, selectedValue) {
-    var data = {
-        labels: _.pluck(records, labelCol),
-        datasets: [
-            {
-                data: _.pluck(records, selectedValue),
-                fillColor: "rgba(34,83,120,1)",
-            }
-        ]
-    };
-    var ctx = document.getElementById("myChart").getContext("2d");
-
-    if (barChart) {
-        barChart.destroy();
-    }
-    barChart = new Chart(ctx).Bar(data, {
-        scaleOverride: true,
-        scaleSteps: 10,
-        scaleStepWidth: 0.1,
-        scaleStartValue: 0,
+    self.columnChart = ko.observable();
+    self.schoolDataLoaded = ko.observable(false);
+    self.allData = ko.observable({});
+    self.metaData = ko.observable({});
+    self.schoolCount = ko.computed(function() {
+        return self.allData().length;
     });
+
+    self.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',
+                                              'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ']);
+
+    self.leaOptions = ko.computed(function() {
+        var leaOptions = _.uniq(_.pluck(self.allData(), 'LEA'));
+        leaOptions.sort();
+        return leaOptions;
+    });
+
+    self.selectedMeasure = ko.observable();
+    self.selectedLea = ko.observable();
+
+    self.selectedMeasureDescription = ko.computed(function() {
+        var measure = _.findWhere(self.metaData(), { 'Metafile heading': self.selectedMeasure() });
+        return measure ? measure['Metafile description'] : '...';
+    });
+
+    self.showNationalAverage = ko.observable(false);
+    self.showTop10Percent = ko.observable(false);
+    self.showBottom10Percent = ko.observable(false);
+
+    self.allDataSelectedMeasure = ko.computed(function() {
+        var series = _.pluck(self.allData(), self.selectedMeasure());
+        series.sort();
+        return series;
+    });
+
+    self.selectedSchools = ko.computed(function() {
+        var selectedSchools = _.where(self.allData(), { LEA: self.selectedLea() });
+        return _.sortBy(selectedSchools, self.selectedMeasure());
+    });
+
+    self.selectedSchoolsNames = ko.computed(function() {
+        return _.pluck(self.selectedSchools(), 'SCHNAME');
+    });
+
+    self.selectedSchoolsNamesAlphabetical = ko.computed(function() {
+        var names = self.selectedSchoolsNames().slice(0);
+        names.sort();
+        return names;
+    });
+
+    self.selectedSchoolsSeries = ko.computed(function() {
+        var series = _.pluck(self.selectedSchools(), self.selectedMeasure());
+        return series;
+    });
+
+    self.focusedSchool = ko.observable();
+
+    self.focusedSchoolIndex = ko.computed(function() {
+        return self.selectedSchoolsNames().indexOf(self.focusedSchool());
+    });
+
+    self.selectedSchoolsSeriesWithColour = ko.computed(function() {
+        var data = self.selectedSchoolsSeries().slice(0);
+        if (self.focusedSchoolIndex() >= 0 && data[self.focusedSchoolIndex()]) {
+            data[self.focusedSchoolIndex()] = { y: data[self.focusedSchoolIndex()], color: 'orange' };
+        }
+        return data;
+    });
+
+    self.updateBar = ko.computed( function() {
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'myChart',
+                type: 'bar',
+                marginLeft: 300
+            },
+            title: {
+                text: self.selectedMeasure() + ' for LEA ' + self.selectedLea()
+            },
+            xAxis: {
+                categories: self.selectedSchoolsNames()
+            },
+            yAxis: {
+                title: {
+                    text: self.selectedMeasure()
+                },
+                max: 1
+            },
+            series: [{
+                showInLegend: false,
+                name: self.selectedMeasure(),
+                data: self.selectedSchoolsSeriesWithColour(),
+                animation: {
+                    duration: 300
+                }
+            }]
+        });
+        self.columnChart(chart);
+    });
+
+    self.nationalAverageLine = ko.computed(function() {
+        return self.showNationalAverage() && {
+            id: 'nat',
+            color: 'rgb(255, 204, 0)',
+            width: 2,
+            value: average(self.allDataSelectedMeasure()),
+            zIndex: 5,
+            label: {
+                align: 'center',
+                verticalAlign: 'middle',
+                text: 'national'
+            }
+        };
+    });
+
+    self.top10Line = ko.computed(function() {
+        return self.showTop10Percent() && {
+            id: 'top',
+            color: 'rgb(51, 204, 51)',
+            width: 2,
+            value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount()*0.9)],
+            zIndex: 5,
+            label: {
+                text: 'top 10%',
+                align: 'right',
+                verticalAlign: 'bottom',
+                y: -5
+            }
+        };
+    });
+
+    self.bottom10Line = ko.computed(function() {
+        return self.showBottom10Percent() && {
+            id: 'bot',
+            color: 'rgb(255, 51, 0)',
+            width: 2,
+            value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount()*0.1)],
+            zIndex: 5,
+            label: {
+                text: 'bottom 10%',
+                verticalAlign: 'top',
+            }
+        };
+    });
+
+    self.averagePlotLines = ko.computed(function() {
+        var plotLines = [self.nationalAverageLine(), self.top10Line(), self.bottom10Line()];
+        return _.without(plotLines, false);
+    });
+
+    self.updatePlotLines = ko.computed(function() {
+        ['nat', 'top', 'bot'].forEach(function(lineId) {
+            self.columnChart().yAxis[0].removePlotLine(lineId);
+        });
+        self.averagePlotLines().forEach(function(line) {
+            self.columnChart().yAxis[0].addPlotLine(line);
+        });
+    });
+
+    self.currentOptionsQueryStringURL = ko.computed(function() {
+        baseUrl = [location.protocol, '//', location.host, location.pathname, '?'].join('');
+        options = {
+            measure: self.selectedMeasure(),
+            lea: self.selectedLea(),
+            focusedSchool: self.focusedSchool,
+            showNatAvg: self.showNationalAverage(),
+            showTop10: self.showTop10Percent(),
+            showBottom10: self.showBottom10Percent()
+        };
+        options =_.pick(options, _.identity)
+        return baseUrl + $.param(options);
+    });
+
+    self.setFromSelectionOptions = function(options) {
+        if ('measure' in options && _.contains(self.measureOptions(), options.measure)) {
+            self.selectedMeasure(options.measure);
+        }
+        if ('lea' in options && _.contains(self.leaOptions(), options.lea)) {
+            self.selectedLea(options.lea);
+        }
+        if ('focusedSchool' in options && _.contains(self.selectedSchoolsNames(), options.focusedSchool)) {
+            self.focusedSchool(options.focusedSchool);
+        }
+        self.showNationalAverage('showNatAvg' in options && options.showNatAvg === 'true');
+        self.showTop10Percent('showTop10' in options && options.showTop10 === 'true');
+        self.showBottom10Percent('showBottom10' in options && options.showBottom10 === 'true');
+    };
 };
 
+var viewModel = new viewModel();
+
+ko.applyBindings(viewModel);
 
 papaConfig = {
-    download: true,
+    dynamicTyping: true,
     header: true,
-    skipEmptyLines: true,
-    complete: function(result) {
-        allSchools = result.data;
-        updateLeaOptions();
-        updateValueOptions();
-        updateBar();
-        finishLoading();
-    }
+    skipEmptyLines: true
 };
 
-Papa.parse('School_data.csv', papaConfig);
+var metaComplete = function(result) {
+    viewModel.metaData(result.data);
+}
+
+var dataComplete = function(result) {
+    viewModel.schoolDataLoaded(true);
+    viewModel.allData(result.data);
+    viewModel.setFromSelectionOptions(queryStringOptions);
+}
+
+var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
+
+var dataPapaConfig = _.extend({ complete: dataComplete }, papaConfig);
+
+$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "School_data.csv",
+        dataType: "text",
+        success: function(data) {
+            Papa.parse(data, dataPapaConfig);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "ks4_meta.csv",
+        dataType: "text",
+        success: function(data) {
+            Papa.parse(data, metaPapaConfig);
+        }
+    });
+});
+
