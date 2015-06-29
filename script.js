@@ -252,8 +252,8 @@ var viewModel = function() {
 
     self.setFromSelectionOptions = function(options)  {
         var cookieString = readCookie('graph');
-        var cookieOptions = parseQueryString(cookieString.substring(cookieString.indexOf('?') + 1));
-
+        var cookieOptions = !cookieString? {} : parseQueryString(cookieString.substring(cookieString.indexOf('?') + 1));
+        
         options = $.isEmptyObject(options) ? cookieOptions : options;
         self.cookieLoaded(true);
 
