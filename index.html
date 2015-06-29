@@ -94,17 +94,17 @@
                             <h3 class="panel-title">Selection</h3>
                         </div>
                         <div class="panel-body">
-                            <label control-label>
+                            <label class="control-label">
                                 LEA
-                                <select id="LEA" class="form-control" data-bind="options: leaOptions, value: selectedLea"></select>
+                                <select class="form-control" data-bind="options: leaOptions, value: selectedLea"></select>
                             </label><br>
-                            <label control-label>
+                            <label class="control-label">
                                 Measure
-                                <select id="Measure" class="form-control" data-bind="options: measureOptions, value: selectedMeasure"></select>
+                                <select class="form-control" data-bind="options: measureOptions, value: selectedMeasure"></select>
                             </label>
-                            <label control-label>
+                            <label class="control-label">
                                 School of interest
-                                <select id="Measure" class="form-control" data-bind="options: selectedSchoolsNamesAlphabetical, value: focusedSchool, optionsCaption: 'select a school...'"></select>
+                                <select class="form-control" data-bind="options: selectedSchoolsNamesAlphabetical, value: focusedSchool, optionsCaption: 'select a school...'"></select>
                             </label>
                         </div>
 
@@ -135,26 +135,24 @@
 
         <!-- SHARE MODAL -->
         <div id="shareModal" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-body">
-                <span data-bind="text: currentOptionsQueryStringURL"></span>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <span data-bind="text: currentOptionsQueryStringURL"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-
-          </div>
+        </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="http://code.highcharts.com/highcharts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.1/papaparse.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-debug.js"></script>
 
     	<script src="script.js"></script>
     </body>

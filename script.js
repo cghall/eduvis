@@ -18,7 +18,7 @@ var average = function(numbers) {
          sum += numbers[i] || 0;
     }
     return sum / numbers.length;
-}
+};
 
 var viewModel = function() {
     var self = this;
@@ -74,8 +74,7 @@ var viewModel = function() {
     });
 
     self.selectedSchoolsSeries = ko.computed(function() {
-        var series = _.pluck(self.selectedSchools(), self.selectedMeasure());
-        return series;
+        return _.pluck(self.selectedSchools(), self.selectedMeasure());
     });
 
     self.focusedSchool = ko.observable();
@@ -163,7 +162,7 @@ var viewModel = function() {
             zIndex: 5,
             label: {
                 text: 'bottom 10%',
-                verticalAlign: 'top',
+                verticalAlign: 'top'
             }
         };
     });
@@ -183,8 +182,8 @@ var viewModel = function() {
     });
 
     self.currentOptionsQueryStringURL = ko.computed(function() {
-        baseUrl = [location.protocol, '//', location.host, location.pathname, '?'].join('');
-        options = {
+        var baseUrl = [location.protocol, '//', location.host, location.pathname, '?'].join('');
+        var options = {
             measure: self.selectedMeasure(),
             lea: self.selectedLea(),
             focusedSchool: self.focusedSchool,
@@ -192,7 +191,7 @@ var viewModel = function() {
             showTop10: self.showTop10Percent(),
             showBottom10: self.showBottom10Percent()
         };
-        options =_.pick(options, _.identity)
+        options =_.pick(options, _.identity);
         return baseUrl + $.param(options);
     });
 
@@ -212,9 +211,9 @@ var viewModel = function() {
     };
 };
 
-var viewModel = new viewModel();
+var myViewModel = new viewModel();
 
-ko.applyBindings(viewModel);
+ko.applyBindings(myViewModel);
 
 papaConfig = {
     dynamicTyping: true,
@@ -223,14 +222,14 @@ papaConfig = {
 };
 
 var metaComplete = function(result) {
-    viewModel.metaData(result.data);
-}
+    myViewModel.metaData(result.data);
+};
 
 var dataComplete = function(result) {
-    viewModel.schoolDataLoaded(true);
-    viewModel.allData(result.data);
-    viewModel.setFromSelectionOptions(queryStringOptions);
-}
+    myViewModel.schoolDataLoaded(true);
+    myViewModel.allData(result.data);
+    myViewModel.setFromSelectionOptions(queryStringOptions);
+};
 
 var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
 
@@ -239,7 +238,7 @@ var dataPapaConfig = _.extend({ complete: dataComplete }, papaConfig);
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: "School_data.csv",
+        url: "School_data_trimmed.csv",
         dataType: "text",
         success: function(data) {
             Papa.parse(data, dataPapaConfig);
