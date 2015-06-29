@@ -269,8 +269,6 @@ var viewModel = function() {
         self.showNationalAverage('showNatAvg' in options && options.showNatAvg === 'true');
         self.showTop10Percent('showTop10' in options && options.showTop10 === 'true');
         self.showBottom10Percent('showBottom10' in options && options.showBottom10 === 'true');
-
-        history.pushState({}, '', location.pathname);
     };
 };
 
@@ -292,6 +290,7 @@ var dataComplete = function(result) {
     myViewModel.schoolDataLoaded(true);
     myViewModel.allData(result.data);
     myViewModel.setFromSelectionOptions(queryStringOptions);
+    history.pushState({}, '', location.pathname);
 };
 
 var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
