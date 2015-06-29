@@ -192,8 +192,45 @@ var viewModel = function() {
             showBottom10: self.showBottom10Percent()
         };
         options =_.pick(options, _.identity);
+
         return baseUrl + $.param(options);
     });
+
+    self.shortenedUrl = ko.observable('');
+
+    self.twitterUrl = ko.computed(function() {
+        var baseUrl = "http://twitter.com/?";
+        return baseUrl + $.param({status: 'Eduvis - ' + encodeURI(self.shortenedUrl())});
+    });
+
+    self.facebookUrl = ko.computed(function() {
+        var baseUrl = "http://www.facebook.com/sharer/sharer.php?";
+        return baseUrl + $.param({u: 'Eduvis - ' + encodeURI(self.shortenedUrl())});
+    });
+
+    self.linkedInUrl = ko.computed(function() {
+        var baseUrl = "http://www.linkedin.com/shareArticle?";
+        return baseUrl + $.param({mini: true, url: encodeURI(self.shortenedUrl()), title: encodeURI('Eduvis')});
+    });
+
+    self.emailUrl = ko.computed(function() {
+        var baseUrl = "mailto:?";
+        return baseUrl + $.param({subject: 'View my graph on Eduvis', body: 'Eduvis - ' + encodeURI(self.shortenedUrl())});
+    });
+
+    self.updateShortenedUrl = function() {
+        var longURL = self.currentOptionsQueryStringURL();
+        $.ajax({
+            url: 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyD_Jgxo5l899PUeNiLjOxXBIb0u-LF3s4s',
+            type: 'POST',
+            contentType: 'application/json',
+            data: '{ longUrl: "' + encodeURI(longURL) +'"}',
+            dataType: 'json',
+            success: function(response) {
+                self.shortenedUrl(response.id);
+            }
+        });
+    };
 
     self.setFromSelectionOptions = function(options) {
         if ('measure' in options && _.contains(self.measureOptions(), options.measure)) {
