@@ -252,8 +252,8 @@ var viewModel = function() {
 
     self.setFromSelectionOptions = function(options)  {
         var cookieString = readCookie('graph');
-        var cookieOptions = !cookieString? {} : parseQueryString(cookieString.substring(cookieString.indexOf('?') + 1));
-        
+        var cookieOptions = !cookieString ? {} : parseQueryString(cookieString.substring(cookieString.indexOf('?') + 1));
+
         options = $.isEmptyObject(options) ? cookieOptions : options;
         self.cookieLoaded(true);
 
@@ -270,7 +270,7 @@ var viewModel = function() {
         self.showTop10Percent('showTop10' in options && options.showTop10 === 'true');
         self.showBottom10Percent('showBottom10' in options && options.showBottom10 === 'true');
 
-        history.pushState({}, '', '/');
+        history.pushState({}, '', location.pathname);
     };
 };
 
