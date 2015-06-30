@@ -1,4 +1,15 @@
-var queryStringOptions = (function(a) {
+function bakeCookie(name, value) {
+    document.cookie = [name, '=', JSON.stringify(value) + ';'].join('');
+}
+
+function readCookie(name) {
+    var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+    result && (result = JSON.parse(result[1]));
+    return result;
+}
+
+var parseQueryString = function(a) {
+    a = a.split('&');
     if (a == "") return {};
     var b = {};
     for (var i = 0; i < a.length; ++i)
@@ -10,7 +21,9 @@ var queryStringOptions = (function(a) {
             b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
     return b;
-})(window.location.search.substr(1).split('&'));
+};
+
+var queryStringOptions = parseQueryString(window.location.search.substr(1));
 
 var average = function(numbers) {
     var sum = 0;
@@ -18,13 +31,14 @@ var average = function(numbers) {
          sum += numbers[i] || 0;
     }
     return sum / numbers.length;
-}
+};
 
 var viewModel = function() {
     var self = this;
 
     self.columnChart = ko.observable();
     self.schoolDataLoaded = ko.observable(false);
+    self.cookieLoaded = ko.observable(false);
     self.allData = ko.observable({});
     self.metaData = ko.observable({});
     self.schoolCount = ko.computed(function() {
@@ -74,8 +88,7 @@ var viewModel = function() {
     });
 
     self.selectedSchoolsSeries = ko.computed(function() {
-        var series = _.pluck(self.selectedSchools(), self.selectedMeasure());
-        return series;
+        return _.pluck(self.selectedSchools(), self.selectedMeasure());
     });
 
     self.focusedSchool = ko.observable();
@@ -163,7 +176,7 @@ var viewModel = function() {
             zIndex: 5,
             label: {
                 text: 'bottom 10%',
-                verticalAlign: 'top',
+                verticalAlign: 'top'
             }
         };
     });
@@ -183,8 +196,8 @@ var viewModel = function() {
     });
 
     self.currentOptionsQueryStringURL = ko.computed(function() {
-        baseUrl = [location.protocol, '//', location.host, location.pathname, '?'].join('');
-        options = {
+        var baseUrl = [location.protocol, '//', location.host, location.pathname, '?'].join('');
+        var options = {
             measure: self.selectedMeasure(),
             lea: self.selectedLea(),
             focusedSchool: self.focusedSchool,
@@ -192,11 +205,58 @@ var viewModel = function() {
             showTop10: self.showTop10Percent(),
             showBottom10: self.showBottom10Percent()
         };
-        options =_.pick(options, _.identity)
-        return baseUrl + $.param(options);
+        options =_.pick(options, _.identity);
+        var queryString = baseUrl + $.param(options);
+
+        if (self.cookieLoaded()) {
+            bakeCookie('graph', queryString);
+        }
+        return queryString;
     });
 
-    self.setFromSelectionOptions = function(options) {
+    self.shortenedUrl = ko.observable('');
+
+    self.twitterUrl = ko.computed(function() {
+        var baseUrl = "http://twitter.com/?";
+        return baseUrl + $.param({status: 'Eduvis - ' + encodeURI(self.shortenedUrl())});
+    });
+
+    self.facebookUrl = ko.computed(function() {
+        var baseUrl = "http://www.facebook.com/sharer/sharer.php?";
+        return baseUrl + $.param({u: 'Eduvis - ' + encodeURI(self.shortenedUrl())});
+    });
+
+    self.linkedInUrl = ko.computed(function() {
+        var baseUrl = "http://www.linkedin.com/shareArticle?";
+        return baseUrl + $.param({mini: true, url: encodeURI(self.shortenedUrl()), title: encodeURI('Eduvis')});
+    });
+
+    self.emailUrl = ko.computed(function() {
+        var baseUrl = "mailto:?";
+        return baseUrl + $.param({subject: 'View my graph on Eduvis', body: 'Eduvis - ' + encodeURI(self.shortenedUrl())});
+    });
+
+    self.updateShortenedUrl = function() {
+        var longURL = self.currentOptionsQueryStringURL();
+        $.ajax({
+            url: 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyD_Jgxo5l899PUeNiLjOxXBIb0u-LF3s4s',
+            type: 'POST',
+            contentType: 'application/json',
+            data: '{ longUrl: "' + encodeURI(longURL) +'"}',
+            dataType: 'json',
+            success: function(response) {
+                self.shortenedUrl(response.id);
+            }
+        });
+    };
+
+    self.setFromSelectionOptions = function(options)  {
+        var cookieString = readCookie('graph');
+        var cookieOptions = !cookieString ? {} : parseQueryString(cookieString.substring(cookieString.indexOf('?') + 1));
+
+        options = $.isEmptyObject(options) ? cookieOptions : options;
+        self.cookieLoaded(true);
+
         if ('measure' in options && _.contains(self.measureOptions(), options.measure)) {
             self.selectedMeasure(options.measure);
         }
@@ -212,9 +272,9 @@ var viewModel = function() {
     };
 };
 
-var viewModel = new viewModel();
+var myViewModel = new viewModel();
 
-ko.applyBindings(viewModel);
+ko.applyBindings(myViewModel);
 
 papaConfig = {
     dynamicTyping: true,
@@ -223,14 +283,15 @@ papaConfig = {
 };
 
 var metaComplete = function(result) {
-    viewModel.metaData(result.data);
-}
+    myViewModel.metaData(result.data);
+};
 
 var dataComplete = function(result) {
-    viewModel.schoolDataLoaded(true);
-    viewModel.allData(result.data);
-    viewModel.setFromSelectionOptions(queryStringOptions);
-}
+    myViewModel.schoolDataLoaded(true);
+    myViewModel.allData(result.data);
+    myViewModel.setFromSelectionOptions(queryStringOptions);
+    history.pushState({}, '', [location.protocol, '//', location.host, location.pathname].join(''));
+};
 
 var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
 
@@ -239,7 +300,7 @@ var dataPapaConfig = _.extend({ complete: dataComplete }, papaConfig);
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: "School_data.csv",
+        url: "School_data_trimmed.csv",
         dataType: "text",
         success: function(data) {
             Papa.parse(data, dataPapaConfig);
@@ -255,4 +316,3 @@ $(document).ready(function() {
         }
     });
 });
-
