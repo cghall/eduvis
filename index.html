@@ -109,7 +109,14 @@
                             <label class="control-label">
                                 LEA
                                 <select class="form-control" data-bind="options: leaOptions, value: selectedLea"></select>
-                            </label><br>
+                            </label>
+
+                            <button class="btn ko-popover" data-bind="visible: selectedSchoolsExcludedNames, popover: true, popoverOptions: { html: true, content: selectedSchoolsExcludedNames }"
+                                                data-popover-placement="bottom"
+                                                data-popover-title="Data not available for:">
+                                Excluded schools
+                            </button><br>
+
                             <label class="control-label">
                                 Measure
                                 <select class="form-control" data-bind="options: measureOptions, value: selectedMeasure"></select>
@@ -177,6 +184,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.1/papaparse.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-debug.js"></script>
+        <script src="ko.bindings.popover.js"></script>
 
     	<script src="script.js"></script>
     </body>

@@ -77,8 +77,29 @@ var viewModel = function() {
         return _.sortBy(selectedSchools, self.selectedMeasure());
     });
 
+    self.selectedSchoolsExcluded = ko.observable([]);
+
+    self.selectedSchoolsExcludedNames = ko.computed(function() {
+        var names = _.pluck(self.selectedSchoolsExcluded(), 'SCHNAME');
+        names.sort();
+        return names.join('<hr>');
+    });
+
+    self.selectedSchoolsIncluded = ko.computed(function() {
+        var hasData = function(school) {
+            return school[self.selectedMeasure()] !== '';
+        };
+
+        var allSchools = _.partition(self.selectedSchools(), hasData);
+        var included = allSchools[0];
+        var excluded = allSchools[1];
+
+        self.selectedSchoolsExcluded(excluded);
+        return included;
+    });
+
     self.selectedSchoolsNames = ko.computed(function() {
-        return _.pluck(self.selectedSchools(), 'SCHNAME');
+        return _.pluck(self.selectedSchoolsIncluded(), 'SCHNAME');
     });
 
     self.selectedSchoolsNamesAlphabetical = ko.computed(function() {
@@ -88,7 +109,7 @@ var viewModel = function() {
     });
 
     self.selectedSchoolsSeries = ko.computed(function() {
-        return _.pluck(self.selectedSchools(), self.selectedMeasure());
+        return _.pluck(self.selectedSchoolsIncluded(), self.selectedMeasure());
     });
 
     self.focusedSchool = ko.observable();
