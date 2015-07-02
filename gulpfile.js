@@ -23,6 +23,8 @@ var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require
             'components/selection/selection',
             'components/chart/chart',
             'components/display-options/display-options',
+            'components/sharing/sharing',
+            'components/chart-description/chart-description',
             'text!components/about-page/about.html'
         ],
         insertRequire: ['app/startup'],

@@ -18,9 +18,9 @@ define(['knockout', 'text!./display-options.html', 'knockout-postbox'], function
             return self.allData().length;
         });
 
-        this.showNationalAverage = ko.observable(false);
-        this.showTop10Percent = ko.observable(false);
-        this.showBottom10Percent = ko.observable(false);
+        this.showNationalAverage = ko.observable(false).publishOn("showNationalAverage");
+        this.showTop10Percent = ko.observable(false).publishOn("showTop10");
+        this.showBottom10Percent = ko.observable(false).publishOn("showBottom10");
 
         this.allDataSelectedMeasure = ko.computed(function() {
             var series = _.pluck(self.allData(), self.selectedMeasure());

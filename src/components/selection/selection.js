@@ -9,6 +9,8 @@ define(['knockout', 'underscore', 'text!./selection.html', 'knockout-postbox'], 
         this.selectedLea = ko.observable('').publishOn("selectedLea");
         this.selectedSchoolsNames = ko.observable([]).publishOn("selectedSchoolsNames");
         this.selectedSchoolsSeries = ko.observable([]).publishOn("selectedSchoolsSeries");
+        this.focusedSchool = ko.observable().publishOn("focusedSchool");
+
 
         this.leaOptions = ko.computed(function() {
             var leaOptions = _.uniq(_.pluck(self.allData(), 'LEA'));
@@ -50,8 +52,6 @@ define(['knockout', 'underscore', 'text!./selection.html', 'knockout-postbox'], 
             names.sort();
             return names;
         });
-
-        this.focusedSchool = ko.observable();
 
         this.focusedSchoolIndex = ko.computed(function() {
             return self.selectedSchoolsNames().indexOf(self.focusedSchool());
