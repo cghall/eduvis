@@ -1,12 +1,12 @@
-define(['knockout', 'highcharts', 'underscore', 'text!./chart.html'], function(ko, Highcharts, _, templateMarkup) {
+define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-postbox'], function(ko, Highcharts, _, templateMarkup) {
 
-    function Chart(params) {
+    function Chart() {
         var self = this;
 
-        this.measure = params.measure;
-        this.lea = params.lea;
-        this.schoolNames = params.schoolNames;
-        this.schoolSeries = params.schoolSeries;
+        this.measure = ko.observable().subscribeTo("selectedMeasure", true);
+        this.lea = ko.observable().subscribeTo("selectedLea", true);
+        this.schoolNames = ko.observable().subscribeTo("selectedSchoolsNames", true);
+        this.schoolSeries = ko.observable().subscribeTo("selectedSchoolsSeries", true);
 
         this.columnChart = ko.observable();
 

@@ -13,7 +13,8 @@
     "knockout-projections": "~1.1.0",
     "papaparse": "~4.1.1",
     "underscore": "~1.8.3",
-    "highcharts-release": "~4.1.7"
+    "highcharts-release": "~4.1.7",
+    "knockout-postbox": "~0.5.2"
   },
   "resolutions": {
     "knockout": "~3.3.0-alpha"

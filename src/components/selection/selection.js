@@ -1,22 +1,19 @@
-define(['knockout', 'underscore', 'text!./selection.html'], function(ko, _, templateMarkup) {
+define(['knockout', 'underscore', 'text!./selection.html', 'knockout-postbox'], function(ko, _, templateMarkup) {
 
-    function Selection(params) {
+    function Selection() {
         var self = this;
 
-        this.selectionConfig = params.selectionConfig;
-        this.allData = params.allData;
-        this.metaData = params.metaData;
+        this.allData = ko.observable().subscribeTo("allData", true);
+        this.metaData = ko.observable().subscribeTo("metaData", true);
+        this.selectedMeasure = ko.observable('').publishOn("selectedMeasure");
+        this.selectedLea = ko.observable('').publishOn("selectedLea");
+        this.selectedSchoolsNames = ko.observable([]).publishOn("selectedSchoolsNames");
+        this.selectedSchoolsSeries = ko.observable([]).publishOn("selectedSchoolsSeries");
 
-        this.selectedMeasure = params.selectedMeasure;
-        this.selectedLea = params.lea;
-        this.selectedSchoolsNames = params.schoolNames;
-        this.selectedSchoolsSeries = params.schoolSeries;
-
-        this.leaOptions = ko.observableArray([]);
-        this.updateLeaOptions = ko.computed(function() {
+        this.leaOptions = ko.computed(function() {
             var leaOptions = _.uniq(_.pluck(self.allData(), 'LEA'));
             leaOptions.sort();
-            self.leaOptions(leaOptions);
+            return leaOptions;
         });
 
         this.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',

@@ -1,20 +1,11 @@
-define(["knockout", "jquery", "underscore", "papaparse", "text!./home.html"], function(ko, $, _, Papa, homeTemplate) {
+define(["knockout", "jquery", "underscore", "papaparse", "text!./home.html", 'knockout-postbox'], function(ko, $, _, Papa, homeTemplate) {
 
-  function HomeViewModel(params) {
+  function HomeViewModel() {
     this.schoolDataLoaded = ko.observable(false);
     this.cookieLoaded = ko.observable(false);
-    this.allData = ko.observable([]);
-    this.metaData = ko.observable({});
 
-    this.selectedMeasure = ko.observable('');
-    this.selectedLea = ko.observable('');
-    this.schoolNames = ko.observable([]);
-    this.schoolSeries = ko.observable([]);
-
-    var self = this;
-    this.schoolCount = ko.computed(function() {
-      return self.allData().length;
-    });
+    this.allData = ko.observable([]).publishOn("allData");
+    this.metaData = ko.observable([]).publishOn("metaData");
 
     this.downloadSchoolData();
   }

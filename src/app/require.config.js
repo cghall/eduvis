@@ -8,6 +8,7 @@ var require = {
         "highcharts":           "bower_modules/highcharts-release/highcharts.src",
         "jquery":               "bower_modules/jquery/dist/jquery",
         "knockout":             "bower_modules/knockout/dist/knockout",
+        "knockout-postbox":     "bower_modules/knockout-postbox/build/knockout-postbox.min",
         "knockout-projections": "bower_modules/knockout-projections/dist/knockout-projections",
         "papaparse":            "bower_modules/papaparse/papaparse",
         "signals":              "bower_modules/js-signals/dist/signals.min",
