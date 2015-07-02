@@ -7,6 +7,7 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
         this.lea = ko.observable().subscribeTo("selectedLea", true);
         this.schoolNames = ko.observable().subscribeTo("selectedSchoolsNames", true);
         this.schoolSeries = ko.observable().subscribeTo("selectedSchoolsSeries", true);
+        this.averagePlotLines = ko.observable().subscribeTo("averagePlotLines", true);
 
         this.columnChart = ko.observable();
 
@@ -51,6 +52,19 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
                     clearInterval(checkExist);
                 }
             }, 30);
+        });
+
+        this.updatePlotLines = ko.computed(function () {
+            if (!self.columnChart() || !self.columnChart().yAxis) {
+                return;
+            }
+
+            ['nat', 'top', 'bot'].forEach(function (lineId) {
+                self.columnChart().yAxis[0].removePlotLine(lineId);
+            });
+            self.averagePlotLines().forEach(function (line) {
+                self.columnChart().yAxis[0].addPlotLine(line);
+            });
         });
     }
 

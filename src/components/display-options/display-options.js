@@ -1,13 +1,84 @@
-define(['knockout', 'text!./display-options.html'], function(ko, templateMarkup) {
+define(['knockout', 'text!./display-options.html', 'knockout-postbox'], function (ko, templateMarkup) {
 
-  function DisplayOptions(params) {
-    this.message = ko.observable('Hello from the display-options component!');
-  }
+    var average = function(numbers) {
+        var sum = 0;
+        for (var i = 0; i < numbers.length; i++) {
+            sum += numbers[i] || 0;
+        }
+        return sum / numbers.length;
+    };
 
-  // This runs when the component is torn down. Put here any logic necessary to clean up,
-  // for example cancelling setTimeouts or disposing Knockout subscriptions/computeds.
-  DisplayOptions.prototype.dispose = function() { };
-  
-  return { viewModel: DisplayOptions, template: templateMarkup };
+    function DisplayOptions(params) {
+        var self = this;
+
+        this.selectedMeasure = ko.observable().subscribeTo("selectedMeasure", true);
+        this.allData = ko.observable().subscribeTo("allData", true);
+
+        this.schoolCount = ko.computed(function() {
+            return self.allData().length;
+        });
+
+        this.showNationalAverage = ko.observable(false);
+        this.showTop10Percent = ko.observable(false);
+        this.showBottom10Percent = ko.observable(false);
+
+        this.allDataSelectedMeasure = ko.computed(function() {
+            var series = _.pluck(self.allData(), self.selectedMeasure());
+            series.sort();
+            return series;
+        });
+
+        this.nationalAverageLine = ko.computed(function () {
+            return self.showNationalAverage() && {
+                    id: 'nat',
+                    color: 'rgb(255, 204, 0)',
+                    width: 2,
+                    value: average(self.allDataSelectedMeasure()),
+                    zIndex: 5,
+                    label: {
+                        align: 'center',
+                        verticalAlign: 'middle',
+                        text: 'national'
+                    }
+                };
+        });
+
+        this.top10Line = ko.computed(function () {
+            return self.showTop10Percent() && {
+                    id: 'top',
+                    color: 'rgb(51, 204, 51)',
+                    width: 2,
+                    value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount() * 0.9)],
+                    zIndex: 5,
+                    label: {
+                        text: 'top 10%',
+                        align: 'right',
+                        verticalAlign: 'bottom',
+                        y: -5
+                    }
+                };
+        });
+
+        this.bottom10Line = ko.computed(function () {
+            return self.showBottom10Percent() && {
+                    id: 'bot',
+                    color: 'rgb(255, 51, 0)',
+                    width: 2,
+                    value: self.allDataSelectedMeasure()[Math.floor(self.schoolCount() * 0.1)],
+                    zIndex: 5,
+                    label: {
+                        text: 'bottom 10%',
+                        verticalAlign: 'top'
+                    }
+                };
+        });
+
+        this.averagePlotLines = ko.computed(function () {
+            var plotLines = [self.nationalAverageLine(), self.top10Line(), self.bottom10Line()];
+            return _.without(plotLines, false);
+        }).publishOn("averagePlotLines");
+    }
+
+    return {viewModel: DisplayOptions, template: templateMarkup};
 
 });
