@@ -9,7 +9,7 @@ define(['jquery', 'knockout', './router', 'bootstrap', 'knockout-projections'], 
     template: { require: 'text!components/about-page/about.html' }
   });
 
-  ko.components.register('blog-page', { require: 'components/blog-page/blog-page' });
+  ko.components.register('blog-page', { require: 'components/blog-page/blog' });
   ko.components.register('loading', { require: 'components/loading/loading' });
   ko.components.register('selection', { require: 'components/selection/selection' });
   ko.components.register('chart', { require: 'components/chart/chart' });

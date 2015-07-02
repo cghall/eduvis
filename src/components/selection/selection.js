@@ -18,7 +18,6 @@ define(['knockout', 'underscore', 'text!./selection.html', 'knockout-postbox'], 
 
         this.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',
                                                   'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ']);
-        this.selectedMeasure = ko.observable();
 
         this.selectedSchools = ko.computed(function() {
             var selectedSchools = _.where(self.allData(), { LEA: self.selectedLea() });

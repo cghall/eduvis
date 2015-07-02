@@ -11,37 +11,49 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
         this.columnChart = ko.observable();
 
         this.updateBar = ko.computed( function() {
-            var chart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'myChart',
-                    type: 'bar',
-                    marginLeft: 300
-                },
-                title: {
-                    text: self.measure() + ' for LEA ' + self.lea()
-                },
-                xAxis: {
-                    categories: self.schoolNames()
-                },
-                yAxis: {
-                    title: {
-                        text: self.measure()
-                    },
-                    max: 1
-                },
-                series: [{
-                    showInLegend: false,
-                    name: self.measure(),
-                    data: self.schoolSeries(),
-                    animation: {
-                        duration: 300
-                    }
-                }]
-            });
-            self.columnChart(chart);
+            var lea = self.lea();
+            var measure = self.measure();
+            var schoolNames = self.schoolNames();
+            var schoolSeries = self.schoolSeries();
+
+            var checkExist = setInterval(function() {
+                if (document.getElementById('myChart')) {
+
+                    var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'myChart',
+                            type: 'bar',
+                            marginLeft: 300
+                        },
+                        title: {
+                            text: measure + ' for LEA ' + lea
+                        },
+                        xAxis: {
+                            categories: schoolNames
+                        },
+                        yAxis: {
+                            title: {
+                                text: measure
+                            },
+                            max: 1
+                        },
+                        series: [{
+                            showInLegend: false,
+                            name: measure,
+                            data: schoolSeries,
+                            animation: {
+                                duration: 300
+                            }
+                        }]
+                    });
+                    self.columnChart(chart);
+
+                    clearInterval(checkExist);
+                }
+            }, 30);
         });
     }
-  
-    return { viewModel: Chart, template: templateMarkup };
+
+    return { viewModel: Chart, template: templateMarkup};
 
 });
