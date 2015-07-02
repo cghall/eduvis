@@ -55,7 +55,7 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
         });
 
         this.updatePlotLines = ko.computed(function () {
-            if (!self.columnChart() || !self.columnChart().yAxis) {
+            if (!self.columnChart() || !self.columnChart().yAxis || !self.averagePlotLines()) {
                 return;
             }
 

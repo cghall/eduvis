@@ -13,11 +13,8 @@ define(['jquery', 'knockout', './router', 'bootstrap', 'knockout-projections'], 
   ko.components.register('loading', { require: 'components/loading/loading' });
   ko.components.register('selection', { require: 'components/selection/selection' });
   ko.components.register('chart', { require: 'components/chart/chart' });
-
   ko.components.register('display-options', { require: 'components/display-options/display-options' });
-
   ko.components.register('sharing', { require: 'components/sharing/sharing' });
-
   ko.components.register('chart-description', { require: 'components/chart-description/chart-description' });
 
   // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]

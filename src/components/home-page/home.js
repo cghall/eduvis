@@ -1,4 +1,5 @@
-define(["knockout", "jquery", "underscore", "papaparse", "text!./home.html", 'knockout-postbox'], function(ko, $, _, Papa, homeTemplate, postbox) {
+define(["knockout", "jquery", "underscore", "papaparse", "text!./home.html", "knockout-postbox", "cookie-manager"],
+    function(ko, $, _, Papa, homeTemplate, postbox, cm) {
 
     var parseQueryString = function(a) {
         a = a.split('&');
@@ -18,33 +19,21 @@ define(["knockout", "jquery", "underscore", "papaparse", "text!./home.html", 'kn
     var queryStringOptions = parseQueryString(window.location.search.substr(1));
 
     function HomeViewModel() {
-        this.schoolDataLoaded = ko.observable(false);
+        cm.enableCookieWriting(false);
+        this.schoolDataLoaded = ko.observable(false)
+            .extend({ rateLimit: { timeout: 300 } });
+
         this.cookieLoaded = ko.observable(false);
 
-        this.allData = ko.observable([]).publishOn("allData");
-        this.metaData = ko.observable([]).publishOn("metaData");
-
         this.downloadSchoolData();
-    }
-
-    function bakeCookie(name, value) {
-        document.cookie = [name, '=', JSON.stringify(value) + ';'].join('');
-    }
-
-    function readCookie(name) {
-        var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
-        result && (result = JSON.parse(result[1]));
-        return result;
     }
 
     HomeViewModel.prototype.setFromSelectionOptions = function(options)  {
         var self = this;
 
-        var cookieString = readCookie('graph');
-        var cookieOptions = !cookieString ? {} : parseQueryString(cookieString.substring(cookieString.indexOf('?') + 1));
+        var cookieOptions = cm.readCookie('graph');
 
         options = $.isEmptyObject(options) ? cookieOptions : options;
-        self.cookieLoaded(true);
 
         if ('measure' in options) {
             postbox.publish("selectedMeasure", options.measure);
@@ -55,9 +44,13 @@ define(["knockout", "jquery", "underscore", "papaparse", "text!./home.html", 'kn
         if ('focusedSchool' in options) {
             postbox.publish("focusedSchool", options.focusedSchool);
         }
-        postbox.publish("showNationalAverage", 'showNatAvg' in options && options.showNatAvg === 'true');
-        postbox.publish("showTop10", 'showTop10' in options && options.showTop10 === 'true');
-        postbox.publish("showBottom10", 'showBottom10' in options && options.showBottom10 === 'true');
+
+        postbox.publish("showNationalAverage", 'showNatAvg' in options && options.showNatAvg === true);
+        postbox.publish("showTop10", 'showTop10' in options && options.showTop10 === true);
+        postbox.publish("showBottom10", 'showBottom10' in options && options.showBottom10 === true);
+
+        self.cookieLoaded(true);
+        cm.enableCookieWriting(true);
     };
 
     HomeViewModel.prototype.downloadSchoolData = function() {
@@ -70,10 +63,12 @@ define(["knockout", "jquery", "underscore", "papaparse", "text!./home.html", 'kn
         };
 
         var metaComplete = function(result) {
+            self.metaData = ko.observable([]).publishOn("metaData");
             self.metaData(result.data);
         };
 
         var dataComplete = function(result) {
+            self.allData = ko.observable([]).publishOn("allData");
             self.schoolDataLoaded(true);
             self.allData(result.data);
             self.setFromSelectionOptions(queryStringOptions);

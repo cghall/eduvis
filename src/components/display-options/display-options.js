@@ -1,4 +1,4 @@
-define(['knockout', 'text!./display-options.html', 'knockout-postbox'], function (ko, templateMarkup) {
+define(['knockout', 'cookie-manager', 'text!./display-options.html', 'knockout-postbox'], function (ko, cm, templateMarkup) {
 
     var average = function(numbers) {
         var sum = 0;
@@ -18,9 +18,17 @@ define(['knockout', 'text!./display-options.html', 'knockout-postbox'], function
             return self.allData().length;
         });
 
-        this.showNationalAverage = ko.observable(false).syncWith("showNationalAverage", true);
-        this.showTop10Percent = ko.observable(false).syncWith("showTop10", true);
-        this.showBottom10Percent = ko.observable(false).syncWith("showBottom10", true);
+        this.showNationalAverage = ko.observable().syncWith("showNationalAverage", true);
+        this.showTop10Percent = ko.observable().syncWith("showTop10", true);
+        this.showBottom10Percent = ko.observable().syncWith("showBottom10", true);
+
+        this.updateCookie = ko.computed(function() {
+            cm.extendCookie('graph', {
+                showNatAvg: self.showNationalAverage(),
+                showTop10: self.showTop10Percent(),
+                showBottom10: self.showBottom10Percent()
+            });
+        });
 
         this.allDataSelectedMeasure = ko.computed(function() {
             var series = _.pluck(self.allData(), self.selectedMeasure());
