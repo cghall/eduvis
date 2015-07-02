@@ -5,12 +5,11 @@ define(['knockout', 'underscore', 'text!./selection.html', 'knockout-postbox'], 
 
         this.allData = ko.observable().subscribeTo("allData", true);
         this.metaData = ko.observable().subscribeTo("metaData", true);
-        this.selectedMeasure = ko.observable('').publishOn("selectedMeasure");
-        this.selectedLea = ko.observable('').publishOn("selectedLea");
+        this.selectedMeasure = ko.observable().syncWith("selectedMeasure", true);
+        this.selectedLea = ko.observable().syncWith("selectedLea", true);
         this.selectedSchoolsNames = ko.observable([]).publishOn("selectedSchoolsNames");
         this.selectedSchoolsSeries = ko.observable([]).publishOn("selectedSchoolsSeries");
-        this.focusedSchool = ko.observable().publishOn("focusedSchool");
-
+        this.focusedSchool = ko.observable().syncWith("focusedSchool", true);
 
         this.leaOptions = ko.computed(function() {
             var leaOptions = _.uniq(_.pluck(self.allData(), 'LEA'));
