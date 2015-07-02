@@ -8,7 +8,7 @@ define(['knockout', 'cookie-manager', 'text!./display-options.html', 'knockout-p
         return sum / numbers.length;
     };
 
-    function DisplayOptions(params) {
+    function DisplayOptions() {
         var self = this;
 
         this.selectedMeasure = ko.observable().subscribeTo("selectedMeasure", true);
@@ -83,7 +83,8 @@ define(['knockout', 'cookie-manager', 'text!./display-options.html', 'knockout-p
 
         this.averagePlotLines = ko.computed(function () {
             var plotLines = [self.nationalAverageLine(), self.top10Line(), self.bottom10Line()];
-            return _.without(plotLines, false);
+            plotLines = _.without(plotLines, false);
+            return _.without(plotLines, undefined);
         }).publishOn("averagePlotLines");
     }
 
