@@ -20,9 +20,8 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
         function DataLoad() {
             cm.enableCookieWriting(false);
             this.schoolDataLoaded = ko.observable(false).publishOn("schoolDataLoaded");
-
-            this.cookieLoaded = ko.observable(false);
-
+            this.allData = ko.observable([]).publishOn("allData");
+            this.metaData = ko.observable([]).publishOn("metaData");
             this.downloadSchoolData();
         }
 
@@ -47,7 +46,6 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
             postbox.publish("showTop10", 'showTop10' in options && options.showTop10 === true);
             postbox.publish("showBottom10", 'showBottom10' in options && options.showBottom10 === true);
 
-            self.cookieLoaded(true);
             cm.enableCookieWriting(true);
         };
 
@@ -61,12 +59,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
             };
 
             var metaComplete = function(result) {
-                self.metaData = ko.observable([]).publishOn("metaData");
                 self.metaData(result.data);
             };
 
             var dataComplete = function(result) {
-                self.allData = ko.observable([]).publishOn("allData");
                 self.schoolDataLoaded(true);
                 self.allData(result.data);
                 self.setFromSelectionOptions(queryStringOptions);

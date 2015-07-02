@@ -10,7 +10,6 @@ define(['underscore'], function(_) {
         if (cookieWritable) {
             value = _.pick(value, _.identity);
             document.cookie = [name, '=', JSON.stringify(value) + ';'].join('');
-            console.log(readCookie('graph'));
         }
     }
 
