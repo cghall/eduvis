@@ -42,9 +42,12 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
                 postbox.publish("focusedSchool", options.focusedSchool);
             }
 
-            postbox.publish("showNationalAverage", 'showNatAvg' in options && options.showNatAvg === true);
-            postbox.publish("showTop10", 'showTop10' in options && options.showTop10 === true);
-            postbox.publish("showBottom10", 'showBottom10' in options && options.showBottom10 === true);
+            postbox.publish("showNationalAverage",
+                'showNatAvg' in options && (options.showNatAvg === true || options.showNatAvg === 'true'));
+            postbox.publish("showTop10",
+                'showTop10' in options && (options.showTop10 === true || options.showTop10 === 'true'));
+            postbox.publish("showBottom10",
+                'showBottom10' in options && (options.showBottom10 === true || options.showBottom10 === 'true'));
 
             cm.enableCookieWriting(true);
         };
