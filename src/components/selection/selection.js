@@ -12,13 +12,8 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
         this.selectedLea = ko.observable().syncWith("selectedLea", true)
             .extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 50 } });
 
-        this.selectedSchoolsNames = ko.observable([]).publishOn("selectedSchoolsNames")
+        this.focusedSchool = ko.observable().syncWith("focusedSchool", true)
             .extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 50 } });
-
-        this.selectedSchoolsSeries = ko.observable([]).publishOn("selectedSchoolsSeries")
-            .extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 50 } });
-
-        this.focusedSchool = ko.observable().syncWith("focusedSchool", true);
 
         this.updateCookie = ko.computed(function() {
             cm.extendCookie('graph', {
@@ -63,6 +58,11 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             return included;
         });
 
+        this.selectedSchoolsNames = ko.computed(function() {
+            return _.pluck(self.selectedSchoolsIncluded(), 'SCHNAME');
+        }).publishOn("selectedSchoolsNames")
+            .extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 50 } });
+
         this.selectedSchoolsNamesAlphabetical = ko.computed(function() {
             var names = self.selectedSchoolsNames().slice(0);
             names.sort();
@@ -79,15 +79,8 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 data[self.focusedSchoolIndex()] = { y: data[self.focusedSchoolIndex()], color: 'orange' };
             }
             return data;
-        });
-
-        this.updateNames = ko.computed(function() {
-            self.selectedSchoolsNames(_.pluck(self.selectedSchoolsIncluded(), 'SCHNAME'));
-        });
-
-        this.updateSeries = ko.computed(function() {
-            self.selectedSchoolsSeries(self.selectedSchoolsSeriesWithColour());
-        });
+        }).publishOn("selectedSchoolsSeries")
+            .extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 50 } });;
     }
   
     return { viewModel: Selection, template: templateMarkup };

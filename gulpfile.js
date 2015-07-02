@@ -16,24 +16,21 @@ var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require
         },
         include: [
             'requireLib',
+            'app/cookie-manager',
+            'app/data-load',
             'components/nav-bar/nav-bar',
             'components/home-page/home',
-            'components/blog-page/blog',
             'components/loading/loading',
             'components/selection/selection',
             'components/chart/chart',
             'components/display-options/display-options',
             'components/sharing/sharing',
-            'components/chart-description/chart-description',
-            'components/cookie-manager/cookie-manager',
-            'text!components/about-page/about.html'
+            'components/chart-description/chart-description'
         ],
         insertRequire: ['app/startup'],
         bundles: {
-            // If you want parts of the site to load on demand, remove them from the 'include' list
-            // above, and group them into bundles here.
-            // 'bundle-name': [ 'some/module', 'another/module' ],
-            // 'another-bundle-name': [ 'yet-another-module' ]
+            'about': ['text!components/about-page/about.html'],
+            'blog': ['components/blog-page/blog']
         }
     });
 
