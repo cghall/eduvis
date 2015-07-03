@@ -48,8 +48,9 @@ gulp.task('css', function () {
         jqueryuiCss = gulp.src('src/bower_modules/jquery-ui/themes/base/jquery-ui.css'),
         appCss = gulp.src('src/css/*.css'),
         combinedCss = es.concat(bowerCss, fontAwesomeCss, jqueryuiCss, appCss).pipe(concat('css.css')),
-        fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', { base: './src/bower_modules/components-bootstrap/' });
-    return es.concat(fontFiles, combinedCss)
+        bootstrapFontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', { base: './src/bower_modules/components-bootstrap/' }),
+        fontAwesomeFontFiles = gulp.src('./src/bower_modules/components-font-awesome/fonts/*', { base: './src/bower_modules/components-font-awesome/' });
+    return es.concat(bootstrapFontFiles, fontAwesomeFontFiles, combinedCss)
         .pipe(gulp.dest('./dist/'));
 });
 
