@@ -10,6 +10,7 @@ var require = {
         "highcharts":           "bower_modules/highcharts-release/highcharts.src",
         "jquery":               "bower_modules/jquery/dist/jquery",
         "jquery-ui":            "bower_modules/jquery-ui/ui",
+        "jquery-ui-touch":      "bower_modules/jqueryui-touch-punch/jquery.ui.touch-punch.min",
         "knockout":             "bower_modules/knockout/dist/knockout",
         'knockout-jqueryui':    "bower_modules/knockout-jqueryui/dist/amd",
         "knockout-popover":     "other_vendor/ko.bindings.popover",
