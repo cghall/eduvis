@@ -10,6 +10,7 @@ var require = {
         "highcharts":           "bower_modules/highcharts-release/highcharts.src",
         "jquery":               "bower_modules/jquery/dist/jquery",
         "knockout":             "bower_modules/knockout/dist/knockout",
+        "knockout-popover":     "other_vendor/ko.bindings.popover",
         "knockout-postbox":     "bower_modules/knockout-postbox/build/knockout-postbox.min",
         "knockout-projections": "bower_modules/knockout-projections/dist/knockout-projections",
         "papaparse":            "bower_modules/papaparse/papaparse",
@@ -22,6 +23,9 @@ var require = {
         "highcharts": {
             exports: "Highcharts",
             deps: ["jquery"]
+        },
+        "knockout-popover": {
+            deps: ["jquery", "knockout"]
         }
     }
 };
