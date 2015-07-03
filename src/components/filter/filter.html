@@ -1,21 +1,59 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Filter</h3>
+        <h3 class="panel-title">School Filter</h3>
     </div>
     <div class="panel-body">
-        <label class="control-label">% Free school meals</label>
-        <div data-bind="slider: { values: fsmRange, realtime: true }"></div>
-        <div style="text-align: center">
-            <p>
-                <span data-bind="text: fsmMin"></span>% - <span data-bind="text: fsmMax"></span>%
-            </p>
+        <label class="control-label">
+            <input id="fsmFilterOn" type="checkbox" value="" data-bind="checked: fsmFilterOn">
+            <strong>% Free school meals</strong>
+        </label>
+        <div data-bind="visible: fsmFilterOn">
+            <div class="visible-md visible-lg">
+                <div data-bind="slider: { values: fsmRange, realtime: true }"></div>
+                <div style="text-align: center">
+                    <p>
+                        <span data-bind="text: fsmMin"></span>% - <span data-bind="text: fsmMax"></span>%
+                    </p>
+                </div>
+            </div>
+            <div class="form-inline visible-xs visible-sm">
+                <div class="form-group">
+                    <label for="fsmMin">Min %</label>
+                    <input type="number" data-bind="value: fsmMinNumberInput" class="form-control"
+                           id="fsmMin" min="0" max="100" step="1" onkeypress="return false">
+                    <label for="fsmMax">Max %</label>
+                    <input type="number" data-bind="value: fsmMaxNumberInput" class="form-control"
+                           id="fsmMax" min="0" max="100" step="1" onkeypress="return false">
+                </div>
+                <hr>
+            </div>
         </div>
-        <label class="control-label">KS2 APS</label>
-        <div data-bind="slider: { values: apsRange, realtime: true }"></div>
-        <div style="text-align: center">
-            <p>
-                <span data-bind="text: apsMin"></span> - <span data-bind="text: apsMax"></span>
-            </p>
+
+        <br data-bind="visible: !fsmFilterOn()">
+
+        <label class="control-label">
+            <input id="apsFilterOn" type="checkbox" value="" data-bind="checked: apsFilterOn">
+            <strong>KS2 APS</strong>
+        </label>
+        <div data-bind="visible: apsFilterOn">
+            <div class="visible-md visible-lg">
+                <div class="" data-bind="slider: { values: apsRange, realtime: true }"></div>
+                <div style="text-align: center">
+                    <p>
+                        <span data-bind="text: apsMin"></span> - <span data-bind="text: apsMax"></span>
+                    </p>
+                </div>
+            </div>
+            <div class="form-inline visible-xs visible-sm">
+                <div class="form-group">
+                    <label for="apsMin">Min %</label>
+                    <input type="number" data-bind="value: apsMinNumberInput" class="form-control"
+                           id="apsMin" min="15" max="30" step="1" onkeypress="return false">
+                    <label for="apsMax">Max %</label>
+                    <input type="number" data-bind="value: apsMaxNumberInput" class="form-control"
+                           id="apsMax" min="15" max="30" step="1" onkeypress="return false">
+                </div>
+            </div>
         </div>
     </div>
 </div>
