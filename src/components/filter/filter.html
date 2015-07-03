@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Filter</h3>
+    </div>
+    <div class="panel-body">
+        <label class="control-label">% Free school meals</label>
+        <div data-bind="slider: { values: fsmRange, realtime: true }"></div>
+        <div style="text-align: center">
+            <p>
+                <span data-bind="text: fsmMin"></span>% - <span data-bind="text: fsmMax"></span>%
+            </p>
+        </div>
+        <label class="control-label">KS2 APS</label>
+        <div data-bind="slider: { values: apsRange, realtime: true }"></div>
+        <div style="text-align: center">
+            <p>
+                <span data-bind="text: apsMin"></span> - <span data-bind="text: apsMax"></span>
+            </p>
+        </div>
+    </div>
+</div>

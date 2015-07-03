@@ -30,6 +30,8 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 return leaOptions;
             });
 
+            this.values = ko.observable([10, 50]);
+
             this.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',
                 'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ']);
 

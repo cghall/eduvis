@@ -17,6 +17,8 @@ define(['jquery', 'knockout', './router', 'bootstrap', 'knockout-projections'], 
     ko.components.register('sharing', { require: 'components/sharing/sharing' });
     ko.components.register('chart-description', { require: 'components/chart-description/chart-description' });
 
+    ko.components.register('filter', { require: 'components/filter/filter' });
+
     // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
 
     // Start the application
