@@ -1,4 +1,4 @@
-define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'jquery-ui-touch', 'knockout-jqueryui/slider', 'knockout-postbox'],
+define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knockout-jqueryui/slider', 'knockout-postbox'],
     function (ko, _, cm, templateMarkup) {
 
       function Filter() {
