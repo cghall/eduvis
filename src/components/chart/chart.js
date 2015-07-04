@@ -23,8 +23,7 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
                     var chart = new Highcharts.Chart({
                         chart: {
                             renderTo: 'myChart',
-                            type: 'bar',
-                            marginLeft: 300
+                            type: 'bar'
                         },
                         title: {
                             text: measure + ' for LEA ' + lea
