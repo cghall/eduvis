@@ -9,11 +9,11 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
 
             this.fsmFilterOn = ko.observable(false).subscribeTo("fsmFilterOn", true);
             this.fsmMin = ko.observable(0).subscribeTo("fsmMin", true);
-            this.fsmMax = ko.observable(100).subscribeTo("fsmMin", true);
+            this.fsmMax = ko.observable(100).subscribeTo("fsmMax", true);
 
             this.apsFilterOn = ko.observable(false).subscribeTo("apsFilterOn", true);
             this.apsMin = ko.observable(0).subscribeTo("apsMin", true);
-            this.apsMax = ko.observable(100).subscribeTo("apsMin", true);
+            this.apsMax = ko.observable(100).subscribeTo("apsMax", true);
 
             this.metricOptions = ko.computed(function () {
                 return _.chain(self.metaData())
