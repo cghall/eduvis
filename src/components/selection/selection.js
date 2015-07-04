@@ -7,7 +7,15 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.allData = ko.observable().subscribeTo("allData", true);
             this.metaData = ko.observable().subscribeTo("metaData", true);
 
-            this.metricOptions = ko.computed(function() {
+            this.fsmFilterOn = ko.observable(false).subscribeTo("fsmFilterOn", true);
+            this.fsmMin = ko.observable(0).subscribeTo("fsmMin", true);
+            this.fsmMax = ko.observable(100).subscribeTo("fsmMin", true);
+
+            this.apsFilterOn = ko.observable(false).subscribeTo("apsFilterOn", true);
+            this.apsMin = ko.observable(0).subscribeTo("apsMin", true);
+            this.apsMax = ko.observable(100).subscribeTo("apsMin", true);
+
+            this.metricOptions = ko.computed(function () {
                 return _.chain(self.metaData())
                     .pluck('metric')
                     .filter(_.identity)
@@ -18,7 +26,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
 
             this.selectedMetric = ko.observable();
 
-            this.pupilGroupOptions = ko.computed(function() {
+            this.pupilGroupOptions = ko.computed(function () {
                 return _.chain(self.metaData())
                     .where({metric: self.selectedMetric()})
                     .pluck('pupils')
@@ -33,12 +41,12 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.selectedMeasure = ko.computed({
-                read: function() {
+                read: function () {
                     var measure = _.findWhere(self.metaData(),
                         {metric: self.selectedMetric(), pupils: self.selectedPupilGroup()});
                     return measure && measure.column
                 },
-                write: function(column) {
+                write: function (column) {
                     var measure = _.findWhere(self.metaData(), {column: column});
                     self.selectedMetric(measure && measure.metric);
                     self.selectedPupilGroup(measure && measure.pupils);
@@ -47,25 +55,25 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             }).syncWith("selectedMeasure", true)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.selectedMeasureSuffix = ko.computed(function() {
+            this.selectedMeasureSuffix = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
                 return measure && measure.suffix;
             }).publishOn("selectedMeasureSuffix");
 
-            this.measureMin = ko.computed(function() {
+            this.measureMin = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
-                return measure && measure.lower/100;
+                return measure && measure.lower / 100;
             }).publishOn("selectedMeasureMin");
 
-            this.measureMax = ko.computed(function() {
+            this.measureMax = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
-                return measure && measure.upper/100;
+                return measure && measure.upper / 100;
             }).publishOn("selectedMeasureMax");
 
             this.selectedLea = ko.observable().syncWith("selectedLea", true)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.selectionSummary = ko.computed(function() {
+            this.selectionSummary = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
                 var measureShort = measure && measure.metric;
                 return measureShort + ' for LEA ' + self.selectedLea();
@@ -74,7 +82,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.focusedSchool = ko.observable()
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            ko.postbox.subscribe("focusedSchool", function(schoolName) {
+            ko.postbox.subscribe("focusedSchool", function (schoolName) {
                 self.focusedSchool(_.findWhere(self.allData(), {SCHNAME: schoolName}));
             }, true);
 
@@ -123,8 +131,23 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             }).publishOn("selectedSchoolsNames")
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
+            this.selectedAndFilteredSchoolsIncluded = ko.computed(function () {
+                var schools = self.selectedSchools();
+                if (self.fsmFilterOn()) {
+                    schools = _.filter(schools, function(school) {
+                        return school.PTFSMCLA >= self.fsmMin() && school.PTFSMCLA <= self.fsmMax();
+                    });
+                }
+                if (self.apsFilterOn()) {
+                    schools = _.filter(schools, function(school) {
+                        return school.KS2APS >= self.apsMin() && school.KS2APS <= self.apsMax();
+                    });
+                }
+                return schools;
+            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+
             this.selectedSchoolsSeriesWithColour = ko.computed(function () {
-                return _.map(self.selectedSchoolsIncluded(), function(school) {
+                return _.map(self.selectedAndFilteredSchoolsIncluded(), function (school) {
                     return school === self.focusedSchool()
                         ? {y: school[self.selectedMeasure()], color: 'orange'}
                         : school[self.selectedMeasure()]

@@ -8,10 +8,10 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
         function Filter() {
             var self = this;
 
-            this.fsmFilterOn = ko.observable(false);
+            this.fsmFilterOn = ko.observable(false).publishOn("fsmFilterOn");
 
-            this.fsmMin = ko.observable(0);
-            this.fsmMax = ko.observable(100);
+            this.fsmMin = ko.observable(0).publishOn("fsmMin");
+            this.fsmMax = ko.observable(100).publishOn("fsmMax");
             this.fsmMinNumberInput = ko.observable(0);
             this.fsmMaxNumberInput = ko.observable(100);
 
@@ -46,18 +46,18 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
                 owner: self
             });
 
-            this.apsFilterOn = ko.observable(false);
+            this.apsFilterOn = ko.observable(false).publishOn("apsFilterOn");
 
             this.apsMinPercent = ko.observable(0);
             this.apsMaxPercent = ko.observable(100);
 
             this.apsMin = ko.computed(function() {
                 return 15 + Math.round(self.apsMinPercent()/100. * 15);
-            });
+            }).publishOn("apsMin");
 
             this.apsMax = ko.computed(function() {
                 return 15 + Math.round(self.apsMaxPercent()/100. * 15);
-            });
+            }).publishOn("apsMax");
 
             this.apsMinNumberInput = ko.observable(15);
             this.apsMaxNumberInput = ko.observable(30);
