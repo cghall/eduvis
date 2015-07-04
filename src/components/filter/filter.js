@@ -10,8 +10,14 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
 
             this.fsmFilterOn = ko.observable(false).publishOn("fsmFilterOn");
 
-            this.fsmMin = ko.observable(0).publishOn("fsmMin");
-            this.fsmMax = ko.observable(100).publishOn("fsmMax");
+            this.fsmMin = ko.observable(0)
+                .publishOn("fsmMin")
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 100}});
+
+            this.fsmMax = ko.observable(100)
+                .publishOn("fsmMax")
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 100}});
+
             this.fsmMinNumberInput = ko.observable(0);
             this.fsmMaxNumberInput = ko.observable(100);
 
@@ -23,7 +29,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
                 self.fsmMax(max);
                 self.fsmMinNumberInput(min);
                 self.fsmMaxNumberInput(max);
-            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+            });
 
             this.updateFromFsm = ko.computed(function() {
                 var x = self.fsmMin(), y = self.fsmMax();
@@ -31,7 +37,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
                 self.fsmMax(Math.max(x, y));
                 self.fsmMinNumberInput(Math.min(x, y));
                 self.fsmMaxNumberInput(Math.max(x, y));
-            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+            });
 
             this.fsmRange = ko.computed({
                 read: function() {
@@ -53,11 +59,13 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
 
             this.apsMin = ko.computed(function() {
                 return 15 + Math.round(self.apsMinPercent()/100. * 15);
-            }).publishOn("apsMin");
+            }).publishOn("apsMin")
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 100}});
 
             this.apsMax = ko.computed(function() {
                 return 15 + Math.round(self.apsMaxPercent()/100. * 15);
-            }).publishOn("apsMax");
+            }).publishOn("apsMax")
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 100}});
 
             this.apsMinNumberInput = ko.observable(15);
             this.apsMaxNumberInput = ko.observable(30);
@@ -72,13 +80,13 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
                 self.apsMaxPercent(maxPercent);
                 self.apsMinNumberInput(min);
                 self.apsMaxNumberInput(max);
-            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+            });
 
             this.updateFromAps = ko.computed(function() {
                 var x = self.apsMin(), y = self.apsMax();
                 self.apsMinNumberInput(Math.min(x, y));
                 self.apsMaxNumberInput(Math.max(x, y));
-            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+            });
 
             this.apsRange = ko.computed({
                 read: function() {
