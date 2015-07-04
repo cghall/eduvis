@@ -36,10 +36,6 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
 
             this.selectedPupilGroup = ko.observable();
 
-            this.selectedMeasure = ko.observable()
-                .syncWith("selectedMeasure", true)
-                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
-
             this.selectedMeasure = ko.computed({
                 read: function () {
                     var measure = _.findWhere(self.metaData(),
@@ -102,7 +98,6 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
 
             this.selectedSchools = ko.computed(function () {
                 var selectedSchools = _.where(self.allData(), {LEA: self.selectedLea()});
-                console.log(selectedSchools)
                 return _.sortBy(selectedSchools, self.selectedMeasure());
             });
 
@@ -128,7 +123,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             });
 
             this.selectedAndFilteredSchoolsIncluded = ko.computed(function () {
-                var schools = self.selectedSchools();
+                var schools = self.selectedSchoolsIncluded();
                 if (self.fsmFilterOn()) {
                     schools = _.filter(schools, function(school) {
                         return school.PTFSMCLA >= self.fsmMin() && school.PTFSMCLA <= self.fsmMax();
