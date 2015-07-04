@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Eduvis</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="scripts.js"></script>
+  </head>
+  <body>
+    <nav-bar params="route: route"></nav-bar>
+    <div id="page" data-bind="component: { name: route().page, params: route }"></div>
+  </body>
+</html>
