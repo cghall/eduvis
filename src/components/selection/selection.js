@@ -7,20 +7,82 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.allData = ko.observable().subscribeTo("allData", true);
             this.metaData = ko.observable().subscribeTo("metaData", true);
 
-            this.selectedMeasure = ko.observable().syncWith("selectedMeasure", true)
+            this.metricOptions = ko.computed(function() {
+                return _.chain(self.metaData())
+                    .pluck('metric')
+                    .filter(_.identity)
+                    .sortBy(_.identity)
+                    .uniq()
+                    .value();
+            });
+
+            this.selectedMetric = ko.observable();
+
+            this.pupilGroupOptions = ko.computed(function() {
+                return _.chain(self.metaData())
+                    .where({metric: self.selectedMetric()})
+                    .pluck('pupils')
+                    .sortBy(_.identity)
+                    .value();
+            });
+
+            this.selectedPupilGroup = ko.observable();
+
+            this.selectedMeasure = ko.observable()
+                .syncWith("selectedMeasure", true)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+
+            this.selectedMeasure = ko.computed({
+                read: function() {
+                    var measure = _.findWhere(self.metaData(),
+                        {metric: self.selectedMetric(), pupils: self.selectedPupilGroup()});
+                    return measure && measure.column
+                },
+                write: function(column) {
+                    var measure = _.findWhere(self.metaData(), {column: column});
+                    self.selectedMetric(measure && measure.metric);
+                    self.selectedPupilGroup(measure && measure.pupils);
+                },
+                owner: self
+            }).syncWith("selectedMeasure", true)
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+
+            this.selectedMeasureSuffix = ko.computed(function() {
+                var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
+                return measure && measure.suffix;
+            }).publishOn("selectedMeasureSuffix");
+
+            this.measureMin = ko.computed(function() {
+                var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
+                return measure && measure.lower/100;
+            }).publishOn("selectedMeasureMin");
+
+            this.measureMax = ko.computed(function() {
+                var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
+                return measure && measure.upper/100;
+            }).publishOn("selectedMeasureMax");
 
             this.selectedLea = ko.observable().syncWith("selectedLea", true)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.focusedSchool = ko.observable().syncWith("focusedSchool", true)
+            this.selectionSummary = ko.computed(function() {
+                var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
+                var measureShort = measure && measure.metric;
+                return measureShort + ' for LEA ' + self.selectedLea();
+            }).publishOn("selectionSummary");
+
+            this.focusedSchool = ko.observable()
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+
+            ko.postbox.subscribe("focusedSchool", function(schoolName) {
+                self.focusedSchool(_.findWhere(self.allData(), {SCHNAME: schoolName}));
+            }, true);
 
             this.updateCookie = ko.computed(function () {
                 cm.extendCookie('graph', {
                     measure: self.selectedMeasure(),
                     lea: self.selectedLea(),
-                    focusedSchool: self.focusedSchool()
+                    focusedSchool: self.focusedSchool() && self.focusedSchool()['SCHNAME']
                 });
             });
 
@@ -29,15 +91,6 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 leaOptions.sort();
                 return leaOptions;
             });
-
-            this.values = ko.observable([10, 50]);
-
-            this.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',
-                'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ']);
-
-            this.pupilGroupOptions = ko.observable(['All', 'Free school meals', 'Non free school meals']);
-
-            this.selectedPupilGroup = ko.observable();
 
             this.selectedSchools = ko.computed(function () {
                 var selectedSchools = _.where(self.allData(), {LEA: self.selectedLea()});
@@ -70,22 +123,12 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             }).publishOn("selectedSchoolsNames")
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.selectedSchoolsNamesAlphabetical = ko.computed(function () {
-                var names = self.selectedSchoolsNames().slice(0);
-                names.sort();
-                return names;
-            });
-
-            this.focusedSchoolIndex = ko.computed(function () {
-                return self.selectedSchoolsNames().indexOf(self.focusedSchool());
-            });
-
             this.selectedSchoolsSeriesWithColour = ko.computed(function () {
-                var data = _.pluck(self.selectedSchoolsIncluded(), self.selectedMeasure());
-                if (self.focusedSchoolIndex() >= 0 && data[self.focusedSchoolIndex()]) {
-                    data[self.focusedSchoolIndex()] = {y: data[self.focusedSchoolIndex()], color: 'orange'};
-                }
-                return data;
+                return _.map(self.selectedSchoolsIncluded(), function(school) {
+                    return school === self.focusedSchool()
+                        ? {y: school[self.selectedMeasure()], color: 'orange'}
+                        : school[self.selectedMeasure()]
+                });
             }).publishOn("selectedSchoolsSeries")
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
         }

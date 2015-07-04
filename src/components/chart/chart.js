@@ -4,10 +4,15 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
         var self = this;
 
         this.measure = ko.observable().subscribeTo("selectedMeasure", true);
+        this.selectionSummary = ko.observable().subscribeTo("selectionSummary", true);
+        this.measureSuffix = ko.observable().subscribeTo("selectedMeasureSuffix", true);
         this.lea = ko.observable().subscribeTo("selectedLea", true);
         this.schoolNames = ko.observable().subscribeTo("selectedSchoolsNames", true);
         this.schoolSeries = ko.observable().subscribeTo("selectedSchoolsSeries", true);
         this.averagePlotLines = ko.observable().subscribeTo("averagePlotLines", true);
+
+        this.measureMin = ko.observable().subscribeTo("selectedMeasureMin", true);
+        this.measureMax = ko.observable().subscribeTo("selectedMeasureMax", true);
 
         this.columnChart = ko.observable();
 
@@ -26,16 +31,24 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
                             type: 'bar'
                         },
                         title: {
-                            text: measure + ' for LEA ' + lea
+                            text: self.selectionSummary(),
+                            style: {
+                                fontSize: 15,
+                                fontWeight: "bold"
+                            }
                         },
                         xAxis: {
                             categories: schoolNames
                         },
                         yAxis: {
+                            labels: {
+                                format: '{value}' + self.measureSuffix()
+                            },
                             title: {
                                 text: measure
                             },
-                            max: 1
+                            min: self.measureMin(),
+                            max: self.measureMax()
                         },
                         series: [{
                             showInLegend: false,
@@ -44,7 +57,10 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
                             animation: {
                                 duration: 300
                             }
-                        }]
+                        }],
+                        tooltip: {
+                            valueSuffix: self.measureSuffix()
+                        }
                     });
                     self.columnChart(chart);
 

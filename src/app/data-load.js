@@ -87,7 +87,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
 
                 $.ajax({
                     type: "GET",
-                    url: "data-src/dfe/ks4_meta.csv",
+                    url: "data-src/meta_file.csv",
                     dataType: "text",
                     success: function(data) {
                         Papa.parse(data, metaPapaConfig);

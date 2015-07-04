@@ -7,8 +7,8 @@ define(['knockout', 'underscore', 'text!./chart-description.html', 'knockout-pos
         this.selectedMeasure = ko.observable().subscribeTo("selectedMeasure", true);
 
         this.selectedMeasureDescription = ko.computed(function() {
-            var measure = _.findWhere(self.metaData(), { 'Metafile heading': self.selectedMeasure() });
-            return measure ? measure['Metafile description'] : '...';
+            var measure = _.findWhere(self.metaData(), { 'column': self.selectedMeasure() });
+            return measure ? measure['long_description'] : '...';
         });
     }
 

@@ -20,7 +20,8 @@
 
         <label class="control-label">
             School of interest
-            <select class="form-control" data-bind="options: selectedSchoolsNamesAlphabetical,
+            <select class="form-control" data-bind="options: selectedSchoolsIncluded,
+                                                    optionsText: 'SCHNAME',
                                                     value: focusedSchool,
                                                     optionsCaption: 'select a school...'"></select>
         </label>
@@ -28,15 +29,15 @@
         <hr>
 
         <label class="control-label">
+            Measure
+            <select class="form-control" data-bind="options: metricOptions,
+                                                    value: selectedMetric"></select>
+        </label><br>
+
+        <label class="control-label">
             Pupil group
             <select class="form-control" data-bind="options: pupilGroupOptions,
                                                     value: selectedPupilGroup"></select>
-        </label>
-
-        <label class="control-label">
-            Measure
-            <select class="form-control" data-bind="options: measureOptions,
-                                                    value: selectedMeasure"></select>
         </label>
 
     </div>
