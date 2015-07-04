@@ -1,13 +1,15 @@
-column,short_description,long_description,category,data_type,lower,upper,associated_cols,aggregate_calculation
-PTAC5EM_PTQ,Five A*-C or equivalent inc. Eng and Maths (%),Percentage of pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,% (as float),0,100,"TAC5EMNFSM_PTQ, TAC5EMFSM_PTQ",(TAC5EMNFSM_PTQ + TAC5EMFSM_PTQ) / TPUP
-PTAC5EMFSM_PTQ,Disadvantaged pupils 5 A*-C inc. Eng and Maths (%),Percentage of disadvantaged pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,% (as float),0,100,"TAC5EMFSM_PTQ, TFSMCLA",TAC5EMFSM_PTQ / TFSMCLA
-PTEBACC_PTQ,EBacc pass rate (%),Percentage of Key Stage 4 pupils achieving the English Baccalaureate,metric,% (as float),0,100,TEBACC_E_PTQ,(PTEBACC_PTQ * TEBACC_E_PTQ) / TEBACC_E_PTQ
-PT24ENGPRG_PTQ,Expected progress in English (%),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE English,metric,% (as float),0,100,,(PT24ENGPRG_PTQ * TPUP) / TPUP
-PT24MATHPRG_PTQ,Expected progress in Maths (%),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE mathematics,metric,% (as float),0,100,,(PT24MATHPRG_PTQ * TPUP) / TPUP
-B8VAMEA_PTQ,Best 8 value added,Value Added measure based on the best 8 GCSE and equivalent results,metric,int,850,1150,,(B8VAMEA_PTQ * TPUP) / TPUP
-KS2APS,KS2 Average Points Score,Key Stage 2 Average Points Score of Key Stage 4 cohort,filter,int,20,30,,(KS2APS * TPUP) / TPUP
-PTFSMCLA,Percentage of FSM,Percentage of pupils who are disadvantaged,filter,% (as float),0,100,TFSMCLA,TFSMCLA / TPUP
-PTAC5EMLO_PTQ,Five A*-C low attainers,Percentage of pupils with low prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,% (as float),0,100,TPRIORLO,(PTAC5EMLO_PTQ * TPRIORLO) / TPRIORLO
-PTAC5EMAV_PTQ,Five A*-C average attainers,Percentage of pupils with middle prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,% (as float),0,100,TPRIORAV,(PTAC5EMAV_PTQ * TPRIORAV) / TPRIORAV
-PTAC5EMHI_PTQ,Five A*-C high attainers,Percentage of pupils with high prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,% (as float),0,100,TPRIORHI,(PTAC5EMHI_PTQ * TPRIORHI) / TPRIORHI
-TTAPSPEPP_PTQ,Average point score per entry,Average points score per qualification entry per pupil (including equivalents),metric,int,0,50,,(TTAPSPEPP_PTQ * TPUP) / TPUP
+column,metric,long_description,category,data_type,lower,upper,associated_cols,aggregate_calculation,pupils,suffix
+PTAC5EM_PTQ,AC5EM,Percentage of pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,"TAC5EMNFSM_PTQ,TAC5EMFSM_PTQ",(TAC5EMNFSM_PTQ + TAC5EMFSM_PTQ) / TPUP,all,%
+PTAC5EMFSM_PTQ,AC5EM,Percentage of disadvantaged pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,"TAC5EMFSM_PTQ,TFSMCLA",TAC5EMFSM_PTQ / TFSMCLA,disadvantaged,%
+PTEBACC_PTQ,EBACC,Percentage of Key Stage 4 pupils achieving the English Baccalaureate,metric,int,0,100,TEBACC_E_PTQ,(PTEBACC_PTQ * TEBACC_E_PTQ) / TEBACC_E_PTQ,all,%
+PT24ENGPRG_PTQ,Expected progress (English),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE English,metric,int,0,100,TPUP,(PT24ENGPRG_PTQ * TPUP) / TPUP,all,%
+PT24MATHPRG_PTQ,Expected progress (maths),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE mathematics,metric,int,0,100,TPUP,(PT24MATHPRG_PTQ * TPUP) / TPUP,all,%
+B8VAMEA_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results,metric,int,850,1150,TPUP,(B8VAMEA_PTQ * TPUP) / TPUP,all,
+KS2APS,KS2APS,Key Stage 2 Average Points Score of Key Stage 4 cohort,filter,int,20,30,TPUP,(KS2APS * TPUP) / TPUP,all,
+PTFSMCLA,FSM,Percentage of pupils who are disadvantaged,filter,int,0,100,TFSMCLA,TFSMCLA / TPUP,,%
+PTAC5EMLO_PTQ,AC5EM,Percentage of pupils with low prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TPRIORLO,(PTAC5EMLO_PTQ * TPRIORLO) / TPRIORLO,low attainers,%
+PTAC5EMAV_PTQ,AC5EM,Percentage of pupils with middle prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TPRIORAV,(PTAC5EMAV_PTQ * TPRIORAV) / TPRIORAV,middle attainers,%
+PTAC5EMHI_PTQ,AC5EM,Percentage of pupils with high prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TPRIORHI,(PTAC5EMHI_PTQ * TPRIORHI) / TPRIORHI,high attainers,%
+TTAPSPEPP_PTQ,APS per entry,Average points score per qualification entry per pupil (including equivalents),metric,int,0,50,TPUP,(TTAPSPEPP_PTQ * TPUP) / TPUP,all,
+SCHNAME,,School name,grouping,str,,,,,,
+LEA,,Local Authority,grouping,str,,,,,,
