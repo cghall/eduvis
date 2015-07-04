@@ -62,12 +62,12 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
 
             this.measureMin = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
-                return measure && measure.lower / 100;
+                return measure && measure.lower;
             }).publishOn("selectedMeasureMin");
 
             this.measureMax = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
-                return measure && measure.upper / 100;
+                return measure && measure.upper;
             }).publishOn("selectedMeasureMax");
 
             this.selectedLea = ko.observable().syncWith("selectedLea", true)
@@ -102,6 +102,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
 
             this.selectedSchools = ko.computed(function () {
                 var selectedSchools = _.where(self.allData(), {LEA: self.selectedLea()});
+                console.log(selectedSchools)
                 return _.sortBy(selectedSchools, self.selectedMeasure());
             });
 
@@ -126,11 +127,6 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 return included;
             });
 
-            this.selectedSchoolsNames = ko.computed(function () {
-                return _.pluck(self.selectedSchoolsIncluded(), 'SCHNAME');
-            }).publishOn("selectedSchoolsNames")
-                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
-
             this.selectedAndFilteredSchoolsIncluded = ko.computed(function () {
                 var schools = self.selectedSchools();
                 if (self.fsmFilterOn()) {
@@ -145,6 +141,11 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 }
                 return schools;
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+
+            this.selectedSchoolsNames = ko.computed(function () {
+                return _.pluck(self.selectedAndFilteredSchoolsIncluded(), 'SCHNAME');
+            }).publishOn("selectedSchoolsNames")
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.selectedSchoolsSeriesWithColour = ko.computed(function () {
                 return _.map(self.selectedAndFilteredSchoolsIncluded(), function (school) {

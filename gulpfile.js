@@ -66,7 +66,7 @@ gulp.task('html', function() {
 });
 
 gulp.task('csv', function() {
-    gulp.src('./src/data-out/School_data_trimmed.csv')
+    gulp.src('./src/data-out/final_data.csv')
         .pipe(gulp.dest('./dist/data-out/'));
     return gulp.src('./src/data-src/meta_file.csv')
         .pipe(gulp.dest('./dist/data-src/'))

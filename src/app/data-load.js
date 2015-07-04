@@ -68,6 +68,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
             var dataComplete = function(result) {
                 self.schoolDataLoaded(true);
                 self.allData(result.data);
+                console.log(result.data)
                 self.setFromSelectionOptions(queryStringOptions);
                 history.pushState({}, '', [location.protocol, '//', location.host, location.pathname].join(''));
             };
@@ -78,7 +79,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
             $(document).ready(function() {
                 $.ajax({
                     type: "GET",
-                    url: "data-out/School_data_trimmed.csv",
+                    url: "data-out/final_data.csv",
                     dataType: "text",
                     success: function(data) {
                         Papa.parse(data, dataPapaConfig);
