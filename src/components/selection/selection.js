@@ -8,19 +8,30 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.metaData = ko.observable().subscribeTo("metaData", true);
 
             this.fsmFilterOn = ko.observable(false).subscribeTo("fsmFilterOn", true);
-            this.fsmMin = ko.observable(0).subscribeTo("fsmMin", true);
-            this.fsmMax = ko.observable(100).subscribeTo("fsmMax", true);
+            this.fsmMin = ko.observable().subscribeTo("fsmMin", true);
+            this.fsmMax = ko.observable().subscribeTo("fsmMax", true);
 
             this.apsFilterOn = ko.observable(false).subscribeTo("apsFilterOn", true);
-            this.apsMin = ko.observable(0).subscribeTo("apsMin", true);
-            this.apsMax = ko.observable(100).subscribeTo("apsMax", true);
+            this.apsMin = ko.observable().subscribeTo("apsMin", true);
+            this.apsMax = ko.observable().subscribeTo("apsMax", true);
+
+            this.leaOptions = ko.computed(function () {
+                return _.chain(self.allData())
+                    .pluck('LEA')
+                    .sortBy(_.identity)
+                    .uniq(true)
+                    .value();
+            });
+
+            this.selectedLea = ko.observable().syncWith("selectedLea", true)
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.metricOptions = ko.computed(function () {
                 return _.chain(self.metaData())
                     .pluck('metric')
                     .filter(_.identity)
                     .sortBy(_.identity)
-                    .uniq()
+                    .uniq(true)
                     .value();
             });
 
@@ -54,7 +65,8 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.selectedMeasureSuffix = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
                 return measure && measure.suffix;
-            }).publishOn("selectedMeasureSuffix");
+            }).publishOn("selectedMeasureSuffix")
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.measureMin = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
@@ -66,17 +78,14 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 return measure && measure.upper;
             }).publishOn("selectedMeasureMax");
 
-            this.selectedLea = ko.observable().syncWith("selectedLea", true)
-                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
-
             this.selectionSummary = ko.computed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMeasure()});
                 var measureShort = measure && measure.metric;
                 return measureShort + ' for LEA ' + self.selectedLea();
-            }).publishOn("selectionSummary");
-
-            this.focusedSchool = ko.observable()
+            }).publishOn("selectionSummary")
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+
+            this.focusedSchool = ko.observable();
 
             ko.postbox.subscribe("focusedSchool", function (schoolName) {
                 self.focusedSchool(_.findWhere(self.allData(), {SCHNAME: schoolName}));
@@ -88,54 +97,52 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                     lea: self.selectedLea(),
                     focusedSchool: self.focusedSchool() && self.focusedSchool()['SCHNAME']
                 });
-            });
-
-            this.leaOptions = ko.computed(function () {
-                var leaOptions = _.uniq(_.pluck(self.allData(), 'LEA'));
-                leaOptions.sort();
-                return leaOptions;
-            });
+            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.selectedSchools = ko.computed(function () {
-                var selectedSchools = _.where(self.allData(), {LEA: self.selectedLea()});
-                return _.sortBy(selectedSchools, self.selectedMeasure());
+                return _.chain(self.allData())
+                    .where({LEA: self.selectedLea()})
+                    .value();
             });
 
             this.selectedSchoolsExcluded = ko.observable([]);
 
             this.selectedSchoolsExcludedNames = ko.computed(function () {
-                var names = _.pluck(self.selectedSchoolsExcluded(), 'SCHNAME');
-                names.sort();
-                return names.join('<hr>');
+                return _.chain(self.selectedSchoolsExcluded())
+                    .pluck('SCHNAME')
+                    .sortBy(_.identity)
+                    .value()
+                    .join('<hr>');
             });
 
             this.selectedSchoolsIncluded = ko.computed(function () {
-                var hasData = function (school) {
-                    return school[self.selectedMeasure()] !== '';
+                var hasNumericData = function (school) {
+                    var measure = school[self.selectedMeasure()];
+                    return measure !== '' && $.isNumeric(measure);
                 };
 
-                var allSchools = _.partition(self.selectedSchools(), hasData);
+                var allSchools = _.partition(self.selectedSchools(), hasNumericData);
                 var included = allSchools[0];
                 var excluded = allSchools[1];
 
                 self.selectedSchoolsExcluded(excluded);
-                return included;
+                return _.sortBy(included, self.selectedMeasure());
             });
 
             this.selectedAndFilteredSchoolsIncluded = ko.computed(function () {
                 var schools = self.selectedSchoolsIncluded();
                 if (self.fsmFilterOn()) {
-                    schools = _.filter(schools, function(school) {
+                    schools = _.filter(schools, function (school) {
                         return school.PTFSMCLA >= self.fsmMin() && school.PTFSMCLA <= self.fsmMax();
                     });
                 }
                 if (self.apsFilterOn()) {
-                    schools = _.filter(schools, function(school) {
+                    schools = _.filter(schools, function (school) {
                         return school.KS2APS >= self.apsMin() && school.KS2APS <= self.apsMax();
                     });
                 }
                 return schools;
-            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+            });
 
             this.selectedSchoolsNames = ko.computed(function () {
                 return _.pluck(self.selectedAndFilteredSchoolsIncluded(), 'SCHNAME');
