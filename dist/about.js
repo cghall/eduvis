@@ -1,1 +1,0 @@
-define("text!components/about-page/about.html",[],function(){return'<div class="container">\n    <h2>About</h2>\n\n    <p>This component has no viewmodel. It\'s just an HTML template.</p>\n</div>\n'});

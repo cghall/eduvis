@@ -1,1 +1,0 @@
-define("text!components/blog-page/blog.html",[],function(){return"<div class=\"container\">\n    <h2>Blog</h2>\n\n    <p data-bind='text: message'></p>\n</div>\n"}),define("components/blog-page/blog",["knockout","text!./blog.html"],function(n,e){function o(e){this.message=n.observable("Blog coming soon...")}return{viewModel:o,template:e}});
