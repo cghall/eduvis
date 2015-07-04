@@ -68,8 +68,8 @@ gulp.task('html', function() {
 gulp.task('csv', function() {
     gulp.src('./src/data-out/School_data_trimmed.csv')
         .pipe(gulp.dest('./dist/data-out/'));
-    return gulp.src('./src/data-src/dfe/ks4_meta.csv')
-        .pipe(gulp.dest('./dist/data-src/dfe/'))
+    return gulp.src('./src/data-src/meta_file.csv')
+        .pipe(gulp.dest('./dist/data-src/'))
 });
 
 // Removes all files from ./dist/
