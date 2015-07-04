@@ -1,21 +1,27 @@
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title">Display Averages</h3>
+        <h3 class="panel-title">
+            <a data-toggle="collapse" data-target="#collapseDispAvg" name="collapseDispAvg">
+                Display Averages
+            </a>
+        </h3>
     </div>
-    <div class="panel-body">
-        <div class="checkbox">
-            <label>
-                <input id="nat-avg" type="checkbox" value="" data-bind="checked: showNationalAverage">
-                National
-            </label><br>
-            <label>
-                <input id="top-avg" type="checkbox" value="" data-bind="checked: showTop10Percent">
-                Top 10%
-            </label><br>
-            <label>
-                <input id="bot-avg" type="checkbox" value="" data-bind="checked: showBottom10Percent">
-                Bottom 10%
-            </label>
+    <div id="collapseDispAvg" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <div class="checkbox">
+                <label>
+                    <input id="nat-avg" type="checkbox" value="" data-bind="checked: showNationalAverage">
+                    National
+                </label><br>
+                <label>
+                    <input id="top-avg" type="checkbox" value="" data-bind="checked: showTop10Percent">
+                    Top 10%
+                </label><br>
+                <label>
+                    <input id="bot-avg" type="checkbox" value="" data-bind="checked: showBottom10Percent">
+                    Bottom 10%
+                </label>
+            </div>
         </div>
     </div>
 </div>

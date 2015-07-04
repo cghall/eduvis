@@ -1,44 +1,50 @@
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title">Selection</h3>
+        <h3 class="panel-title">
+            <a data-toggle="collapse" data-target="#collapseSelection" name="collapseSelection">
+                Selection
+            </a>
+        </h3>
     </div>
-    <div class="panel-body">
-        <label class="control-label">
-            LEA
-            <select class="form-control"
-                    data-bind="options: leaOptions, value: selectedLea"></select>
-        </label>
+    <div id="collapseSelection" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <label class="control-label">
+                LEA
+                <select class="form-control"
+                        data-bind="options: leaOptions, value: selectedLea"></select>
+            </label>
 
-        <button class="btn ko-popover"
-                data-bind="visible: selectedSchoolsExcludedNames,
-                           popover: true,
-                           popoverOptions: { html: true, content: selectedSchoolsExcludedNames }"
-                data-popover-placement="bottom"
-                data-popover-title="Data not available for:">
-            Excluded schools
-        </button><br>
+            <button class="btn ko-popover"
+                    data-bind="visible: selectedSchoolsExcludedNames,
+                               popover: true,
+                               popoverOptions: { html: true, content: selectedSchoolsExcludedNames }"
+                    data-popover-placement="bottom"
+                    data-popover-title="Data not available for:">
+                Excluded schools
+            </button><br>
 
-        <label class="control-label">
-            School of interest
-            <select class="form-control" data-bind="options: selectedSchoolsIncluded,
-                                                    optionsText: 'SCHNAME',
-                                                    value: focusedSchool,
-                                                    optionsCaption: 'select a school...'"></select>
-        </label>
+            <label class="control-label">
+                School of interest
+                <select class="form-control" data-bind="options: selectedSchoolsIncludedAlphabetical,
+                                                        optionsText: 'SCHNAME',
+                                                        value: focusedSchool,
+                                                        optionsCaption: 'select a school...'"></select>
+            </label>
 
-        <hr>
+            <hr>
 
-        <label class="control-label">
-            Measure
-            <select class="form-control" data-bind="options: metricOptions,
-                                                    value: selectedMetric"></select>
-        </label>
+            <label class="control-label">
+                Measure
+                <select class="form-control" data-bind="options: metricOptions,
+                                                        value: selectedMetric"></select>
+            </label>
 
-        <label class="control-label">
-            Pupil group
-            <select class="form-control" data-bind="options: pupilGroupOptions,
-                                                    value: selectedPupilGroup"></select>
-        </label>
+            <label class="control-label">
+                Pupil group
+                <select class="form-control" data-bind="options: pupilGroupOptions,
+                                                        value: selectedPupilGroup"></select>
+            </label>
 
+        </div>
     </div>
 </div>

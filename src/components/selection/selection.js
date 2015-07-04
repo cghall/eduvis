@@ -129,6 +129,10 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 return _.sortBy(included, self.selectedMeasure());
             });
 
+            this.selectedSchoolsIncludedAlphabetical = ko.computed(function () {
+                return _.sortBy(self.selectedSchoolsIncluded(), 'SCHNAME');
+            });
+
             this.selectedAndFilteredSchoolsIncluded = ko.computed(function () {
                 var schools = self.selectedSchoolsIncluded();
                 if (self.fsmFilterOn()) {
