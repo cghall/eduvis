@@ -42,14 +42,14 @@ gulp.task('js', function () {
 
 // Concatenates CSS files, rewrites relative paths to Bootstrap fonts, copies Bootstrap fonts
 gulp.task('css', function () {
-    var bowerCss = gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.min.css')
+    var bowerCss = gulp.src('src/bower_modules/bootstrap/dist/css/bootstrap.min.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
         fontAwesomeCss = gulp.src('src/bower_modules/components-font-awesome/css/font-awesome.min.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
         jqueryuiCss = gulp.src('src/bower_modules/jquery-ui/themes/base/jquery-ui.css'),
         appCss = gulp.src('src/css/*.css'),
         combinedCss = es.concat(bowerCss, fontAwesomeCss, jqueryuiCss, appCss).pipe(concat('css.css')),
-        bootstrapFontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', { base: './src/bower_modules/components-bootstrap/' }),
+        bootstrapFontFiles = gulp.src('./src/bower_modules/bootstrap/dist/fonts/*', { base: './src/bower_modules/bootstrap/dist' }),
         fontAwesomeFontFiles = gulp.src('./src/bower_modules/components-font-awesome/fonts/*', { base: './src/bower_modules/components-font-awesome/' });
     return es.concat(bootstrapFontFiles, fontAwesomeFontFiles, combinedCss)
         .pipe(gulp.dest('./dist/'));

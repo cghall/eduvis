@@ -2,7 +2,7 @@
 var require = {
     baseUrl: ".",
     paths: {
-        "bootstrap":            "bower_modules/components-bootstrap/js/bootstrap.min",
+        "bootstrap":            "bower_modules/bootstrap/dist/js/bootstrap.min",
         "cookie-manager":       "app/cookie-manager",
         "crossroads":           "bower_modules/crossroads/dist/crossroads.min",
         "data-load":            "app/data-load",

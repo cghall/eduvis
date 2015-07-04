@@ -66,10 +66,13 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
             };
 
             var dataComplete = function(result) {
-                self.schoolDataLoaded(true);
-                self.allData(result.data);
-                self.setFromSelectionOptions(queryStringOptions);
-                history.pushState({}, '', [location.protocol, '//', location.host, location.pathname].join(''));
+                setTimeout(function() {
+                    self.schoolDataLoaded(true);
+                    self.allData(result.data);
+                    self.setFromSelectionOptions(queryStringOptions);
+                    history.pushState({}, '', [location.protocol, '//', location.host, location.pathname].join(''));
+                }, 2000)
+
             };
 
             var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
