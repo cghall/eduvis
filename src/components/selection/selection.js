@@ -35,6 +35,10 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.measureOptions = ko.observableArray(['PTAC5EM_PTQ', 'PTEBACC_PTQ', 'PTAC5EMFSM_PTQ',
                 'PT24ENGPRG_PTQ', 'PT24MATHPRG_PTQ']);
 
+            this.pupilGroupOptions = ko.observable(['All', 'Free school meals', 'Non free school meals']);
+
+            this.selectedPupilGroup = ko.observable();
+
             this.selectedSchools = ko.computed(function () {
                 var selectedSchools = _.where(self.allData(), {LEA: self.selectedLea()});
                 return _.sortBy(selectedSchools, self.selectedMeasure());
