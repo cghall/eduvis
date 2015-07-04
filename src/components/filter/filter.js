@@ -17,10 +17,12 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
 
             this.updateFromFsmNumberInput = ko.computed(function() {
                 var x = self.fsmMinNumberInput(), y = self.fsmMaxNumberInput();
-                self.fsmMin(Math.min(x, y));
-                self.fsmMax(Math.max(x, y));
-                self.fsmMinNumberInput(Math.min(x, y));
-                self.fsmMaxNumberInput(Math.max(x, y));
+                var min = Math.max(0, Math.min(x, y));
+                var max = Math.min(100, Math.max(x, y));
+                self.fsmMin(min);
+                self.fsmMax(max);
+                self.fsmMinNumberInput(min);
+                self.fsmMaxNumberInput(max);
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.updateFromFsm = ko.computed(function() {
@@ -62,12 +64,14 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./filter.html', 'knock
 
             this.updateFromApsNumberInput = ko.computed(function() {
                 var x = self.apsMinNumberInput(), y = self.apsMaxNumberInput();
-                var xPercent = Math.round((self.apsMinNumberInput() - 15) / 0.15);
-                var yPercent = Math.round((self.apsMaxNumberInput() - 15) / 0.15);
-                self.apsMinPercent(Math.min(xPercent, yPercent));
-                self.apsMaxPercent(Math.max(xPercent, yPercent));
-                self.apsMinNumberInput(Math.min(x, y));
-                self.apsMaxNumberInput(Math.max(x, y));
+                var min = Math.max(15, Math.min(x, y));
+                var max = Math.min(30, Math.max(x, y));
+                var minPercent = Math.round((min - 15) / 0.15);
+                var maxPercent = Math.round((max - 15) / 0.15);
+                self.apsMinPercent(minPercent);
+                self.apsMaxPercent(maxPercent);
+                self.apsMinNumberInput(min);
+                self.apsMaxNumberInput(max);
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.updateFromAps = ko.computed(function() {
