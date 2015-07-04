@@ -112,7 +112,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                     .pluck('SCHNAME')
                     .sortBy(_.identity)
                     .value()
-                    .join('<hr>');
+                    .join('<br>');
             });
 
             this.selectedSchoolsIncluded = ko.computed(function () {
