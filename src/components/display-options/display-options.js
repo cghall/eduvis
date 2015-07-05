@@ -1,4 +1,4 @@
-define(['knockout', 'cookie-manager', 'text!./display-options.html', 'knockout-postbox'], function (ko, cm, templateMarkup) {
+define(['knockout', 'cookie-manager', 'jquery', 'text!./display-options.html', 'knockout-postbox'], function (ko, cm, $, templateMarkup) {
 
     var average = function(numbers) {
         var sum = 0;
@@ -31,9 +31,15 @@ define(['knockout', 'cookie-manager', 'text!./display-options.html', 'knockout-p
         });
 
         this.allDataSelectedMeasure = ko.computed(function() {
-            var series = _.pluck(self.allData(), self.selectedMeasure());
-            series.sort();
-            return series;
+            return _.chain(self.allData())
+                .pluck(self.selectedMeasure())
+                .filter($.isNumeric)
+                .sortBy(_.identity)
+                .value();
+        });
+
+        this.schoolCount = ko.computed(function() {
+            return self.allDataSelectedMeasure().length;
         });
 
         this.nationalAverageLine = ko.computed(function () {
