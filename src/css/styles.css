@@ -10,6 +10,10 @@
 	word-wrap: break-word;
 }
 
+.fa-valign {
+	line-height: inherit;
+}
+
 .fa-spin-custom, .glyphicon-spin {
 	-webkit-animation: spin 1500ms infinite linear;
 	animation: spin 1500ms infinite linear;
@@ -43,4 +47,16 @@
 }
 .panel-heading a.collapsed:after {
 	content:"\e080";
+}
+
+.nav-tabs > li > a
+{
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.nav-pills > li > a
+{
+	padding-top: 6px;
+	padding-bottom: 6px;
 }

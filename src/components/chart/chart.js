@@ -15,12 +15,38 @@ define(['knockout', 'highcharts', 'underscore', 'text!./chart.html', 'knockout-p
 
         this.columnChart = ko.observable();
 
+        this.isBarSelected = ko.observable(true);
+        this.isTableSelected = ko.observable(false);
+        this.isMapSelected = ko.observable(false);
+
+        this.selectBar = function() {
+            this.isBarSelected(true);
+            this.isTableSelected(false);
+            this.isMapSelected(false);
+        };
+
+        this.selectTable = function() {
+            this.isBarSelected(false);
+            this.isTableSelected(true);
+            this.isMapSelected(false);
+        };
+
+        this.selectMap = function() {
+            this.isBarSelected(false);
+            this.isTableSelected(false);
+            this.isMapSelected(true);
+        };
+
         this.updateBar = ko.computed( function() {
             var measure = self.measure();
             var schoolNames = self.schoolNames();
             var schoolSeries = self.schoolSeries();
 
             var checkExist = setInterval(function() {
+                if (!self.isBarSelected()) {
+                    return;
+                }
+
                 if (document.getElementById('myChart')) {
 
                     var chart = new Highcharts.Chart({
