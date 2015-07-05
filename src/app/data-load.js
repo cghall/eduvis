@@ -41,6 +41,18 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
             if ('focusedSchool' in options) {
                 postbox.publish("focusedSchool", options.focusedSchool);
             }
+            if ('fsmMin' in options) {
+                postbox.publish("fsmMin", options.fsmMin);
+            }
+            if ('fsmMax' in options) {
+                postbox.publish("fsmMax", options.fsmMax);
+            }
+            if ('apsMinPercent' in options) {
+                postbox.publish("apsMinPercent", options.apsMinPercent);
+            }
+            if ('apsMaxPercent' in options) {
+                postbox.publish("apsMaxPercent", options.apsMaxPercent);
+            }
 
             postbox.publish("showNationalAverage",
                 'showNatAvg' in options && (options.showNatAvg === true || options.showNatAvg === 'true'));
@@ -48,6 +60,11 @@ define(["knockout", "jquery", "underscore", "papaparse", "knockout-postbox", "co
                 'showTop10' in options && (options.showTop10 === true || options.showTop10 === 'true'));
             postbox.publish("showBottom10",
                 'showBottom10' in options && (options.showBottom10 === true || options.showBottom10 === 'true'));
+
+            postbox.publish("fsmFilterOn",
+                'fsmFilterOn' in options && (options.fsmFilterOn === true || options.fsmFilterOn === 'true'));
+            postbox.publish("apsFilterOn",
+                'apsFilterOn' in options && (options.apsFilterOn === true || options.apsFilterOn === 'true'));
 
             cm.enableCookieWriting(true);
         };

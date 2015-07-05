@@ -1,33 +1,13 @@
-define(['knockout', 'text!./sharing.html', 'knockout-postbox'], function(ko, templateMarkup) {
+define(['knockout', 'cookie-manager', 'text!./sharing.html', 'knockout-postbox'], function(ko, cm, templateMarkup) {
 
     function Sharing() {
         var self = this;
 
-        this.selectedMeasure = ko.observable().subscribeTo("selectedMeasure", true);
-        this.selectedLea = ko.observable().subscribeTo("selectedLea", true);
-        this.focusedSchool = ko.observable().subscribeTo("focusedSchool", true);
-        this.showNationalAverage = ko.observable().subscribeTo("showNationalAverage", true);
-        this.showTop10Percent = ko.observable().subscribeTo("showTop10", true);
-        this.showBottom10Percent = ko.observable().subscribeTo("showBottom10", true);
-        
-        this.currentOptionsQueryStringURL = ko.computed(function() {
+        this.currentOptionsQueryStringURL = function() {
             var baseUrl = [location.protocol, '//', location.host, location.pathname, '?'].join('');
-            var options = {
-                measure: self.selectedMeasure(),
-                lea: self.selectedLea(),
-                focusedSchool: self.focusedSchool(),
-                showNatAvg: self.showNationalAverage(),
-                showTop10: self.showTop10Percent(),
-                showBottom10: self.showBottom10Percent()
-            };
-            options =_.pick(options, _.identity);
-            var queryString = baseUrl + $.param(options);
-
-            //if (self.cookieLoaded()) {
-            //    bakeCookie('graph', queryString);
-            //}
-            return queryString;
-        });
+            var options = cm.readCookie('graph');
+            return baseUrl + $.param(options);
+        };
 
         this.shortenedUrl = ko.observable('');
 
