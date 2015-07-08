@@ -1,6 +1,6 @@
 define(['knockout', 'cookie-manager', 'jquery', 'text!./display-options.html', 'knockout-postbox'], function (ko, cm, $, templateMarkup) {
 
-    var average = function(numbers) {
+    var average = function (numbers) {
         var sum = 0;
         for (var i = 0; i < numbers.length; i++) {
             sum += numbers[i] || 0;
@@ -14,7 +14,7 @@ define(['knockout', 'cookie-manager', 'jquery', 'text!./display-options.html', '
         this.selectedMeasure = ko.observable().subscribeTo("selectedMeasure", true);
         this.allData = ko.observable().subscribeTo("allData", true);
 
-        this.schoolCount = ko.computed(function() {
+        this.schoolCount = ko.computed(function () {
             return self.allData().length;
         });
 
@@ -22,7 +22,7 @@ define(['knockout', 'cookie-manager', 'jquery', 'text!./display-options.html', '
         this.showTop10Percent = ko.observable().syncWith("showTop10", true);
         this.showBottom10Percent = ko.observable().syncWith("showBottom10", true);
 
-        this.updateCookie = ko.computed(function() {
+        this.updateCookie = ko.computed(function () {
             cm.extendCookie('graph', {
                 showNatAvg: self.showNationalAverage(),
                 showTop10: self.showTop10Percent(),
@@ -30,7 +30,7 @@ define(['knockout', 'cookie-manager', 'jquery', 'text!./display-options.html', '
             });
         });
 
-        this.allDataSelectedMeasure = ko.computed(function() {
+        this.allDataSelectedMeasure = ko.computed(function () {
             return _.chain(self.allData())
                 .pluck(self.selectedMeasure())
                 .filter($.isNumeric)
@@ -38,7 +38,7 @@ define(['knockout', 'cookie-manager', 'jquery', 'text!./display-options.html', '
                 .value();
         });
 
-        this.schoolCount = ko.computed(function() {
+        this.schoolCount = ko.computed(function () {
             return self.allDataSelectedMeasure().length;
         });
 

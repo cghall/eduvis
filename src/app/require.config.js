@@ -18,7 +18,7 @@ var require = {
         "papaparse":            "bower_modules/papaparse/papaparse",
         "signals":              "bower_modules/js-signals/dist/signals.min",
         "text":                 "bower_modules/requirejs-text/text",
-        "underscore":           "bower_modules/underscore/underscore-min"
+        "underscore":           "bower_modules/lodash/lodash.min"
     },
     shim: {
         "bootstrap": { deps: ["jquery"] },

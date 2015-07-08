@@ -16,7 +16,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.apsMax = ko.observable().subscribeTo("apsMax", true);
 
             this.leaOptions = ko.computed(function () {
-                return _.chain(self.allData())
+                return _(self.allData())
                     .pluck('LEA')
                     .sortBy(_.identity)
                     .uniq(true)
@@ -27,7 +27,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.metricOptions = ko.computed(function () {
-                return _.chain(self.metaData())
+                return _(self.metaData())
                     .pluck('metric')
                     .filter(_.identity)
                     .sortBy(_.identity)
@@ -38,7 +38,7 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             this.selectedMetric = ko.observable();
 
             this.pupilGroupOptions = ko.computed(function () {
-                return _.chain(self.metaData())
+                return _(self.metaData())
                     .where({metric: self.selectedMetric()})
                     .pluck('pupils')
                     .sortBy(_.identity)
@@ -100,15 +100,13 @@ define(['knockout', 'underscore', 'cookie-manager', 'text!./selection.html', 'kn
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.selectedSchools = ko.computed(function () {
-                return _.chain(self.allData())
-                    .where({LEA: self.selectedLea()})
-                    .value();
+                return _.where(self.allData(), {LEA: self.selectedLea()});
             });
 
             this.selectedSchoolsExcluded = ko.observable([]);
 
             this.selectedSchoolsExcludedNames = ko.computed(function () {
-                return _.chain(self.selectedSchoolsExcluded())
+                return _(self.selectedSchoolsExcluded())
                     .pluck('SCHNAME')
                     .sortBy(_.identity)
                     .value()
