@@ -20,9 +20,6 @@ england_census = pd.read_csv(ENGLAND_CENSUS_PATH)
 edubase = pd.read_csv(EDUBASE_PATH)
 # Convert URN from object to float
 england_census.URN = england_census.URN.convert_objects(convert_numeric=True)
-# Convert other numbers to float
-ks4_england.TOTPUPS = ks4_england.TOTPUPS.convert_objects(convert_numeric=True)
-ks4_england.B8VAMEA_PTQ = ks4_england.B8VAMEA_PTQ.convert_objects(convert_numeric=True)
 
 ### Check for duplicate columns and remove from dfs before merge
 # Function for returning common elements

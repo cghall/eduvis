@@ -1,24 +1,51 @@
-column,metric,long_description,category,data_type,lower,upper,associated_cols,weighted_value,group_divisor,pupils,suffix
-PTAC5EM_PTQ,AC5EM,Percentage of pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,"TAC5EMNFSM_PTQ,TAC5EMFSM_PTQ",TAC5EMNFSM_PTQ + TAC5EMFSM_PTQ,TPUP,all,%
-PTAC5EMFSM_PTQ,AC5EM,Percentage of disadvantaged pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,"TAC5EMFSM_PTQ,TFSMCLA",TAC5EMFSM_PTQ,TFSMCLA,disadvantaged,%
-PTAC5EMNFSM_PTQ,AC5EM,Percentage of non-disadvantaged pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,"TAC5EMNFSM_PTQ, TNOTFSMCLA",TAC5EMNFSM_PTQ,TNOTFSMCLA,non-disadvantaged,%
-PTAC5EMLO_PTQ,AC5EM,Percentage of pupils with low prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TPRIORLO,PTAC5EMLO_PTQ * TPRIORLO,TPRIORLO,low attainers,%
-PTAC5EMAV_PTQ,AC5EM,Percentage of pupils with middle prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TPRIORAV,PTAC5EMAV_PTQ * TPRIORAV,TPRIORAV,middle attainers,%
-PTAC5EMHI_PTQ,AC5EM,Percentage of pupils with high prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TPRIORHI,PTAC5EMHI_PTQ * TPRIORHI,TPRIORHI,high attainers,%
-PTEBACC_PTQ,EBACC,Percentage of Key Stage 4 pupils achieving the English Baccalaureate,metric,int,0,100,TEBACC_E_PTQ,PTEBACC_PTQ * TEBACC_E_PTQ,TEBACC_E_PTQ,all,%
-PT24ENGPRG_PTQ,Expected progress (English),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE English,metric,int,0,100,TPUP,PT24ENGPRG_PTQ * TPUP,TPUP,all,%
-PT24MATHPRG_PTQ,Expected progress (maths),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE mathematics,metric,int,0,100,TPUP,PT24MATHPRG_PTQ * TPUP,TPUP,all,%
-B8VAMEA_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results,metric,int,800,1150,TPUP,B8VAMEA_PTQ * TPUP,TPUP,all,
-B8VAMEA_FSM_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for disadvantaged pupils,metric,int,800,1150,TPUP,B8VAMEA_PTQ * TFSMCLA,TFSMCLA,disadvantaged,
-B8VAMEA_NFSM_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for non-disadvantaged pupils,metric,int,800,1150,TPUP,B8VAMEA_PTQ * TNOTFSMCLA,TNOTFSMCLA,non-disadvantaged,
-B8VAMEA_LO_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for pupils with low prior attainment,metric,int,800,1150,TPRIORLO,B8VAMEA)_LO_PTQ * TPRIORLO,TPRIORLO,low attainers,
-B8VAMEA_AV_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for pupils with middle prior attainment,metric,int,800,1150,TPRIORAV,B8VAMEA)_AV_PTQ * TPRIORAV,TPRIORAV,middle attainers,
-B8VAMEA_HI_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for pupils with high prior attainment,metric,int,800,1150,TPRIORHI,B8VAMEA)_HI_PTQ * TPRIORHI,TPRIORHI,high attainers,
-KS2APS,KS2APS,Key Stage 2 Average Points Score of Key Stage 4 cohort,filter,int,23,34,TPUP,KS2APS * TPUP,TPUP,all,
-PTFSMCLA,FSM,Percentage of pupils who are disadvantaged,filter,int,0,100,"TFSMCLA,TPUP",TFSMCLA,TPUP,,%
-TTAPSPEPP_PTQ,APS per entry,Average points score per qualification entry per pupil (including equivalents),metric,int,0,60,TPUP,TTAPSPEPP_PTQ * TPUP,TPUP,all,
-SCHNAME,,School name,grouping,str,,,,,,,
-LEA,,Local Authority,grouping,str,,,,,,,
-PCODE,,Postcode,geo,str,,,,,,,
-TrustSchoolFlag (name),,Indicates whether a school is part of an academy trust,grouping,str,,,,,,,
-Trusts (name),,Name of academy trust,grouping,str,,,,,,,
+column,metric,long_description,category,data_type,lower,upper,weighted_value,group_divisor,pupils,suffix
+PTAC5EM_PTQ,AC5EM,Percentage of pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TAC5EMNFSM_PTQ + TAC5EMFSM_PTQ,TPUP,all,%
+PTAC5EMFSM_PTQ,AC5EM,Percentage of disadvantaged pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TAC5EMFSM_PTQ,TFSMCLA,disadvantaged,%
+PTAC5EMNFSM_PTQ,AC5EM,Percentage of non-disadvantaged pupils achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,TAC5EMNFSM_PTQ,TNOTFSMCLA,non-disadvantaged,%
+PTAC5EMLO_PTQ,AC5EM,Percentage of pupils with low prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,PTAC5EMLO_PTQ * TPRIORLO,TPRIORLO,low attainers,%
+PTAC5EMAV_PTQ,AC5EM,Percentage of pupils with middle prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,PTAC5EMAV_PTQ * TPRIORAV,TPRIORAV,middle attainers,%
+PTAC5EMHI_PTQ,AC5EM,Percentage of pupils with high prior attainment achieving 5+ A*-C or equivalents including A*-C in both English and mathematics GCSEs,metric,int,0,100,PTAC5EMHI_PTQ * TPRIORHI,TPRIORHI,high attainers,%
+PTEBACMAT_PTQ,Subject pass rate (maths),Percentage of pupils achieving the English Baccalaureate Maths subject area,metric,int,0,100,PTEBACMAT_PTQ * TPUP,TPUP,all,%
+PTEBACENG_PTQ,Subject pass rate (English),Percentage of pupils achieving the English Baccalaureate English subject area,metric,int,0,100,PTEBACENG_PTQ * TPUP,TPUP,all,%
+PTEBACC_PTQ,EBACC,Percentage of Key Stage 4 pupils achieving the English Baccalaureate,metric,int,0,100,PTEBACC_PTQ * TEBACC_E_PTQ,TEBACC_E_PTQ,all,%
+PTEBACC_FSM_PTQ,EBACC,Percentage of disadvantaged pupils achieving the English Baccalaureate,metric,int,0,100,PTEBACC_FSM_PTQ * (PTEBACC_EFSM_PTQ * TFSMCLA),TFSMCLA,disadvantaged,%
+PTEBACC_NFSM_PTQ,EBACC,Percentage of non-disadvantaged pupils achieving the English Baccalaureate,metric,int,0,100,PTEBACC_NFSM_PTQ * (PTEBACC_ENFSM_PTQ * TNOTFSMCLA),TNOTFSMCLA,non-disadvantaged,%
+PTEBACCLO_PTQ,EBACC,Percentage of pupils with low prior attainment achieving the English Baccalaureate,metric,int,0,100,PTEBACCLO_PTQ * TEBACC_ELO_PTQ,TPRIORLO,low attainers,%
+PTEBACCAV_PTQ,EBACC,Percentage of pupils with middle prior attainment achieving the English Baccalaureate,metric,int,0,100,PTEBACCAV_PTQ * TEBACC_EAV_PTQ,TPRIORAV,middle attainers,%
+PTEBACCHI_PTQ,EBACC,Percentage of pupils with high prior attainment achieving the English Baccalaureate,metric,int,0,100,PTEBACCHI_PTQ * TEBACC_EHI_PTQ,TPRIORHI,high attainers,%
+PT24ENGPRG_PTQ,Expected progress (English),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE English,metric,int,0,100,PT24ENGPRG_PTQ * TPUP,TPUP,all,%
+PT24ENGPRGLO_PTQ,Expected progress (English),Percentage of pupils with low prior attainment achieving expected progress between Key Stage 2 and GCSE English,metric,int,0,100,PT24ENGPRGLO_PTQ * TPRIORLO,TPRIORLO,low attainers,%
+PT24ENGPRGAV_PTQ,Expected progress (English),Percentage of pupils with middle prior attainment achieving expected progress between Key Stage 2 and GCSE English,metric,int,0,100,PT24ENGPRGAV_PTQ * TPRIORAV,TPRIORAV,middle attainers,%
+PT24ENGPRGHI_PTQ,Expected progress (English),Percentage of pupils with high prior attainment achieving expected progress between Key Stage 2 and GCSE English,metric,int,0,100,PT24ENGPRGHI_PTQ * TPRIORHI,TPRIORHI,high attainers,%
+PT24MATHPRG_PTQ,Expected progress (maths),Percentage of pupils at the end of Key Stage 4 achieving expected level of progress between Key Stage 2 and GCSE mathematics,metric,int,0,100,PT24MATHPRG_PTQ * TPUP,TPUP,all,%
+PT24MATHPRGLO_PTQ,Expected progress (maths),Percentage of pupils with low prior attainment achieving expected progress between Key Stage 2 and GCSE mathematics,,int,0,100,PT24MATHPRGLO_PTQ * TPRIORLO,TPRIORLO,low attainers,%
+PT24MATHPRGAV_PTQ,Expected progress (maths),Percentage of pupils with middle prior attainment achieving expectedprogress between Key Stage 2 and GCSE mathematics,,int,0,100,PT24MATHPRGAV_PTQ * TPRIORAV,TPRIORAV,middle attainers,%
+PT24MATHPRGHI_PTQ,Expected progress (maths),Percentage of pupils with high prior attainment achieving expected progress between Key Stage 2 and GCSE mathematics,,int,0,100,PT24MATHPRGHI_PTQ * TPRIORHI,TPRIORHI,high attainers,%
+B8VAMEA_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results,metric,int,800,1150,B8VAMEA_PTQ * TPUP,TPUP,all,
+B8VAMEA_FSM_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for disadvantaged pupils,metric,int,800,1150,B8VAMEA_PTQ * TFSMCLA,TFSMCLA,disadvantaged,
+B8VAMEA_NFSM_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for non-disadvantaged pupils,metric,int,800,1150,B8VAMEA_PTQ * TNOTFSMCLA,TNOTFSMCLA,non-disadvantaged,
+B8VAMEA_LO_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for pupils with low prior attainment,metric,int,800,1150,B8VAMEA_LO_PTQ * TPRIORLO,TPRIORLO,low attainers,
+B8VAMEA_AV_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for pupils with middle prior attainment,metric,int,800,1150,B8VAMEA_AV_PTQ * TPRIORAV,TPRIORAV,middle attainers,
+B8VAMEA_HI_PTQ,Value Added,Value Added measure based on the best 8 GCSE and equivalent results for pupils with high prior attainment,metric,int,800,1150,B8VAMEA_HI_PTQ * TPRIORHI,TPRIORHI,high attainers,
+KS2APS,KS2APS,Key Stage 2 Average Points Score of Key Stage 4 cohort,filter,int,23,34,KS2APS * TPUP,TPUP,all,
+PTFSMCLA,FSM,Percentage of pupils who are disadvantaged,filter,int,0,100,TFSMCLA,TPUP,,%
+TTAPSPEPP_PTQ,APS per entry,Average points score per qualification entry per pupil (including equivalents),metric,int,0,60,TTAPSPEPP_PTQ * TPUP,TPUP,all,
+SCHNAME,,School name,grouping,str,,,,,,
+LEA,,Local Authority,grouping,str,,,,,,
+PCODE,,Postcode,geo,str,,,,,,
+TrustSchoolFlag (name),,Indicates whether a school is part of an academy trust,grouping,str,,,,,,
+Trusts (name),,Name of academy trust,grouping,str,,,,,,
+TPRIORLO,,,calc,int,,,,,,
+TPRIORAV,,,calc,int,,,,,,
+TPRIORHI,,,calc,int,,,,,,
+TPUP,,,calc,int,,,,,,
+TAC5EMFSM_PTQ,,,calc,int,,,,,,
+TAC5EMNFSM_PTQ,,,calc,int,,,,,,
+TFSMCLA,,,calc,int,,,,,,
+TNOTFSMCLA,,,calc,int,,,,,,
+TEBACC_E_PTQ,,,calc,int,,,,,,
+PTEBACC_EFSM_PTQ,,,calc,int,,,,,,
+PTEBACC_ENFSM_PTQ,,,calc,int,,,,,,
+TEBACC_ELO_PTQ,,,calc,int,,,,,,
+TEBACC_EAV_PTQ,,,calc,int,,,,,,
+TEBACC_EHI_PTQ,,,calc,int,,,,,,
