@@ -72,13 +72,18 @@ gulp.task('csv', function() {
         .pipe(gulp.dest('./dist/data-src/'))
 });
 
+gulp.task('img', function() {
+    return gulp.src('./src/img/*')
+        .pipe(gulp.dest('./dist/img/'));
+});
+
 // Removes all files from ./dist/
 gulp.task('clean', function() {
     return gulp.src('./dist/**/*', { read: false })
         .pipe(clean());
 });
 
-gulp.task('default', ['html', 'js', 'css', 'csv'], function(callback) {
+gulp.task('default', ['html', 'js', 'css', 'csv', 'img'], function(callback) {
     callback();
     console.log('\nPlaced optimized files in ' + chalk.magenta('dist/\n'));
 });
