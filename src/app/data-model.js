@@ -1,12 +1,11 @@
 define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
     function (ko, $, _, Papa, cm) {
 
-        var parseQueryString = function(a) {
+        var parseQueryString = function (a) {
             a = a.split('&');
             if (a == "") return {};
             var b = {};
-            for (var i = 0; i < a.length; ++i)
-            {
+            for (var i = 0; i < a.length; ++i) {
                 var p = a[i].split('=', 2);
                 if (p.length == 1)
                     b[p[0]] = "";
@@ -26,7 +25,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.metaData = ko.observable([]);
             this.downloadSchoolData();
 
-            this.leas = ko.computed(function () {
+            this.leas = ko.pureComputed(function () {
                 return _(self.allData())
                     .pluck('LEA')
                     .sortBy(_.identity)
@@ -43,7 +42,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.apsMin = ko.observable(15);
             this.apsMax = ko.observable(30);
 
-            this.measures = ko.computed(function () {
+            this.measures = ko.pureComputed(function () {
                 return _(self.metaData())
                     .pluck('metric')
                     .filter(_.identity)
@@ -54,7 +53,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.selectedMeasure = ko.observable()
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.pupilGroups = ko.computed(function () {
+            this.pupilGroups = ko.pureComputed(function () {
                 return _(self.metaData())
                     .where({metric: self.selectedMeasure()})
                     .pluck('pupils')
@@ -79,48 +78,56 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
             this.schoolsWithoutData = ko.observable([]);
 
-            this.schools = ko.computed(function () {
-                var hasNumericData = function (school) {
-                    var measure = school[self.selectedMetric()];
-                    return measure !== '' && $.isNumeric(measure);
-                };
-                var isWithinFsmAndApsLimits = function(school) {
+            this.isWithinFsmAndApsLimits = ko.pureComputed(function () {
+                return function (school) {
                     return school.PTFSMCLA >= self.fsmMin() && school.PTFSMCLA <= self.fsmMax()
                         && school.KS2APS >= self.apsMin() && school.KS2APS <= self.apsMax();
                 };
+            })
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-                var partitioned = _(self.allData())
-                    .where({LEA: self.selectedLea()})
-                    .partition(hasNumericData)
-                    .value();
-                var schoolsWithData = partitioned[0], schoolsWithoutData = partitioned[1];
-                self.schoolsWithoutData(schoolsWithoutData);
+            this.schools = ko.computed({
+                read: function () {
+                    var hasNumericData = function (school) {
+                        var measure = school[self.selectedMetric()];
+                        return measure !== '' && $.isNumeric(measure);
+                    };
 
-                return _.filter(schoolsWithData, isWithinFsmAndApsLimits);
-            });
+                    var partitioned = _(self.allData())
+                        .where({LEA: self.selectedLea()})
+                        .partition(hasNumericData)
+                        .value();
+                    var schoolsWithData = partitioned[0], schoolsWithoutData = partitioned[1];
+                    self.schoolsWithoutData(schoolsWithoutData);
 
-            this.measureMin = ko.computed(function () {
+                    return _.filter(schoolsWithData, self.isWithinFsmAndApsLimits());
+                },
+                deferEvaluation: true
+            })
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 100}});
+
+            this.measureMin = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 return measure && measure.lower;
             });
 
-            this.measureMax = ko.computed(function () {
+            this.measureMax = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 return measure && measure.upper;
             });
 
-            this.selectedMeasureSuffix = ko.computed(function () {
+            this.selectedMeasureSuffix = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 return measure && measure.suffix;
             });
 
-            this.selectionSummary = ko.computed(function () {
+            this.selectionSummary = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 var measureShort = measure && measure.metric;
                 return measureShort + ' for LEA ' + self.selectedLea();
             });
 
-            this.allDataSelectedMetric = ko.computed(function () {
+            this.allDataSelectedMetric = ko.pureComputed(function () {
                 return _.chain(self.allData())
                     .pluck(self.selectedMetric())
                     .filter($.isNumeric)
@@ -128,7 +135,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                     .value();
             });
 
-            this.schoolCount = ko.computed(function () {
+            this.schoolCount = ko.pureComputed(function () {
                 return self.allDataSelectedMetric().length;
             });
 
@@ -144,28 +151,29 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 return sum / numbers.length;
             };
 
-            this.nationalAverage = ko.computed(function () {
+            this.nationalAverage = ko.pureComputed(function () {
                 if (self.showNationalAverage()) {
                     return average(self.allDataSelectedMetric());
                 }
             });
 
-            this.top10Percent = ko.computed(function () {
+            this.top10Percent = ko.pureComputed(function () {
                 if (self.showTop10Percent()) {
                     return self.allDataSelectedMetric()[Math.floor(self.schoolCount() * 0.9)]
                 }
             });
 
-            this.bottom10Percent = ko.computed(function () {
+            this.bottom10Percent = ko.pureComputed(function () {
                 if (self.showBottom10Percent()) {
                     return self.allDataSelectedMetric()[Math.floor(self.schoolCount() * 0.1)];
                 }
             });
 
-            this.updateCookie = ko.computed(this._updateCookie, this);
+            this.updateCookie = ko.computed(this._updateCookie, this)
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 500}});
         }
 
-        DataModel.prototype._updateCookie = function() {
+        DataModel.prototype._updateCookie = function () {
             cm.extendCookie('graph', {
                 selectedLea: this.selectedLea(),
                 focusedSchool: this.focusedSchool() && this.focusedSchool()['SCHNAME'],
@@ -182,7 +190,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             });
         };
 
-        DataModel.prototype.downloadSchoolData = function() {
+        DataModel.prototype.downloadSchoolData = function () {
             var self = this;
 
             var papaConfig = {
@@ -191,26 +199,26 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 skipEmptyLines: true
             };
 
-            var metaComplete = function(result) {
+            var metaComplete = function (result) {
                 self.metaData(result.data);
             };
 
-            var dataComplete = function(result) {
+            var dataComplete = function (result) {
                 self.schoolDataLoaded(true);
                 self.allData(result.data);
                 self.setFromSelectionOptions(queryStringOptions);
                 history.pushState({}, '', [location.protocol, '//', location.host, location.pathname].join(''));
             };
 
-            var metaPapaConfig = _.extend({ complete: metaComplete }, papaConfig);
-            var dataPapaConfig = _.extend({ complete: dataComplete }, papaConfig);
+            var metaPapaConfig = _.extend({complete: metaComplete}, papaConfig);
+            var dataPapaConfig = _.extend({complete: dataComplete}, papaConfig);
 
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $.ajax({
                     type: "GET",
                     url: "data-out/final_data.csv",
                     dataType: "text",
-                    success: function(data) {
+                    success: function (data) {
                         Papa.parse(data, dataPapaConfig);
                     }
                 });
@@ -219,14 +227,14 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                     type: "GET",
                     url: "data-src/meta_file.csv",
                     dataType: "text",
-                    success: function(data) {
+                    success: function (data) {
                         Papa.parse(data, metaPapaConfig);
                     }
                 });
             });
         };
 
-        DataModel.prototype.setFromSelectionOptions = function(options)  {
+        DataModel.prototype.setFromSelectionOptions = function (options) {
             var cookieOptions = cm.readCookie('graph');
             options = $.isEmptyObject(options) ? cookieOptions : options;
 

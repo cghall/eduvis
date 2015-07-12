@@ -1,7 +1,9 @@
 <div class="container-fluid">
-    <loading data-bind="visible: !schoolDataLoaded()"></loading>
+    <div data-bind="ifnot: schoolDataLoaded">
+        <loading></loading>
+    </div>
 
-    <div id="mainContent" class="container-fluid" style="display: none;" data-bind="visible: schoolDataLoaded">
+    <div id="mainContent" class="container-fluid" data-bind="if: schoolDataLoaded">
         <div class="row">
             <div class="col-md-8">
                 <div class="row">

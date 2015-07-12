@@ -4,15 +4,15 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
         function Chart() {
             var self = this;
 
-            this.sortedSchools = ko.computed(function () {
+            this.sortedSchools = ko.pureComputed(function () {
                 return _.sortBy(dataModel.schools(), dataModel.selectedMetric());
             });
 
-            this.schoolNames = ko.computed(function () {
+            this.schoolNames = ko.pureComputed(function () {
                 return _.pluck(self.sortedSchools(), 'SCHNAME');
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.schoolSeries = ko.computed(function () {
+            this.schoolSeries = ko.pureComputed(function () {
                 return _.map(self.sortedSchools(), function (school) {
                     return school === dataModel.focusedSchool()
                         ? {y: school[dataModel.selectedMetric()], color: 'orange'}
@@ -101,7 +101,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
             });
 
 
-            this.nationalAverageLine = ko.computed(function () {
+            this.nationalAverageLine = ko.pureComputed(function () {
                 return dataModel.showNationalAverage() && {
                         id: 'nat',
                         color: 'rgb(255, 204, 0)',
@@ -116,7 +116,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                     };
             });
 
-            this.top10Line = ko.computed(function () {
+            this.top10Line = ko.pureComputed(function () {
                 return dataModel.showTop10Percent() && {
                         id: 'top',
                         color: 'rgb(51, 204, 51)',
@@ -132,7 +132,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                     };
             });
 
-            this.bottom10Line = ko.computed(function () {
+            this.bottom10Line = ko.pureComputed(function () {
                 return dataModel.showBottom10Percent() && {
                         id: 'bot',
                         color: 'rgb(255, 51, 0)',
@@ -146,7 +146,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                     };
             });
 
-            this.averagePlotLines = ko.computed(function () {
+            this.averagePlotLines = ko.pureComputed(function () {
                 var plotLines = [self.nationalAverageLine(), self.top10Line(), self.bottom10Line()];
                 plotLines = _.without(plotLines, false);
                 return _.without(plotLines, undefined);

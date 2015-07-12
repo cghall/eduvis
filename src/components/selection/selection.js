@@ -16,7 +16,7 @@ define(['knockout', 'underscore', 'data-model', 'text!./selection.html', 'knocko
 
             this.focusedSchool = dataModel.focusedSchool;
 
-            this.selectedSchoolsExcludedNames = ko.computed(function () {
+            this.selectedSchoolsExcludedNames = ko.pureComputed(function () {
                 return _(dataModel.schoolsWithoutData())
                     .pluck('SCHNAME')
                     .sortBy(_.identity)
@@ -24,7 +24,7 @@ define(['knockout', 'underscore', 'data-model', 'text!./selection.html', 'knocko
                     .join('<br>');
             });
 
-            this.selectedSchoolsIncludedAlphabetical = ko.computed(function () {
+            this.selectedSchoolsIncludedAlphabetical = ko.pureComputed(function () {
                 return _.sortBy(dataModel.schools(), 'SCHNAME');
             });
         }
