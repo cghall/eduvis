@@ -1,7 +1,7 @@
-define(["knockout", "text!./home.html", "knockout-postbox", "data-load"], function(ko, homeTemplate) {
+define(["knockout", "data-model", "text!./home.html"], function(ko, dataModel, homeTemplate) {
 
     function HomeViewModel() {
-        this.schoolDataLoaded = ko.observable().subscribeTo("schoolDataLoaded", true);
+        this.schoolDataLoaded = dataModel.schoolDataLoaded;
     }
 
     return { viewModel: HomeViewModel, template: homeTemplate };

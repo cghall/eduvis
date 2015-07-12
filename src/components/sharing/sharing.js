@@ -1,4 +1,4 @@
-define(['knockout', 'cookie-manager', 'text!./sharing.html', 'knockout-postbox'], function(ko, cm, templateMarkup) {
+define(['knockout', 'cookie-manager', 'text!./sharing.html'], function(ko, cm, templateMarkup) {
 
     function Sharing() {
         var self = this;
