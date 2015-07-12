@@ -4,12 +4,16 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
         function Chart() {
             var self = this;
 
+            this.sortedSchools = ko.computed(function () {
+                return _.sortBy(dataModel.schools(), dataModel.selectedMetric());
+            });
+
             this.schoolNames = ko.computed(function () {
-                return _.pluck(dataModel.schools(), 'SCHNAME');
+                return _.pluck(self.sortedSchools(), 'SCHNAME');
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.schoolSeries = ko.computed(function () {
-                return _.map(dataModel.schools(), function (school) {
+                return _.map(self.sortedSchools(), function (school) {
                     return school === dataModel.focusedSchool()
                         ? {y: school[dataModel.selectedMetric()], color: 'orange'}
                         : school[dataModel.selectedMetric()]
