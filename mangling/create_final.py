@@ -45,4 +45,17 @@ for col in agg_cols_name:
     weighted_calc = re.sub(r"([A-Za-z]\w+)", r"final_data['\1']", weighted_calc)
     final_data[col+'_weighted'] = eval(weighted_calc)
 
+# Add establishment group column to final_data
+establishment_mapping = {'Academy Converter': 'Academies', 'Community School' : 'LA maintained schools',
+                         'Academy Sponsor Led' : 'Academies', 'Foundation School' : 'LA maintained schools',
+                         'Voluntary Aided School' : 'LA maintained schools', 'Free Schools' : 'Free Schools',
+                         'Voluntary Controlled School' : 'LA maintained schools', 'Studio Schools' : 'Free Schools',
+                         'University Technical College' : 'Free Schools', 'City Technology College' : 'Academies'}
+
+final_data['EstablishmentGroup'] = final_data['TypeOfEstablishment (name)'].replace(establishment_mapping)
+
+# Removed independent schools from final_data
+final_data = final_data[final_data['EstablishmentGroup'] != 'Other Independent School']
+final_data = final_data[final_data['EstablishmentGroup'] != 'Other Independent Special School']
+
 final_data.to_csv(OUTPUT_PATH)
