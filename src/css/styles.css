@@ -45,6 +45,17 @@
 	float: right;
 	color: #fff;
 }
+
+/*.panel {*/
+	/*border-color: #00593C;*/
+/*}*/
+
+/*.panel > .panel-heading {*/
+	/*background: #00539C none;*/
+	/*color: white;*/
+
+/*}*/
+
 .panel-heading a.collapsed:after {
 	content:"\e080";
 }
