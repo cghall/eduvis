@@ -14,7 +14,6 @@
     "papaparse": "~4.1.1",
     "underscore": "~1.8.3",
     "highcharts-release": "~4.1.7",
-    "knockout-postbox": "~0.5.2",
     "jquery-ui": "~1.11.4",
     "knockout-jqueryui": "~2.2.2",
     "bootstrap": "~3.3.5",
