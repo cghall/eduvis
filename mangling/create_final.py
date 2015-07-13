@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import itertools
+import re
 
 META_PATH = os.path.join('..', 'data-src', 'meta_file.csv')
 SCHOOL_DATA_PATH = os.path.join('..', 'data-out', 'school_data.csv')
@@ -29,5 +30,19 @@ def convert_numeric(cols):
     for col in cols:
         final_data[col] = final_data[col].convert_objects(convert_numeric=True)
 convert_numeric(int_cols)
+
+# Create dict of columns that can be aggregated with weighted_calc
+col_category = dict(zip(meta_data.column,meta_data.category))
+agg_cols_name = list(a for (a, b) in col_category.iteritems() if b == 'metric' or b == 'filter')
+
+col_weighted = dict(zip(meta_data.column,meta_data.weighted_value))
+agg_cols = dict((a, b) for (a, b) in col_weighted.iteritems() if a in agg_cols_name)
+
+# Perform weighted calculation
+for col in agg_cols_name:
+    weighted_calc = [b for (a, b) in agg_cols.iteritems() if a == col]
+    weighted_calc = ''.join(weighted_calc)
+    weighted_calc = re.sub(r"([A-Za-z]\w+)", r"final_data['\1']", weighted_calc)
+    final_data[col+'_weighted'] = eval(weighted_calc)
 
 final_data.to_csv(OUTPUT_PATH)
