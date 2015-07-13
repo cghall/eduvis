@@ -14,9 +14,8 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
 
             this.schoolSeries = ko.pureComputed(function () {
                 return _.map(self.sortedSchools(), function (school) {
-                    return school === dataModel.focusedSchool()
-                        ? {y: school[dataModel.selectedMetric()], color: 'orange'}
-                        : school[dataModel.selectedMetric()]
+                    var color = school === dataModel.focusedSchool() ? '#e99002' : '#00539C';
+                    return {y: school[dataModel.selectedMetric()], color: color}
                 });
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
