@@ -37,6 +37,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
             this.focusedSchool = ko.observable();
 
+            this.includeLaMaintained = ko.observable(false);
+            this.includeAcademies = ko.observable(false);
+            this.includeFreeSchools = ko.observable(false);
+
             this.fsmMin = ko.observable(0);
             this.fsmMax = ko.observable(100);
             this.apsMin = ko.observable(15);
@@ -97,10 +101,27 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                         .where({LEA: self.selectedLea()})
                         .partition(hasNumericData)
                         .value();
+
                     var schoolsWithData = partitioned[0], schoolsWithoutData = partitioned[1];
                     self.schoolsWithoutData(schoolsWithoutData);
 
-                    return _.filter(schoolsWithData, self.isWithinFsmAndApsLimits());
+
+                    var groups = [
+                        {group: 'Academies', include: self.includeAcademies()},
+                        {group: 'Free Schools', include: self.includeFreeSchools()},
+                        {group: 'LA maintained schools', include: self.includeLaMaintained()}
+                    ];
+                    var includedGroups = _(groups)
+                        .where({include: true})
+                        .pluck('group')
+                        .value();
+
+                    return _(schoolsWithData)
+                        .filter(function(school) {
+                            return _.contains(includedGroups, school.EstablishmentGroup);
+                        })
+                        .filter(self.isWithinFsmAndApsLimits())
+                        .value();
                 },
                 deferEvaluation: true
             })
@@ -178,6 +199,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 selectedLea: this.selectedLea(),
                 focusedSchool: this.focusedSchool() && this.focusedSchool()['SCHNAME'],
                 selectedMetric: this.selectedMetric(),
+
+                excludeLaMaintained: !this.includeLaMaintained(),
+                excludeAcademies: !this.includeAcademies(),
+                excludeFreeSchools: !this.includeFreeSchools(),
 
                 fsmMin: this.fsmMin(),
                 fsmMax: this.fsmMax(),
@@ -262,6 +287,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             if ('apsMax' in options) {
                 this.apsMax(options.apsMax);
             }
+
+            this.includeLaMaintained(!('excludeLaMaintained' in options));
+            this.includeAcademies(!('excludeAcademies' in options));
+            this.includeFreeSchools(!('excludeFreeSchools' in options));
 
             this.showNationalAverage('showNationalAverage' in options && options.showNationalAverage);
             this.showTop10Percent('showTop10Percent' in options && options.showTop10Percent);

@@ -9,6 +9,21 @@
     <div id="collapseFilter" class="panel-collapse collapse in">
         <div class="panel-body">
             <label class="control-label">
+                <input type="checkbox" value="" data-bind="checked: includeAcademies">
+                <strong>Academies</strong>
+            </label>
+            <label class="control-label">
+                <input type="checkbox" value="" data-bind="checked: includeFreeSchools">
+                <strong>Free schools</strong>
+            </label>
+            <label class="control-label">
+                <input type="checkbox" value="" data-bind="checked: includeLaMaintained">
+                <strong>LA maintained schools</strong>
+            </label>
+
+            <br>
+
+            <label class="control-label">
                 <input id="fsmFilterOn" type="checkbox" value="" data-bind="checked: fsmFilterOn">
                 <strong>Percentage of pupils disadvantaged</strong>
             </label>

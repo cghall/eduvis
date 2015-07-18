@@ -8,6 +8,10 @@ define(['knockout', 'underscore', 'cookie-manager', 'data-model', 'text!./filter
         function Filter() {
             var self = this;
 
+            this.includeLaMaintained = dataModel.includeLaMaintained;
+            this.includeAcademies = dataModel.includeAcademies;
+            this.includeFreeSchools = dataModel.includeFreeSchools;
+
             this.fsmFilterOn = ko.observable(dataModel.fsmMin() !== 0 || dataModel.fsmMax() !== 100);
 
             this.fsmMinNumberInput = ko.observable(0);
