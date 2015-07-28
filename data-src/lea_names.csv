@@ -1,175 +1,153 @@
-"LEA09CD","LEA09NM"
-"201","City of London"
-"202","Camden"
-"203","Greenwich"
-"204","Hackney"
-"205","Hammersmith and Fulham"
-"206","Islington"
-"207","Kensington and Chelsea"
-"208","Lambeth"
-"209","Lewisham"
-"210","Southwark"
-"211","Tower Hamlets"
-"212","Wandsworth"
-"213","Westminster"
-"301","Barking and Dagenham"
-"302","Barnet"
-"303","Bexley"
-"304","Brent"
-"305","Bromley"
-"306","Croydon"
-"307","Ealing"
-"308","Enfield"
-"309","Haringey"
-"310","Harrow"
-"311","Havering"
-"312","Hillingdon"
-"313","Hounslow"
-"314","Kingston upon Thames"
-"315","Merton"
-"316","Newham"
-"317","Redbridge"
-"318","Richmond upon Thames"
-"319","Sutton"
-"320","Waltham Forest"
-"330","Birmingham"
-"331","Coventry"
-"332","Dudley"
-"333","Sandwell"
-"334","Solihull"
-"335","Walsall"
-"336","Wolverhampton"
-"340","Knowsley"
-"341","Liverpool"
-"342","St Helens"
-"343","Sefton"
-"344","Wirral"
-"350","Bolton"
-"351","Bury"
-"352","Manchester"
-"353","Oldham"
-"354","Rochdale"
-"355","Salford"
-"356","Stockport"
-"357","Tameside"
-"358","Trafford"
-"359","Wigan"
-"370","Barnsley"
-"371","Doncaster"
-"372","Rotherham"
-"373","Sheffield"
-"380","Bradford"
-"381","Calderdale"
-"382","Kirklees"
-"383","Leeds"
-"384","Wakefield"
-"390","Gateshead"
-"391","Newcastle upon Tyne"
-"392","North Tyneside"
-"393","South Tyneside"
-"394","Sunderland"
-"420","Isles of Scilly"
-"800","Bath and North East Somerset"
-"801","Bristol"
-"802","North Somerset"
-"803","South Gloucestershire"
-"805","Hartlepool"
-"806","Middlesbrough"
-"807","Redcar and Cleveland"
-"808","Stockton-on-Tees"
-"810","Kingston upon Hull"
-"811","East Riding of Yorkshire"
-"812","North East Lincolnshire"
-"813","North Lincolnshire"
-"815","North Yorkshire"
-"816","York"
-"821","Luton"
-"822","Bedford"
-"823","Central Bedfordshire"
-"825","Buckinghamshire"
-"826","Milton Keynes"
-"830","Derbyshire"
-"831","Derby"
-"835","Dorset"
-"836","Poole"
-"837","Bournemouth"
-"840","Durham"
-"841","Darlington"
-"845","East Sussex"
-"846","Brighton and Hove"
-"850","Hampshire"
-"851","Portsmouth"
-"852","Southampton"
-"855","Leicestershire"
-"856","Leicester"
-"857","Rutland"
-"860","Staffordshire"
-"861","Stoke-on-Trent"
-"865","Wiltshire"
-"866","Swindon"
-"867","Bracknell Forest"
-"868","Windsor and Maidenhead"
-"869","West Berkshire"
-"870","Reading"
-"871","Slough"
-"872","Wokingham"
-"873","Cambridgeshire"
-"874","Peterborough"
-"876","Halton"
-"877","Warrington"
-"878","Devon"
-"879","Plymouth"
-"880","Torbay"
-"881","Essex"
-"882","Southend on Sea"
-"883","Thurrock"
-"884","Herefordshire"
-"885","Worcestershire"
-"886","Kent"
-"887","Medway"
-"888","Lancashire"
-"889","Blackburn with Darwen"
-"890","Blackpool"
-"891","Nottinghamshire"
-"892","Nottingham"
-"893","Shropshire"
-"894","Telford and Wrekin"
-"895","Cheshire East"
-"896","Cheshire West and Chester"
-"908","Cornwall"
-"909","Cumbria"
-"916","Gloucestershire"
-"919","Hertfordshire"
-"921","Isle of Wight"
-"925","Lincolnshire"
-"926","Norfolk"
-"928","Northamptonshire"
-"929","Northumberland"
-"931","Oxfordshire"
-"933","Somerset"
-"935","Suffolk"
-"936","Surrey"
-"937","Warwickshire"
-"938","West Sussex"
-"660","Isle of Anglesey"
-"661","Gwynedd"
-"662","Conwy"
-"663","Denbighshire"
-"664","Flintshire"
-"665","Wrexham"
-"666","Powys"
-"667","Ceredigion"
-"668","Pembrokeshire"
-"669","Carmarthenshire"
-"670","Swansea"
-"671","Neath Port Talbot"
-"672","Bridgend"
-"673","Vale of Glamorgan"
-"674","Rhondda, Cynon, Taff"
-"675","Merthyr Tydfil"
-"676","Caerphilly"
-"677","Blaenau Gwent"
-"678","Torfaen"
-"679","Monmouthshire"
-"680","Newport"
-"681","Cardiff"
+LEA_CODE,LEA_NAME,LEA_REGION
+301,Barking and Dagenham,London
+302,Barnet,London
+370,Barnsley,Yorkshire & Humberside
+800,Bath and North East Somerset,South West
+822,Bedford,Eastern England
+303,Bexley,London
+330,Birmingham,West Midlands
+889,Blackburn with Darwen,North West
+890,Blackpool,North West
+350,Bolton,North West
+837,Bournemouth,South West
+867,Bracknell Forest,South East
+380,Bradford,Yorkshire & Humberside
+304,Brent,London
+846,Brighton and Hove,South East
+801,Bristol,South West
+305,Bromley,London
+825,Buckinghamshire,South East
+351,Bury,North West
+381,Calderdale,Yorkshire & Humberside
+873,Cambridgeshire,Eastern England
+202,Camden,London
+823,Central Bedfordshire,Eastern England
+895,Cheshire East,North West
+896,Cheshire West and Chester,North West
+201,City of London,London
+908,Cornwall,South West
+331,Coventry,West Midlands
+306,Croydon,London
+909,Cumbria,North West
+841,Darlington,North East
+831,Derby,East Midlands
+830,Derbyshire,East Midlands
+878,Devon,South West
+371,Doncaster,Yorkshire & Humberside
+835,Dorset,South West
+332,Dudley,West Midlands
+840,Durham,North East
+307,Ealing,London
+811,East Riding of Yorkshire,Yorkshire & Humberside
+845,East Sussex,South East
+308,Enfield,London
+881,Essex,Eastern England
+390,Gateshead,North East
+916,Gloucestershire,South West
+203,Greenwich,London
+204,Hackney,London
+876,Halton,North West
+205,Hammersmith and Fulham,London
+850,Hampshire,South East
+309,Haringey,London
+310,Harrow,London
+805,Hartlepool,North East
+311,Havering,London
+884,Herefordshire,West Midlands
+919,Hertfordshire,Eastern England
+312,Hillingdon,London
+313,Hounslow,London
+921,Isle of Wight,South East
+420,Isles of Scilly,South West
+206,Islington,London
+207,Kensington and Chelsea,London
+886,Kent,South East
+810,Kingston upon Hull,Yorkshire & Humberside
+314,Kingston upon Thames,London
+382,Kirklees,Yorkshire & Humberside
+340,Knowsley,North West
+208,Lambeth,London
+888,Lancashire,North West
+383,Leeds,Yorkshire & Humberside
+856,Leicester,East Midlands
+855,Leicestershire,East Midlands
+209,Lewisham,London
+925,Lincolnshire,East Midlands
+341,Liverpool,North West
+821,Luton,Eastern England
+352,Manchester,North West
+887,Medway,South East
+315,Merton,London
+806,Middlesbrough,North East
+826,Milton Keynes,South East
+391,Newcastle upon Tyne,North East
+316,Newham,London
+926,Norfolk,Eastern England
+812,North East Lincolnshire,Yorkshire & Humberside
+813,North Lincolnshire,Yorkshire & Humberside
+802,North Somerset,South West
+392,North Tyneside,North East
+815,North Yorkshire,Yorkshire & Humberside
+928,Northamptonshire,East Midlands
+929,Northumberland,North East
+892,Nottingham,East Midlands
+891,Nottinghamshire,East Midlands
+353,Oldham,North West
+931,Oxfordshire,South East
+874,Peterborough,Eastern England
+879,Plymouth,South West
+836,Poole,South West
+851,Portsmouth,South East
+870,Reading,South East
+317,Redbridge,London
+807,Redcar and Cleveland,North East
+318,Richmond upon Thames,London
+354,Rochdale,North West
+372,Rotherham,Yorkshire & Humberside
+857,Rutland,East Midlands
+355,Salford,North West
+333,Sandwell,West Midlands
+343,Sefton,North West
+373,Sheffield,Yorkshire & Humberside
+893,Shropshire,West Midlands
+871,Slough,South East
+334,Solihull,West Midlands
+933,Somerset,South West
+803,South Gloucestershire,South West
+393,South Tyneside,North East
+852,Southampton,South East
+882,Southend on Sea,Eastern England
+210,Southwark,London
+342,St Helens,North West
+860,Staffordshire,West Midlands
+356,Stockport,North West
+808,Stockton-on-Tees,North East
+861,Stoke-on-Trent,Midlands
+935,Suffolk,Eastern England
+394,Sunderland,North East
+936,Surrey,South East
+319,Sutton,London
+866,Swindon,South West
+357,Tameside,North West
+894,Telford and Wrekin,West Midlands
+883,Thurrock,Eastern England
+880,Torbay,South West
+211,Tower Hamlets,London
+358,Trafford,North West
+384,Wakefield,Yorkshire & Humberside
+335,Walsall,West Midlands
+320,Waltham Forest,London
+212,Wandsworth,London
+877,Warrington,North West
+937,Warwickshire,West Midlands
+869,West Berkshire,South East
+938,West Sussex,South East
+213,Westminster,London
+359,Wigan,North West
+865,Wiltshire,South West
+868,Windsor and Maidenhead,South East
+344,Wirral,North West
+872,Wokingham,South East
+336,Wolverhampton,West Midlands
+885,Worcestershire,West Midlands
+816,York,Yorkshire & Humberside

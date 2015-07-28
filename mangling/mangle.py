@@ -27,7 +27,7 @@ def common(list1, list2):
     return [el for el in list1 if el in list2]
 # Function for returning all occurrences
 def remove_all(list_name, val):
-   return [value for value in list_name if value != val]
+    return [value for value in list_name if value != val]
 # Create column lists
 ks4_cols = list(ks4_england.columns)
 census_cols = list(england_census.columns)
@@ -46,10 +46,20 @@ edubase.drop(edubase_todrop, axis=1, inplace=True)
 merged_df = pd.merge(ks4_england, england_census, on='URN', how='left')
 merged_df = pd.merge(merged_df, edubase, on='URN', how='left')
 
-# Replace LEA codes with descriptive code
+# Add Region to data frame
 lea_codes = pd.read_csv(LEA_CODE_PATH)
-lea_codes['NAME'] = lea_codes['LEA09NM'] +' '+'('+lea_codes['LEA09CD'].astype(str)+')'
-lea_dict = lea_codes.set_index('LEA09CD')['NAME'].to_dict()
+
+def add_region(row, df):
+    lea_region_map = zip(df['LEA_CODE'], df['LEA_REGION'])
+    region = list(b for (a,b) in lea_region_map if a == row['LEA'])
+    region = ','.join(region)
+    return region
+                         
+merged_df['REGION'] = merged_df.apply (lambda row: add_region(row, lea_codes), axis = 1)
+                         
+# Replace LEA codes with descriptive code
+lea_codes['NAME'] = lea_codes['LEA_NAME'] +' '+'('+lea_codes['LEA_CODE'].astype(str)+')'
+lea_dict = lea_codes.set_index('LEA_CODE')['NAME'].to_dict()
 merged_df = merged_df.replace({'LEA': lea_dict})
 
 # Function that parses percentage columns into float or None
