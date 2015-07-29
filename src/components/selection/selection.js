@@ -4,15 +4,13 @@ define(['knockout', 'underscore', 'data-model', 'text!./selection.html', 'knocko
         function Selection() {
             var self = this;
 
-            this.allData =  dataModel.allData;
+            this.viewLevel = dataModel.viewLevel;
+
+            this.regionOptions = dataModel.regions;
+            this.selectedRegion = dataModel.selectedRegion;
 
             this.leaOptions = dataModel.leas;
             this.selectedLea = dataModel.selectedLea;
-
-            this.measureOptions = dataModel.measures;
-            this.selectedMeasure = dataModel.selectedMeasure;
-            this.pupilGroupOptions = dataModel.pupilGroups;
-            this.selectedPupilGroup = dataModel.selectedPupilGroup;
 
             this.focusedSchool = dataModel.focusedSchool;
 

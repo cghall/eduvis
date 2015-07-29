@@ -62,7 +62,10 @@
 	padding-bottom: 6px;
 }
 
-
+label.btn > input[type='radio']
+{
+	display: none;
+}
 
 /*=========================
   Icons

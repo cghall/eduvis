@@ -1,6 +1,28 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
+            <a data-toggle="collapse" data-target="#collapseMeasures" name="collapseMeasures">
+                Measures
+            </a>
+        </h3>
+    </div>
+    <div id="collapseMeasures" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <label class="control-label">
+                Measure
+                <select class="form-control" data-bind="options: measureOptions,
+                                                            value: selectedMeasure"></select>
+            </label>
+
+            <label class="control-label">
+                Pupil group
+                <select class="form-control" data-bind="options: pupilGroupOptions,
+                                                            value: selectedPupilGroup"></select>
+            </label>
+        </div>
+    </div>
+    <div class="panel-heading">
+        <h3 class="panel-title">
             <a data-toggle="collapse" data-target="#collapseDispAvg" name="collapseDispAvg">
                 Display Averages
             </a>

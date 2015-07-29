@@ -25,8 +25,20 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.metaData = ko.observable([]);
             this.downloadSchoolData();
 
+            this.viewLevel = ko.observable("School");
+
+            this.regions = ko.pureComputed(function () {
+                return _(self.allData())
+                    .pluck('REGION')
+                    .sortBy(_.identity)
+                    .uniq(true)
+                    .value();
+            });
+            this.selectedRegion = ko.observable();
+
             this.leas = ko.pureComputed(function () {
                 return _(self.allData())
+                    .where({ REGION: self.selectedRegion() })
                     .pluck('LEA')
                     .sortBy(_.identity)
                     .uniq(true)
@@ -97,14 +109,14 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                         return measure !== '' && $.isNumeric(measure);
                     };
 
-                    var partitioned = _(self.allData())
-                        .where({LEA: self.selectedLea()})
-                        .partition(hasNumericData)
-                        .value();
+                    var leaRegionFiltered = self.viewLevel() == 'School'
+                        ? _.where(self.allData(), { LEA: self.selectedLea() })
+                        : _.where(self.allData(), { REGION: self.selectedRegion() });
+
+                    var partitioned = _.partition(leaRegionFiltered, hasNumericData);
 
                     var schoolsWithData = partitioned[0], schoolsWithoutData = partitioned[1];
                     self.schoolsWithoutData(schoolsWithoutData);
-
 
                     var groups = [
                         {group: 'Academies', include: self.includeAcademies()},
@@ -126,6 +138,54 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 deferEvaluation: true
             })
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 100}});
+
+            this.focusedLea = ko.observable();
+
+            this.focusedEntity = ko.pureComputed(function () {
+                if (self.viewLevel() == 'School') {
+                    return self.focusedSchool();
+                } else {
+                    return self.focusedLea();
+                }
+            });
+
+            this.entities = ko.computed(function () {
+                if (self.viewLevel() == 'School') {
+                    return self.schools();
+                } else if (self.selectedMetric()){
+                    var byLea = _.groupBy(self.schools(), 'LEA');
+
+                    var divisor = _.findWhere(self.metaData(), {column: self.selectedMetric()}).group_divisor;
+                    var weightedMetric = self.selectedMetric() + '_weighted';
+
+
+                    var leas = [];
+
+                    $.each(byLea, function(leaName, schools) {
+
+                        var weightedMetricSum = _.reduce(schools, function(memo, school){
+                            var value = $.isNumeric(school[weightedMetric]) ? school[weightedMetric] : 0;
+                            return memo + value;
+                        }, 0);
+                        var divisorSum = _.reduce(schools, function(memo, school){
+                            var value = $.isNumeric(school[weightedMetric]) ? school[divisor] : 0;
+                            return memo + value;
+                        }, 0);
+
+                        var lea = { SCHNAME: leaName };
+                        var multiplier = self.selectedMeasureSuffix() === '%' ? 100 : 1;
+                        lea[self.selectedMetric()] = Math.round((weightedMetricSum / divisorSum) * multiplier);
+                        leas.push(lea);
+
+                        if (leaName === self.selectedLea()) {
+                            self.focusedLea(lea);
+                        }
+                    });
+
+                    return leas;
+                }
+
+            });
 
             this.measureMin = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
@@ -197,6 +257,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
         DataModel.prototype._updateCookie = function () {
             cm.extendCookie('graph', {
                 selectedLea: this.selectedLea(),
+                viewLevel: this.viewLevel(),
                 focusedSchool: this.focusedSchool() && this.focusedSchool()['SCHNAME'],
                 selectedMetric: this.selectedMetric(),
 
@@ -286,6 +347,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             }
             if ('apsMax' in options) {
                 this.apsMax(options.apsMax);
+            }
+            if ('viewLevel' in options) {
+                this.viewLevel(options.viewLevel);
             }
 
             this.includeLaMaintained(!('excludeLaMaintained' in options));

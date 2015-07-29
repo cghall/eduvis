@@ -8,42 +8,47 @@
     </div>
     <div id="collapseSelection" class="panel-collapse collapse in">
         <div class="panel-body">
+            <div class="btn-group btn-group-justified">
+                <label class="btn btn-default btn-sm" data-bind="css: { 'active': viewLevel() === 'LEA' }">
+                    <input type="radio" name="options" id="option1" data-bind="checked: viewLevel, checkedValue: 'LEA'">LEA view
+                </label>
+                <label class="btn btn-default btn-sm" data-bind="css: { 'active': viewLevel() === 'School' }">
+                    <input type="radio" name="options" id="option2" data-bind="checked: viewLevel, checkedValue: 'School'">School view
+                </label>
+            </div>
+
             <label class="control-label">
-                LEA
+                Region
+                <select class="form-control"
+                        data-bind="options: regionOptions, value: selectedRegion"></select>
+            </label>
+
+            <br>
+
+            <label class="control-label">
+                LEA <span data-bind="visible : viewLevel() === 'LEA'">of interest</span>
                 <select class="form-control"
                         data-bind="options: leaOptions, value: selectedLea"></select>
             </label>
 
-            <button class="btn ko-popover"
-                    data-bind="visible: selectedSchoolsExcludedNames,
+            <button class="btn btn-sm ko-popover"
+                    data-bind="visible: selectedSchoolsExcludedNames() && viewLevel() === 'School',
                                popover: true,
                                popoverOptions: { html: true, content: selectedSchoolsExcludedNames }"
                     data-popover-placement="bottom"
                     data-popover-title="Data not available for:">
                 Excluded schools
-            </button><br>
+            </button>
 
-            <label class="control-label">
-                School of interest
-                <select class="form-control" data-bind="options: selectedSchoolsIncludedAlphabetical,
+            <div data-bind="visible: viewLevel() === 'School'">
+                <label class="control-label">
+                    School of interest
+                    <select class="form-control" data-bind="options: selectedSchoolsIncludedAlphabetical,
                                                         optionsText: 'SCHNAME',
                                                         value: focusedSchool,
                                                         optionsCaption: 'select a school...'"></select>
-            </label>
-
-            <hr>
-
-            <label class="control-label">
-                Measure
-                <select class="form-control" data-bind="options: measureOptions,
-                                                        value: selectedMeasure"></select>
-            </label>
-
-            <label class="control-label">
-                Pupil group
-                <select class="form-control" data-bind="options: pupilGroupOptions,
-                                                        value: selectedPupilGroup"></select>
-            </label>
+                </label>
+            </div>
 
         </div>
     </div>

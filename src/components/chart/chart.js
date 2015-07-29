@@ -4,18 +4,18 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
         function Chart() {
             var self = this;
 
-            this.sortedSchools = ko.pureComputed(function () {
-                return _.sortBy(dataModel.schools(), dataModel.selectedMetric());
+            this.sortedEntities = ko.pureComputed(function () {
+                return _.sortBy(dataModel.entities(), dataModel.selectedMetric());
             });
 
-            this.schoolNames = ko.pureComputed(function () {
-                return _.pluck(self.sortedSchools(), 'SCHNAME');
+            this.entityNames = ko.pureComputed(function () {
+                return _.pluck(self.sortedEntities(), 'SCHNAME');
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.schoolSeries = ko.pureComputed(function () {
-                return _.map(self.sortedSchools(), function (school) {
-                    var color = school === dataModel.focusedSchool() ? '#e99002' : '#00539C';
-                    return {y: school[dataModel.selectedMetric()], color: color}
+            this.entitySeries = ko.pureComputed(function () {
+                return _.map(self.sortedEntities(), function (entity) {
+                    var color = entity === dataModel.focusedEntity() ? '#e99002' : '#00539C';
+                    return {y: entity[dataModel.selectedMetric()], color: color}
                 });
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
@@ -45,8 +45,8 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
 
             this.updateBar = ko.computed(function () {
                 var measure = dataModel.selectedMetric();
-                var schoolNames = self.schoolNames();
-                var schoolSeries = self.schoolSeries();
+                var schoolNames = self.entityNames();
+                var schoolSeries = self.entitySeries();
 
                 var checkExist = setInterval(function () {
                     if (!self.isBarSelected()) {
@@ -79,6 +79,21 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                 },
                                 min: dataModel.measureMin(),
                                 max: dataModel.measureMax()
+                            },
+                            plotOptions: {
+                                series: {
+                                    cursor: 'pointer',
+                                    point: {
+                                        events: {
+                                            click: function () {
+                                                if (dataModel.viewLevel() === "LEA") {
+                                                    dataModel.selectedLea(this.category);
+                                                    dataModel.viewLevel("School");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             series: [{
                                 showInLegend: false,
