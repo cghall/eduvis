@@ -256,6 +256,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
         DataModel.prototype._updateCookie = function () {
             cm.extendCookie('graph', {
+                selectedRegion: this.selectedRegion(),
                 selectedLea: this.selectedLea(),
                 viewLevel: this.viewLevel(),
                 focusedSchool: this.focusedSchool() && this.focusedSchool()['SCHNAME'],
@@ -324,6 +325,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             var cookieOptions = cm.readCookie('graph');
             options = $.isEmptyObject(options) ? cookieOptions : options;
 
+            if ('selectedRegion' in options) {
+                this.selectedRegion(options.selectedRegion);
+            }
             if ('selectedLea' in options) {
                 this.selectedLea(options.selectedLea);
             }
