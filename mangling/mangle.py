@@ -14,6 +14,9 @@ OUTPUT_PATH = os.path.join('..', 'data-out', 'school_data.csv')
 ks4_england = pd.read_csv(ENGLAND_KS4_PATH)
 # Filter out non-school records
 ks4_england = ks4_england[ks4_england['RECTYPE']==1]
+ks4_england = ks4_england[ks4_england['NFTYPE'] != 'IND']
+ks4_england = ks4_england[ks4_england['NFTYPE'] != 'INDSPEC']
+
 # Read in census
 england_census = pd.read_csv(ENGLAND_CENSUS_PATH)
 # Read in edubase
