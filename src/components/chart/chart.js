@@ -95,6 +95,15 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                 enabled: true,
                                     series: {
                                     type: 'column'
+                                },
+                                xAxis: {
+                                    tickWidth: 0,
+                                    lineWidth: 0,
+                                    gridLineWidth: 1,
+                                    tickPixelInterval: 200,
+                                    labels: {
+                                        enabled: false
+                                    }
                                 }
                             };
                             chartOptions.subtitle = {

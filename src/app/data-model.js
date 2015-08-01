@@ -278,7 +278,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
                 showNationalAverage: this.showNationalAverage(),
                 showTop10Percent: this.showTop10Percent(),
-                showBottom10Percent: this.showBottom10Percent()
+                showBottom10Percent: this.showBottom10Percent(),
+
+                verticalChart: this.verticalChart()
             });
         };
 
@@ -368,6 +370,8 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.showNationalAverage('showNationalAverage' in options && options.showNationalAverage);
             this.showTop10Percent('showTop10Percent' in options && options.showTop10Percent);
             this.showBottom10Percent('showBottom10Percent' in options && options.showBottom10Percent);
+
+            this.verticalChart('verticalChart' in options);
 
             cm.enableCookieWriting(true);
         };
