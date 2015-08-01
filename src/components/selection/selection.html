@@ -8,39 +8,72 @@
     </div>
     <div id="collapseSelection" class="panel-collapse collapse in">
         <div class="panel-body">
+
+            <label>View Level</label>
             <div class="btn-group btn-group-justified">
-                <label class="btn btn-default btn-sm" data-bind="css: { 'active': viewLevel() === 'LEA' }">
-                    <input type="radio" name="options" id="option1" data-bind="checked: viewLevel, checkedValue: 'LEA'">LEA view
+                <label class="btn btn-default btn-sm"
+                       data-bind="css: { 'active': viewLevel() === 'Region'}">
+                    <input type="radio" name="options" id="viewRegion" data-bind="checked: viewLevel, checkedValue: 'Region'">
+                    Region
                 </label>
-                <label class="btn btn-default btn-sm" data-bind="css: { 'active': viewLevel() === 'School' }">
-                    <input type="radio" name="options" id="option2" data-bind="checked: viewLevel, checkedValue: 'School'">School view
+                <label class="btn btn-default btn-sm"
+                       data-bind="css: { 'active': viewLevel() === 'LEA', 'disabled': dataLevel() === 'Region' }">
+                <input type="radio" name="options" id="viewLEA" data-bind="checked: viewLevel, checkedValue: 'LEA',
+                                                                           disable: dataLevel() === 'Region'">
+                    Local Authority
+                </label>
+            </div>
+
+            <label>Data Level</label>
+            <div class="btn-group btn-group-justified">
+                <label class="btn btn-default btn-sm"
+                       data-bind="css: { 'active': dataLevel() === 'Region', 'disabled': viewLevel() === 'LEA' }">
+                    <input type="radio" name="options" id="dataRegion" data-bind="checked: dataLevel, checkedValue: 'Region',
+                                                                                  disable: viewLevel() === 'LEA'">
+                    Region
+                </label>
+                <label class="btn btn-default btn-sm"
+                       data-bind="css: { 'active': dataLevel() === 'LEA'}">
+                    <input type="radio" name="options" id="dataLEA" data-bind="checked: dataLevel, checkedValue: 'LEA'">
+                    Local Authority
+                </label>
+                <label class="btn btn-default btn-sm"
+                       data-bind="css: { 'active': dataLevel() === 'School' }">
+                    <input type="radio" name="options" id="dataSchool" data-bind="checked: dataLevel, checkedValue: 'School'">
+                    School
                 </label>
             </div>
 
             <label class="control-label">
                 Region
                 <select class="form-control"
-                        data-bind="options: regionOptions, value: selectedRegion"></select>
+                        data-bind="options: regionOptions,
+                                   value: selectedRegion,
+                                   optionsCaption: 'All'"></select>
             </label>
 
             <br>
 
-            <label class="control-label">
-                LEA <span data-bind="visible : viewLevel() === 'LEA'">of interest</span>
-                <select class="form-control"
-                        data-bind="options: leaOptions, value: selectedLea"></select>
+            <div data-bind="visible: !(dataLevel() === 'Region' && viewLevel() === 'Region')">
+                <label class="control-label">
+                    Local authority
+                    <select class="form-control"
+                            data-bind="options: leaOptions,
+                                       value: selectedLea,
+                                       optionsCaption: 'select a local authority...'"></select>
             </label>
+            </div>
 
             <button class="btn btn-sm ko-popover"
-                    data-bind="visible: selectedSchoolsExcludedNames() && viewLevel() === 'School',
+                    data-bind="visible: selectedSchoolsExcludedNames() && dataLevel() === 'School',
                                popover: true,
-                               popoverOptions: { html: true, content: selectedSchoolsExcludedNames }"
+                               popoverOptions: { html: true, content: selectedSchoolsExcludedNames },"
                     data-popover-placement="bottom"
                     data-popover-title="Data not available for:">
                 Excluded schools
             </button>
 
-            <div data-bind="visible: viewLevel() === 'School'">
+            <div data-bind="visible: dataLevel() === 'School'">
                 <label class="control-label">
                     School of interest
                     <select class="form-control" data-bind="options: selectedSchoolsIncludedAlphabetical,

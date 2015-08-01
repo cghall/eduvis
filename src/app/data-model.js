@@ -25,7 +25,8 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.metaData = ko.observable([]);
             this.downloadSchoolData();
 
-            this.viewLevel = ko.observable("School");
+            this.viewLevel = ko.observable("LEA");
+            this.dataLevel = ko.observable("School");
 
             this.regions = ko.pureComputed(function () {
                 return _(self.allData())
@@ -36,18 +37,21 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             });
             this.selectedRegion = ko.observable();
 
-            this.leas = ko.pureComputed(function () {
+            this.selectedLea = ko.observable()
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
+            this.focusedSchool = ko.observable();
+
+            this.leas = ko.computed(function () {
                 return _(self.allData())
-                    .where({ REGION: self.selectedRegion() })
+                    .filter(function(school) {
+                        var region = self.selectedRegion();
+                        return !region || (region && school.REGION === region);
+                    })
                     .pluck('LEA')
                     .sortBy(_.identity)
                     .uniq(true)
                     .value();
             });
-
-            this.selectedLea = ko.observable()
-                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
-            this.focusedSchool = ko.observable();
 
             this.includeLaMaintained = ko.observable(false);
             this.includeAcademies = ko.observable(false);
@@ -102,18 +106,30 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             })
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
+            this.tooManySchools = ko.observable(false);
+
             this.schools = ko.computed({
                 read: function () {
+                    if (self.viewLevel() == 'Region' && self.dataLevel() == 'School' && !self.selectedRegion()) {
+                        self.tooManySchools(true);
+                        return [];
+                    }
+                    self.tooManySchools(false);
+
                     var hasNumericData = function (school) {
                         var measure = school[self.selectedMetric()];
                         return measure !== '' && $.isNumeric(measure);
                     };
 
-                    var leaRegionFiltered = self.viewLevel() == 'School'
-                        ? _.where(self.allData(), { LEA: self.selectedLea() })
-                        : _.where(self.allData(), { REGION: self.selectedRegion() });
+                    var filtered = self.allData();
 
-                    var partitioned = _.partition(leaRegionFiltered, hasNumericData);
+                    if (self.viewLevel() == 'Region' && self.selectedRegion()) {
+                        filtered = _.where(self.allData(), { REGION: self.selectedRegion() });
+                    } else if (self.viewLevel() == 'LEA') {
+                        filtered = _.where(self.allData(), { LEA: self.selectedLea() })
+                    }
+
+                    var partitioned = _.partition(filtered, hasNumericData);
 
                     var schoolsWithData = partitioned[0], schoolsWithoutData = partitioned[1];
                     self.schoolsWithoutData(schoolsWithoutData);
@@ -142,26 +158,31 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.focusedLea = ko.observable();
 
             this.focusedEntity = ko.pureComputed(function () {
-                if (self.viewLevel() == 'School') {
-                    return self.focusedSchool();
+                if (self.dataLevel() == 'Region') {
+                    return self.selectedRegion();
+                } else if (self.dataLevel() == 'LEA') {
+                    return self.selectedLea();
                 } else {
-                    return self.focusedLea();
+                    return self.focusedSchool();
                 }
             });
 
             this.entities = ko.computed(function () {
-                if (self.viewLevel() == 'School') {
+                if (self.dataLevel() == 'School') {
                     return self.schools();
                 } else if (self.selectedMetric()){
-                    var byLea = _.groupBy(self.schools(), 'LEA');
+                    //var focusedGroup = self.dataLevel() === 'LEA' ? self.focusedLea() : self.selectedRegion();
+                    var grouping = self.dataLevel() === 'LEA' ? 'LEA' : 'REGION';
+
+                    var byGroup = _.groupBy(self.schools(), grouping);
 
                     var divisor = _.findWhere(self.metaData(), {column: self.selectedMetric()}).group_divisor;
                     var weightedMetric = self.selectedMetric() + '_weighted';
 
 
-                    var leas = [];
+                    var groups = [];
 
-                    $.each(byLea, function(leaName, schools) {
+                    $.each(byGroup, function(groupName, schools) {
 
                         var weightedMetricSum = _.reduce(schools, function(memo, school){
                             var value = $.isNumeric(school[weightedMetric]) ? school[weightedMetric] : 0;
@@ -172,19 +193,14 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                             return memo + value;
                         }, 0);
 
-                        var lea = { SCHNAME: leaName };
+                        var group = { SCHNAME: groupName };
                         var multiplier = self.selectedMeasureSuffix() === '%' ? 100 : 1;
-                        lea[self.selectedMetric()] = Math.round((weightedMetricSum / divisorSum) * multiplier);
-                        leas.push(lea);
-
-                        if (leaName === self.selectedLea()) {
-                            self.focusedLea(lea);
-                        }
+                        group[self.selectedMetric()] = Math.round((weightedMetricSum / divisorSum) * multiplier);
+                        groups.push(group);
                     });
 
-                    return leas;
+                    return groups;
                 }
-
             });
 
             this.measureMin = ko.pureComputed(function () {
@@ -205,10 +221,13 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.selectionSummary = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 var measureShort = measure && measure.metric;
-                if (self.viewLevel() === 'School') {
-                    return measureShort + ' for LEA ' + self.selectedLea();
+                if (self.viewLevel() === 'Region') {
+                    var region = self.selectedRegion() ? self.selectedRegion() : 'all regions';
+                    var groupedBy = self.dataLevel() === 'LEA' ? ' grouped by local authority' : '';
+                    return measureShort + ' for ' + region + groupedBy;
                 }
-                return measureShort + ' for ' + self.selectedRegion();
+                var lea = self.selectedLea() ? self.selectedLea() : 'all regions in the Great Britain';
+                return measureShort + ' for ' + lea;
             });
 
             this.allDataSelectedMetric = ko.pureComputed(function () {
@@ -264,6 +283,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 selectedRegion: this.selectedRegion(),
                 selectedLea: this.selectedLea(),
                 viewLevel: this.viewLevel(),
+                dataLevel: this.dataLevel(),
                 focusedSchool: this.focusedSchool() && this.focusedSchool()['SCHNAME'],
                 selectedMetric: this.selectedMetric(),
 
@@ -361,6 +381,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             }
             if ('viewLevel' in options) {
                 this.viewLevel(options.viewLevel);
+            }
+            if ('dataLevel' in options) {
+                this.dataLevel(options.dataLevel);
             }
 
             this.includeLaMaintained(!('excludeLaMaintained' in options));

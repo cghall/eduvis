@@ -5,6 +5,7 @@ define(['knockout', 'underscore', 'data-model', 'text!./selection.html', 'knocko
             var self = this;
 
             this.viewLevel = dataModel.viewLevel;
+            this.dataLevel = dataModel.dataLevel;
 
             this.regionOptions = dataModel.regions;
             this.selectedRegion = dataModel.selectedRegion;

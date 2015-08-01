@@ -4,6 +4,8 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
         function Chart(params) {
             var self = this;
 
+            this.tooManySchools = dataModel.tooManySchools;
+
             this.sortedEntities = ko.pureComputed(function () {
                 return _.sortBy(dataModel.entities(), dataModel.selectedMetric());
             });
@@ -14,7 +16,8 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
 
             this.entitySeries = ko.pureComputed(function () {
                 return _.map(self.sortedEntities(), function (entity) {
-                    var color = entity === dataModel.focusedEntity() ? '#e99002' : '#00539C';
+                    var color = entity === dataModel.focusedEntity() || ('SCHNAME' in entity && entity.SCHNAME === dataModel.focusedEntity())
+                        ? '#e99002' : '#00539C';
                     return {y: entity[dataModel.selectedMetric()], color: color}
                 });
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
@@ -67,9 +70,20 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                     point: {
                                         events: {
                                             click: function () {
-                                                if (dataModel.viewLevel() === "LEA") {
-                                                    dataModel.selectedLea(this.category);
-                                                    dataModel.viewLevel("School");
+                                                if (dataModel.viewLevel() === "Region") {
+                                                    if (dataModel.dataLevel() === 'Region') {
+                                                        dataModel.selectedRegion(this.category);
+                                                        dataModel.dataLevel("LEA");
+                                                    } else if (dataModel.dataLevel() === 'LEA') {
+                                                        dataModel.selectedLea(this.category);
+                                                        dataModel.viewLevel("LEA");
+                                                        dataModel.dataLevel("School");
+                                                    }
+                                                } else if (dataModel.viewLevel() === "LEA") {
+                                                    if (dataModel.dataLevel() === 'LEA') {
+                                                        dataModel.selectedLea(this.category);
+                                                        dataModel.dataLevel("School");
+                                                    }
                                                 }
                                             }
                                         }
