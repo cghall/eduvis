@@ -37,7 +37,7 @@ define(['knockout', 'cookie-manager', 'text!./sharing.html'], function(ko, cm, t
                 url: 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyD_Jgxo5l899PUeNiLjOxXBIb0u-LF3s4s',
                 type: 'POST',
                 contentType: 'application/json',
-                data: '{ longUrl: "' + encodeURI(longURL) +'"}',
+                data: '{ longUrl: "' + longURL +'"}',
                 dataType: 'json',
                 success: function(response) {
                     self.shortenedUrl(response.id);
