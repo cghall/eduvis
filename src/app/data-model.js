@@ -205,7 +205,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.selectionSummary = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 var measureShort = measure && measure.metric;
-                return measureShort + ' for LEA ' + self.selectedLea();
+                if (self.viewLevel() === 'School') {
+                    return measureShort + ' for LEA ' + self.selectedLea();
+                }
+                return measureShort + ' for ' + self.selectedRegion();
             });
 
             this.allDataSelectedMetric = ko.pureComputed(function () {
@@ -249,6 +252,8 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                     return self.allDataSelectedMetric()[Math.floor(self.schoolCount() * 0.1)];
                 }
             });
+
+            this.verticalChart = ko.observable(true);
 
             this.updateCookie = ko.computed(this._updateCookie, this)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 500}});

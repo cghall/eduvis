@@ -1,7 +1,19 @@
 define(["knockout", "data-model", "text!./home.html"], function(ko, dataModel, homeTemplate) {
 
     function HomeViewModel() {
+        var self = this;
+
         this.schoolDataLoaded = dataModel.schoolDataLoaded;
+
+        this.verticalChart = dataModel.verticalChart;
+
+        this.setVertical = function() {
+            self.verticalChart(true);
+        };
+
+        this.setHorizontal = function() {
+            self.verticalChart(false);
+        };
 
         this.isBarSelected = ko.observable(true);
         this.isTableSelected = ko.observable(false);

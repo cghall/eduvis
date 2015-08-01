@@ -11,12 +11,23 @@
                     <div class="span12">
                         <div class="panel panel-default">
                             <ul class="nav nav-tabs nav-justified">
-                                <li data-bind="css: { active: isBarSelected }">
-                                    <a href="#" data-toggle="tab" aria-expanded="true"
+
+                                <li class="dropdown active" data-bind="css: { active: isBarSelected }">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
                                        data-bind="click: selectBar">
-                                        <i class="fa fa-bar-chart fa-valign pull-center"></i> Bar Chart
+                                        <i class="fa fa-bar-chart fa-valign pull-center"></i> Chart <span class="caret"></span>
                                     </a>
+                                    <ul class="dropdown-menu dropdown-centered">
+                                        <li class="active" data-bind="css: { active: verticalChart }, click: setVertical">
+                                            <a href="#" data-toggle="tab" aria-expanded="true">Column Chart (vertical)</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li data-bind="css: { active: !verticalChart() }, click: setHorizontal">
+                                            <a href="#" data-toggle="tab">Bar Chart (horizontal)</a>
+                                        </li>
+                                    </ul>
                                 </li>
+
                                 <li data-bind="css: { active: isTableSelected }">
                                     <a href="#" data-toggle="tab" aria-expanded="true"
                                        data-bind="click: selectTable">
@@ -29,6 +40,7 @@
                                         <i class="fa fa-globe fa-valign pull-center"></i> Map
                                     </a>
                                 </li>
+
                             </ul>
 
                             <div class="panel-body text-center">
@@ -36,7 +48,7 @@
                                 <div class="tab-content">
                                     <div class="tab-pane in" data-bind="css: { active: isBarSelected }">
 
-                                        <chart params="isSelected: isBarSelected"></chart>
+                                        <chart params="isSelected: isBarSelected, verticalChart: verticalChart"></chart>
 
                                     </div>
                                     <div class="tab-pane" data-bind="css: { active: isTableSelected }">
@@ -45,9 +57,9 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" data-bind="css: { active: isMapSelected }">
-                                        <div class="well well-lg" style="width:100%; height:400px;">
-                                            <h3>Map view coming soon...</h3>
-                                        </div>
+
+                                        <ukmap params="isSelected: isMapSelected"></ukmap>
+
                                     </div>
                                 </div>
 

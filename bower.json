@@ -17,7 +17,10 @@
     "jquery-ui": "~1.11.4",
     "knockout-jqueryui": "~2.2.2",
     "bootstrap": "~3.3.5",
-    "lodash": "~3.10.0"
+    "lodash": "~3.10.0",
+    "highmaps-release": "~1.1.7",
+    "proj4": "~2.3.6",
+    "highstock-release": "~2.1.7"
   },
   "resolutions": {
     "knockout": "~3.3.0-alpha"

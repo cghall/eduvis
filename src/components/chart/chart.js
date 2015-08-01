@@ -19,12 +19,13 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                 });
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
-            this.columnChart = ko.observable();
+            this.chart = ko.observable();
 
             this.updateBar = ko.computed(function () {
                 var measure = dataModel.selectedMetric();
                 var schoolNames = self.entityNames();
                 var schoolSeries = self.entitySeries();
+                var verticalChart = dataModel.verticalChart();
 
                 var checkExist = setInterval(function () {
                     if (!params.isSelected()) {
@@ -33,10 +34,10 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
 
                     if (document.getElementById('myChart')) {
 
-                        var chart = new Highcharts.Chart({
+                        var chartOptions = {
                             chart: {
                                 renderTo: 'myChart',
-                                type: 'bar'
+                                zoomType: 'x'
                             },
                             title: {
                                 text: dataModel.selectionSummary(),
@@ -46,14 +47,16 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                 }
                             },
                             xAxis: {
-                                categories: schoolNames
+                                categories: schoolNames,
+                                min: 0,
+                                max: Math.min(schoolNames.length - 1, 20)
                             },
                             yAxis: {
                                 labels: {
                                     format: '{value}' + dataModel.selectedMeasureSuffix()
                                 },
                                 title: {
-                                    text: measure
+                                    text: null
                                 },
                                 min: dataModel.measureMin(),
                                 max: dataModel.measureMax()
@@ -75,7 +78,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                             },
                             series: [{
                                 showInLegend: false,
-                                name: measure,
+                                name: dataModel.selectedMeasure(),
                                 data: schoolSeries,
                                 animation: {
                                     duration: 0
@@ -84,8 +87,32 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                             tooltip: {
                                 valueSuffix: dataModel.selectedMeasureSuffix()
                             }
-                        });
-                        self.columnChart(chart);
+                        };
+
+                        if (verticalChart) {
+                            chartOptions.chart.type = 'column';
+                            chartOptions.navigator = {
+                                enabled: true,
+                                    series: {
+                                    type: 'column'
+                                }
+                            };
+                            chartOptions.subtitle = {
+                                text: "Use the navigation bar at the bottom to zoom and scroll."
+                            };
+                        } else {
+                            chartOptions.chart.type = 'bar';
+                            chartOptions.scrollbar = {
+                                enabled: true
+                            };
+                            chartOptions.subtitle = {
+                                text: "Click and drag to zoom. Use the scroll bar at the bottom to scroll. Click 'Reset Zoom' to reset selection."
+                            };
+                        }
+
+                        var chart = new Highcharts.Chart(chartOptions);
+
+                        self.chart(chart);
 
                         clearInterval(checkExist);
                     }
@@ -145,15 +172,15 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
             });
 
             this.updatePlotLines = ko.computed(function () {
-                if (!self.columnChart() || !self.columnChart().yAxis || !self.averagePlotLines()) {
+                if (!self.chart() || !self.chart().yAxis || !self.averagePlotLines()) {
                     return;
                 }
 
                 ['nat', 'top', 'bot'].forEach(function (lineId) {
-                    self.columnChart().yAxis[0].removePlotLine(lineId);
+                    self.chart().yAxis[0].removePlotLine(lineId);
                 });
                 self.averagePlotLines().forEach(function (line) {
-                    self.columnChart().yAxis[0].addPlotLine(line);
+                    self.chart().yAxis[0].addPlotLine(line);
                 });
             });
         }

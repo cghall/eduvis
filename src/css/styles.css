@@ -67,6 +67,18 @@ label.btn > input[type='radio']
 	display: none;
 }
 
+.dropdown-menu {
+	width: 100%;
+}
+
+.btn{
+	width: 100%;
+}
+
+.dropdown-centered {
+	text-align: center;
+}
+
 /*=========================
   Icons
  ================= */
