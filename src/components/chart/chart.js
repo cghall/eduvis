@@ -1,7 +1,7 @@
 define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html'],
     function (ko, Highcharts, _, dataModel, templateMarkup) {
 
-        function Chart() {
+        function Chart(params) {
             var self = this;
 
             this.sortedEntities = ko.pureComputed(function () {
@@ -21,35 +21,13 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
 
             this.columnChart = ko.observable();
 
-            this.isBarSelected = ko.observable(true);
-            this.isTableSelected = ko.observable(false);
-            this.isMapSelected = ko.observable(false);
-
-            this.selectBar = function () {
-                this.isBarSelected(true);
-                this.isTableSelected(false);
-                this.isMapSelected(false);
-            };
-
-            this.selectTable = function () {
-                this.isBarSelected(false);
-                this.isTableSelected(true);
-                this.isMapSelected(false);
-            };
-
-            this.selectMap = function () {
-                this.isBarSelected(false);
-                this.isTableSelected(false);
-                this.isMapSelected(true);
-            };
-
             this.updateBar = ko.computed(function () {
                 var measure = dataModel.selectedMetric();
                 var schoolNames = self.entityNames();
                 var schoolSeries = self.entitySeries();
 
                 var checkExist = setInterval(function () {
-                    if (!self.isBarSelected()) {
+                    if (!params.isSelected()) {
                         return;
                     }
 
@@ -100,7 +78,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                 name: measure,
                                 data: schoolSeries,
                                 animation: {
-                                    duration: 300
+                                    duration: 0
                                 }
                             }],
                             tooltip: {
