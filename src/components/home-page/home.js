@@ -15,9 +15,9 @@ define(["knockout", "data-model", "text!./home.html"], function(ko, dataModel, h
             self.verticalChart(false);
         };
 
-        this.isBarSelected = ko.observable(true);
-        this.isTableSelected = ko.observable(false);
-        this.isMapSelected = ko.observable(false);
+        this.isBarSelected = dataModel.isBarSelected;
+        this.isTableSelected = dataModel.isTableSelected;
+        this.isMapSelected = dataModel.isMapSelected;
 
         this.selectBar = function () {
             this.isBarSelected(true);

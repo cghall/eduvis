@@ -147,7 +147,6 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
                     if (schools.length > 300) {
                         self.tooManySchools(true);
-                        return [];
                     }
                     self.tooManySchools(false);
                     return schools;
@@ -275,6 +274,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
             this.verticalChart = ko.observable(true);
 
+            this.isBarSelected = ko.observable(true);
+            this.isTableSelected = ko.observable(false);
+            this.isMapSelected = ko.observable(false);
+
             this.updateCookie = ko.computed(this._updateCookie, this)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 500}});
         }
@@ -301,7 +304,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 showTop10Percent: this.showTop10Percent(),
                 showBottom10Percent: this.showBottom10Percent(),
 
-                verticalChart: this.verticalChart()
+                verticalChart: this.verticalChart(),
+                isBarSelected: this.isBarSelected(),
+                isTableSelected: this.isTableSelected(),
+                isMapSelected: this.isMapSelected()
             });
         };
 
@@ -390,6 +396,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.includeLaMaintained(!('excludeLaMaintained' in options));
             this.includeAcademies(!('excludeAcademies' in options));
             this.includeFreeSchools(!('excludeFreeSchools' in options));
+
+            this.isBarSelected('isBarSelected' in options);
+            this.isTableSelected('isTableSelected' in options);
+            this.isMapSelected('isMapSelected' in options);
 
             this.showNationalAverage('showNationalAverage' in options && options.showNationalAverage);
             this.showTop10Percent('showTop10Percent' in options && options.showTop10Percent);
