@@ -112,7 +112,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                         clearInterval(checkExist);
                     }
                 }, 30);
-            });
+            }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 150}});
 
 
             this.nationalAverageLine = ko.pureComputed(function () {
