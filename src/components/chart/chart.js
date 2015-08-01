@@ -35,7 +35,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                         return;
                     }
 
-                    if (document.getElementById('myChart')) {
+                    if (!dataModel.tooManySchools() && document.getElementById('myChart')) {
 
                         var chartOptions = {
                             chart: {

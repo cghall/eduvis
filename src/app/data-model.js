@@ -110,12 +110,6 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
             this.schools = ko.computed({
                 read: function () {
-                    if (self.viewLevel() == 'Region' && self.dataLevel() == 'School' && !self.selectedRegion()) {
-                        self.tooManySchools(true);
-                        return [];
-                    }
-                    self.tooManySchools(false);
-
                     var hasNumericData = function (school) {
                         var measure = school[self.selectedMetric()];
                         return measure !== '' && $.isNumeric(measure);
@@ -144,12 +138,19 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                         .pluck('group')
                         .value();
 
-                    return _(schoolsWithData)
-                        .filter(function(school) {
+                    var schools = _(schoolsWithData)
+                        .filter(function (school) {
                             return _.contains(includedGroups, school.EstablishmentGroup);
                         })
                         .filter(self.isWithinFsmAndApsLimits())
                         .value();
+
+                    if (schools.length > 300) {
+                        self.tooManySchools(true);
+                        return [];
+                    }
+                    self.tooManySchools(false);
+                    return schools;
                 },
                 deferEvaluation: true
             })
