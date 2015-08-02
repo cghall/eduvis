@@ -81,10 +81,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 var groups = _(self.metaData())
                     .where({metric: self.selectedMeasure()})
                     .pluck('pupils')
-                    .sortBy(_.identity)
                     .filter(_.identity)
+                    .sortBy(_.identity)
                     .value();
-                console.log(groups)
                 return groups;
             });
             this.selectedPupilGroup = ko.observable();
@@ -121,13 +120,17 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
             this.tooManySchools = ko.observable(false);
 
+            this.hasNumericData = function(school) {
+                var measure = school[self.selectedMetric()];
+                return measure !== '' && $.isNumeric(measure);
+            };
+
+            this.allSchoolsWithData = ko.pureComputed(function() {
+                return _.filter(self.allData(), self.hasNumericData)
+            });
+
             this.schools = ko.computed({
                 read: function () {
-                    var hasNumericData = function (school) {
-                        var measure = school[self.selectedMetric()];
-                        return measure !== '' && $.isNumeric(measure);
-                    };
-
                     var filtered = self.allData();
 
                     if (self.viewLevel() == 'Region' && self.selectedRegion()) {
@@ -136,7 +139,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                         filtered = _.where(self.allData(), { LEA: self.selectedLea() })
                     }
 
-                    var partitioned = _.partition(filtered, hasNumericData);
+                    var partitioned = _.partition(filtered, self.hasNumericData);
 
                     var schoolsWithData = partitioned[0], schoolsWithoutData = partitioned[1];
                     self.schoolsWithoutData(schoolsWithoutData);
@@ -183,39 +186,49 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 }
             });
 
+            this.weightedAverage = function(grouped, divisor, weightedMetric) {
+                var groups = [];
+
+                $.each(grouped, function(groupName, schools) {
+
+                    var weightedMetricSum = _.reduce(schools, function(memo, school){
+                        var value = $.isNumeric(school[weightedMetric]) ? school[weightedMetric] : 0;
+                        return memo + value;
+                    }, 0);
+                    var divisorSum = _.reduce(schools, function(memo, school){
+                        var value = $.isNumeric(school[weightedMetric]) ? school[divisor] : 0;
+                        return memo + value;
+                    }, 0);
+
+                    var group = { SCHNAME: groupName };
+                    var multiplier = self.selectedMeasureSuffix() === '%' ? 100 : 1;
+                    group[self.selectedMetric()] = Math.round((weightedMetricSum / divisorSum) * multiplier);
+                    groups.push(group);
+                });
+
+                return groups;
+            };
+
+            this.nationalAverage = ko.pureComputed(function() {
+                var divisor = _.findWhere(self.metaData(), {column: self.selectedMetric()}).group_divisor;
+                var weightedMetric = self.selectedMetric() + '_weighted';
+                var grouped = {'all' : self.allData()};
+                return self.weightedAverage(grouped, divisor, weightedMetric)[0][self.selectedMetric()];
+            });
+
             this.entities = ko.computed(function () {
                 if (self.dataLevel() == 'School') {
+
                     return self.schools();
+
                 } else if (self.selectedMetric()){
-                    //var focusedGroup = self.dataLevel() === 'LEA' ? self.focusedLea() : self.selectedRegion();
+
                     var grouping = self.dataLevel() === 'LEA' ? 'LEA' : 'REGION';
-
                     var byGroup = _.groupBy(self.schools(), grouping);
-
                     var divisor = _.findWhere(self.metaData(), {column: self.selectedMetric()}).group_divisor;
                     var weightedMetric = self.selectedMetric() + '_weighted';
 
-
-                    var groups = [];
-
-                    $.each(byGroup, function(groupName, schools) {
-
-                        var weightedMetricSum = _.reduce(schools, function(memo, school){
-                            var value = $.isNumeric(school[weightedMetric]) ? school[weightedMetric] : 0;
-                            return memo + value;
-                        }, 0);
-                        var divisorSum = _.reduce(schools, function(memo, school){
-                            var value = $.isNumeric(school[weightedMetric]) ? school[divisor] : 0;
-                            return memo + value;
-                        }, 0);
-
-                        var group = { SCHNAME: groupName };
-                        var multiplier = self.selectedMeasureSuffix() === '%' ? 100 : 1;
-                        group[self.selectedMetric()] = Math.round((weightedMetricSum / divisorSum) * multiplier);
-                        groups.push(group);
-                    });
-
-                    return groups;
+                    return self.weightedAverage(byGroup, divisor, weightedMetric)
                 }
             });
 
@@ -276,19 +289,19 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.showTop10Percent = ko.observable();
             this.showBottom10Percent = ko.observable();
 
-            var average = function (numbers) {
-                var sum = 0;
-                for (var i = 0; i < numbers.length; i++) {
-                    sum += numbers[i] || 0;
-                }
-                return sum / numbers.length;
-            };
-
-            this.nationalAverage = ko.pureComputed(function () {
-                if (self.showNationalAverage()) {
-                    return average(self.allDataSelectedMetric());
-                }
-            });
+            //var average = function (numbers) {
+            //    var sum = 0;
+            //    for (var i = 0; i < numbers.length; i++) {
+            //        sum += numbers[i] || 0;
+            //    }
+            //    return sum / numbers.length;
+            //};
+            //
+            //this.nationalAverage = ko.pureComputed(function () {
+            //    if (self.showNationalAverage()) {
+            //        return average(self.allDataSelectedMetric());
+            //    }
+            //});
 
             this.top10Percent = ko.pureComputed(function () {
                 if (self.showTop10Percent()) {
