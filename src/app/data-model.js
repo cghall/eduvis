@@ -25,6 +25,10 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.metaData = ko.observable([]);
             this.downloadSchoolData();
 
+            this.isBarSelected = ko.observable(true);
+            this.isTableSelected = ko.observable(false);
+            this.isMapSelected = ko.observable(false);
+
             this.viewLevel = ko.observable("Region");
             this.dataLevel = ko.observable("LEA");
 
@@ -147,6 +151,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
                     if (schools.length > 300) {
                         self.tooManySchools(true);
+                        if (self.isBarSelected()) {
+                            return [];
+                        }
                     }
                     self.tooManySchools(false);
                     return schools;
@@ -272,11 +279,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 }
             });
 
-            this.verticalChart = ko.observable(true);
-
-            this.isBarSelected = ko.observable(true);
-            this.isTableSelected = ko.observable(false);
-            this.isMapSelected = ko.observable(false);
+            this.verticalChart = ko.observable(false);
 
             this.updateCookie = ko.computed(this._updateCookie, this)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 500}});
