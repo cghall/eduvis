@@ -78,18 +78,27 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.pupilGroups = ko.pureComputed(function () {
-                return _(self.metaData())
+                var groups = _(self.metaData())
                     .where({metric: self.selectedMeasure()})
                     .pluck('pupils')
                     .sortBy(_.identity)
+                    .filter(_.identity)
                     .value();
+                console.log(groups)
+                return groups;
             });
             this.selectedPupilGroup = ko.observable();
 
             this.selectedMetric = ko.computed({
                 read: function () {
-                    var measure = _.findWhere(self.metaData(),
-                        {metric: self.selectedMeasure(), pupils: self.selectedPupilGroup()});
+                    var measure;
+                    if (self.selectedPupilGroup()) {
+                        measure = _.findWhere(self.metaData(),
+                            {metric: self.selectedMeasure(), pupils: self.selectedPupilGroup()});
+                    } else {
+                        measure = _.findWhere(self.metaData(),
+                            {metric: self.selectedMeasure()});
+                    }
                     return measure && measure.column
                 },
                 write: function (column) {

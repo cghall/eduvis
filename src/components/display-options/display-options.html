@@ -17,12 +17,12 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" data-bind="visible: pupilGroupOptions().length > 0">
                 <label for="selectPupilGroup" class="col-sm-3 control-label">Pupil group</label>
 
                 <div class="col-sm-9">
                     <select id="selectPupilGroup" class="form-control" data-bind="options: pupilGroupOptions,
-                                                                                      value: selectedPupilGroup"></select>
+                                                                                  value: selectedPupilGroup"></select>
                 </div>
             </div>
 
