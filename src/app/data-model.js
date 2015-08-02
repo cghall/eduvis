@@ -103,7 +103,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 write: function (column) {
                     var measure = _.findWhere(self.metaData(), {column: column});
                     self.selectedMeasure(measure && measure.metric);
-                    self.selectedPupilGroup(measure && measure.pupils);
+                    if (self.pupilGroups()) {
+                        self.selectedPupilGroup(measure && measure.pupils);
+                    }
                 },
                 owner: self
             });
