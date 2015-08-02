@@ -20,17 +20,18 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./ukmap.html
             });
 
             this.updateMap = ko.computed(function () {
-                console.log(Highcharts.maps['countries/gb/gb-all']);
 
-                var included_hc_keys = _(self.entities())
-                    .pluck('hc-key')
-                    .object(Array(self.entities().length).join('').split(''))
+                var included_hc_keys = _(dataModel.leas())
+                    .map(function(lea) {
+                        return hc_keys[lea];
+                    })
+                    .object(Array(dataModel.leas().length).join('').split(''))
                     .value();
 
                 var mapData = _.clone(Highcharts.maps['countries/gb/gb-all']);
 
                 mapData.features = _.filter(mapData.features, function(feature) {
-                   return feature.properties['hc-key'] in included_hc_keys;
+                    return feature.properties['hc-key'] in included_hc_keys;
                 });
 
                 if (params.isSelected()) {
@@ -63,10 +64,11 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./ukmap.html
 
                         legend: {
                             layout: 'vertical',
-                            borderWidth: 0,
-                            backgroundColor: 'rgba(255,255,255,0.5)',
-                            //floating: true,
-                            align: 'left'
+                            backgroundColor: 'rgba(255,255,255,0.85)',
+                            floating: true,
+                            align: 'left',
+                            borderWidth: 1,
+                            padding: 10,
                         },
 
                         series: [{
@@ -78,7 +80,10 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./ukmap.html
                             dataLabels: {
                                 enabled: true,
                                 color: 'white',
-                                format: '{point.LEA}'
+                                padding: 10,
+                                formatter: function() {
+                                    return this.point.properties && this.point.properties['hc-a2']
+                                }
                             },
                             name: dataModel.selectedMeasure(),
                             tooltip: {
