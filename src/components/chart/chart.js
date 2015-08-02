@@ -31,10 +31,11 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                 var schoolSeries = self.entitySeries();
                 var verticalChart = dataModel.verticalChart();
 
+                if (!params.isSelected()) {
+                    return;
+                }
+                
                 var checkExist = setInterval(function () {
-                    if (!params.isSelected()) {
-                        return;
-                    }
 
                     if (!dataModel.tooManySchools() && document.getElementById('myChart')) {
 
