@@ -22,10 +22,11 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                 });
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
+            this.selectionSummary = dataModel.selectionSummary;
+
             this.chart = ko.observable();
 
             this.updateBar = ko.computed(function () {
-                var measure = dataModel.selectedMetric();
                 var schoolNames = self.entityNames();
                 var schoolSeries = self.entitySeries();
                 var verticalChart = dataModel.verticalChart();
@@ -43,7 +44,7 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                 zoomType: 'x'
                             },
                             title: {
-                                text: dataModel.selectionSummary(),
+                                text: self.selectionSummary(),
                                 style: {
                                     fontSize: 15,
                                     fontWeight: "bold"

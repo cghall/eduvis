@@ -228,20 +228,27 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.selectionSummary = ko.pureComputed(function () {
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 var measureShort = measure && measure.metric;
-                if (self.viewLevel() === 'Region') {
-                    var viewRegion = self.selectedRegion() ? self.selectedRegion() : 'all regions';
-                    var dataShowing;
-                    if (self.dataLevel() == 'Region') {
-                        dataShowing = 'regions';
-                    } else if (self.dataLevel() == 'LEA') {
-                        dataShowing = ' local authorities';
-                    } else {
-                        dataShowing = ' schools'
-                    }
-                    return measureShort + ' for ' + dataShowing + viewRegion;
+
+                var dataShowing;
+                if (self.dataLevel() == 'Region') {
+                    dataShowing = 'regions';
+                } else if (self.dataLevel() == 'LEA') {
+                    dataShowing = 'local authorities';
+                } else {
+                    dataShowing = 'schools'
                 }
-                var lea = self.selectedLea() ? self.selectedLea() : 'all regions in the Great Britain';
-                return measureShort + ' for ' + dataShowing + ' in ' + lea;
+
+                var group;
+                if (self.viewLevel() == 'Region') {
+                    group = self.selectedRegion() ? self.selectedRegion() : 'Great Britain';
+                } else {
+                    var region = self.selectedRegion() ? self.selectedRegion() : 'Great Britain';
+                    group = self.selectedLea() ? self.selectedLea() : region;
+                }
+
+                var suffix = self.selectedMeasureSuffix() ? ' (' + self.selectedMeasureSuffix() + ')' : '';
+
+                return measureShort + suffix + ' for ' + dataShowing + ' in ' + group;
             });
 
             this.allDataSelectedMetric = ko.pureComputed(function () {

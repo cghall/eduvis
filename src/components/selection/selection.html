@@ -69,18 +69,18 @@
                 </div>
             </div>
 
-            <div class="form-group"
-                 data-bind="visible: !(dataLevel() === 'Region' && viewLevel() === 'Region')">
+            <div class="form-group">
+                 <!--data-bind="visible: !(dataLevel() === 'Region' && viewLevel() === 'Region')">-->
                 <label for="selectLEA" class="col-sm-3 control-label"
-                       data-bind="css: { 'text-warning': viewLevel() === 'LEA' && !selectedLea() }">
+                       data-bind="css: { 'text-warning': tooManySchools() || (viewLevel() === 'LEA' && !selectedLea()) }">
                     Local authority
                 </label>
 
                 <div class="col-sm-9" data-bind="css: { 'has-warning': tooManySchools() || (viewLevel() === 'LEA' && !selectedLea()) }">
                     <select id="selectLEA" class="form-control"
                             data-bind="options: leaOptions,
-                                           value: selectedLea,
-                                           optionsCaption: 'select a local authority...'"></select>
+                                       value: selectedLea,
+                                       optionsCaption: 'select a local authority...'"></select>
                 </div>
             </div>
 
