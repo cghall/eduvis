@@ -397,9 +397,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.includeAcademies(!('excludeAcademies' in options));
             this.includeFreeSchools(!('excludeFreeSchools' in options));
 
-            this.isBarSelected('isBarSelected' in options);
             this.isTableSelected('isTableSelected' in options);
             this.isMapSelected('isMapSelected' in options);
+            this.isBarSelected(!(this.isTableSelected() || this.isMapSelected()));
 
             this.showNationalAverage('showNationalAverage' in options && options.showNationalAverage);
             this.showTop10Percent('showTop10Percent' in options && options.showTop10Percent);
