@@ -25,8 +25,8 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.metaData = ko.observable([]);
             this.downloadSchoolData();
 
-            this.viewLevel = ko.observable("LEA");
-            this.dataLevel = ko.observable("School");
+            this.viewLevel = ko.observable("Region");
+            this.dataLevel = ko.observable("LEA");
 
             this.regions = ko.pureComputed(function () {
                 return _(self.allData())
