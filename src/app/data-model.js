@@ -161,7 +161,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                         .filter(self.isWithinFsmAndApsLimits())
                         .value();
 
-                    if (schools.length > 300) {
+                    if (schools.length > 500) {
                         self.tooManySchools(true);
                         if (self.isBarSelected() && self.dataLevel() === 'School') {
                             return [];
@@ -288,20 +288,6 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.showNationalAverage = ko.observable();
             this.showTop10Percent = ko.observable();
             this.showBottom10Percent = ko.observable();
-
-            //var average = function (numbers) {
-            //    var sum = 0;
-            //    for (var i = 0; i < numbers.length; i++) {
-            //        sum += numbers[i] || 0;
-            //    }
-            //    return sum / numbers.length;
-            //};
-            //
-            //this.nationalAverage = ko.pureComputed(function () {
-            //    if (self.showNationalAverage()) {
-            //        return average(self.allDataSelectedMetric());
-            //    }
-            //});
 
             this.top10Percent = ko.pureComputed(function () {
                 if (self.showTop10Percent()) {
