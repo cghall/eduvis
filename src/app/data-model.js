@@ -229,12 +229,19 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 var measure = _.findWhere(self.metaData(), {column: self.selectedMetric()});
                 var measureShort = measure && measure.metric;
                 if (self.viewLevel() === 'Region') {
-                    var region = self.selectedRegion() ? self.selectedRegion() : 'all regions';
-                    var groupedBy = self.dataLevel() === 'LEA' ? ' grouped by local authority' : '';
-                    return measureShort + ' for ' + region + groupedBy;
+                    var viewRegion = self.selectedRegion() ? self.selectedRegion() : 'all regions';
+                    var dataShowing;
+                    if (self.dataLevel() == 'Region') {
+                        dataShowing = 'regions';
+                    } else if (self.dataLevel() == 'LEA') {
+                        dataShowing = ' local authorities';
+                    } else {
+                        dataShowing = ' schools'
+                    }
+                    return measureShort + ' for ' + dataShowing + viewRegion;
                 }
                 var lea = self.selectedLea() ? self.selectedLea() : 'all regions in the Great Britain';
-                return measureShort + ' for ' + lea;
+                return measureShort + ' for ' + dataShowing + ' in ' + lea;
             });
 
             this.allDataSelectedMetric = ko.pureComputed(function () {
