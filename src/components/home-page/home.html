@@ -1,9 +1,10 @@
-<div class="container-fluid">
-    <div data-bind="ifnot: schoolDataLoaded">
-        <loading></loading>
-    </div>
+<div data-bind="ifnot: false">
+    <loading></loading>
+</div>
 
-    <div id="mainContent" class="container-fluid" data-bind="if: schoolDataLoaded">
+<div class="container-fluid">
+
+    <div id="mainContent" class="container-fluid" data-bind="if: false">
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
