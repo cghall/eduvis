@@ -240,9 +240,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
                 var group;
                 if (self.viewLevel() == 'Region') {
-                    group = self.selectedRegion() ? self.selectedRegion() : 'Great Britain';
+                    group = self.selectedRegion() ? self.selectedRegion() : 'England';
                 } else {
-                    var region = self.selectedRegion() ? self.selectedRegion() : 'Great Britain';
+                    var region = self.selectedRegion() ? self.selectedRegion() : 'England';
                     group = self.selectedLea() ? self.selectedLea() : region;
                 }
 
