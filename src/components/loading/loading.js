@@ -5,7 +5,7 @@ define(['knockout', 'underscore', 'text!./loading.html'], function (ko, _, templ
     }
 
     var ellipsis = {
-        'value': ['&nbsp;', '.', '..', '...'],
+        'value': ['&nbsp;&nbsp;&nbsp;&nbsp;', '.&nbsp;&nbsp;&nbsp;', '..&nbsp;&nbsp;', '...&nbsp;'],
         'count': 0,
         'run': false,
         'timer': null,
