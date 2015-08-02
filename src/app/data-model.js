@@ -151,7 +151,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
                     if (schools.length > 300) {
                         self.tooManySchools(true);
-                        if (self.isBarSelected()) {
+                        if (self.isBarSelected() && self.dataLevel() === 'School') {
                             return [];
                         }
                     }
