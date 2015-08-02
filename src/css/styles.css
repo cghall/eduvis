@@ -50,6 +50,18 @@
 	content:"\e080";
 }
 
+.panel-heading {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	color: #333333;
+	background-color: #f5f5f5;
+	border-color: #dddddd;
+}
+
+.form-group {
+	margin-bottom: 5px;
+}
+
 .nav-tabs > li > a
 {
 	padding-top: 6px;
@@ -68,10 +80,6 @@ label.btn > input[type='radio']
 }
 
 .dropdown-menu {
-	width: 100%;
-}
-
-.btn{
 	width: 100%;
 }
 

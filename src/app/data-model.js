@@ -279,7 +279,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 }
             });
 
-            this.verticalChart = ko.observable(false);
+            this.verticalChart = ko.observable(true);
 
             this.updateCookie = ko.computed(this._updateCookie, this)
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 500}});

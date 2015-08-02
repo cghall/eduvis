@@ -7,6 +7,8 @@ define(['knockout', 'underscore', 'data-model', 'text!./selection.html', 'knocko
             this.viewLevel = dataModel.viewLevel;
             this.dataLevel = dataModel.dataLevel;
 
+            this.tooManySchools = dataModel.tooManySchools;
+
             this.regionOptions = dataModel.regions;
             this.selectedRegion = dataModel.selectedRegion;
 

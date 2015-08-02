@@ -1,49 +1,54 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <a data-toggle="collapse" data-target="#collapseMeasures" name="collapseMeasures">
-                Measures
-            </a>
-        </h3>
-    </div>
-    <div id="collapseMeasures" class="panel-collapse collapse in">
-        <div class="panel-body">
-            <label class="control-label">
-                Measure
-                <select class="form-control" data-bind="options: measureOptions,
-                                                            value: selectedMeasure"></select>
-            </label>
+<div class="panel-heading">
+    <a data-toggle="collapse" data-target="#collapseMeasures" name="collapseMeasures">
+        Select metrics
+    </a>
+</div>
+<div id="collapseMeasures" class="panel-collapse collapse in">
+    <div class="panel-body">
 
-            <label class="control-label">
-                Pupil group
-                <select class="form-control" data-bind="options: pupilGroupOptions,
-                                                            value: selectedPupilGroup"></select>
-            </label>
-        </div>
-    </div>
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <a data-toggle="collapse" data-target="#collapseDispAvg" name="collapseDispAvg">
-                Display Averages
-            </a>
-        </h3>
-    </div>
-    <div id="collapseDispAvg" class="panel-collapse collapse in">
-        <div class="panel-body">
-            <div class="checkbox">
-                <label>
-                    <input id="nat-avg" type="checkbox" value="" data-bind="checked: showNationalAverage">
-                    National
-                </label><br>
-                <label>
-                    <input id="top-avg" type="checkbox" value="" data-bind="checked: showTop10Percent">
-                    Top 10%
-                </label><br>
-                <label>
-                    <input id="bot-avg" type="checkbox" value="" data-bind="checked: showBottom10Percent">
-                    Bottom 10%
-                </label>
+        <form class="form-horizontal">
+
+            <div class="form-group">
+                <label for="selectMeasure" class="col-sm-3 control-label">Metric</label>
+
+                <div class="col-sm-9">
+                    <select id="selectMeasure" class="form-control" data-bind="options: measureOptions,
+                                                                                   value: selectedMeasure"></select>
+                </div>
             </div>
+
+            <div class="form-group">
+                <label for="selectPupilGroup" class="col-sm-3 control-label">Pupil group</label>
+
+                <div class="col-sm-9">
+                    <select id="selectPupilGroup" class="form-control" data-bind="options: pupilGroupOptions,
+                                                                                      value: selectedPupilGroup"></select>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div class="panel-heading">
+    <a data-toggle="collapse" data-target="#collapseDispAvg" name="collapseDispAvg">
+        Comparators
+    </a>
+</div>
+<div id="collapseDispAvg" class="panel-collapse collapse in">
+    <div class="panel-body">
+        <div class="checkbox">
+            <label>
+                <input id="nat-avg" type="checkbox" value="" data-bind="checked: showNationalAverage">
+                National average
+            </label>
+            <label>
+                <input id="top-avg" type="checkbox" value="" data-bind="checked: showTop10Percent">
+                Top 10%
+            </label>
+            <label>
+                <input id="bot-avg" type="checkbox" value="" data-bind="checked: showBottom10Percent">
+                Bottom 10%
+            </label>
         </div>
     </div>
 </div>
