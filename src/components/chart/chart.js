@@ -1,4 +1,4 @@
-define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html'],
+define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html', 'highcharts-export'],
     function (ko, Highcharts, _, dataModel, templateMarkup) {
 
         function Chart(params) {

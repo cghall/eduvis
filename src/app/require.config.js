@@ -9,6 +9,7 @@ var require = {
         "hasher":               "bower_modules/hasher/dist/js/hasher.min",
         "gb-map":               "other_vendor/gb-all",
         "highcharts":           "bower_modules/highstock-release/highstock",
+        "highcharts-export":    "bower_modules/highstock-release/modules/exporting",
         "highmaps":             "bower_modules/highmaps-release/modules/map.src",
         "jquery":               "bower_modules/jquery/dist/jquery",
         "jquery-ui":            "bower_modules/jquery-ui/ui",
@@ -27,6 +28,9 @@ var require = {
         "highcharts": {
             exports: "Highcharts",
             deps: ["jquery", "proj4"]
+        },
+        "highcharts-export": {
+            deps: ["highcharts"]
         },
         "highmaps": {
             deps: ["highcharts"]
