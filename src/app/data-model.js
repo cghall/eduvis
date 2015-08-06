@@ -216,17 +216,20 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                     groups.push(group);
                 });
 
-                console.log(groups)
-
                 return groups;
             };
 
             this.nationalAverage = ko.pureComputed(function() {
-                var divisor = _.findWhere(self.metaData(), {column: self.selectedMetric()}).group_divisor;
+                var metric = _.findWhere(self.metaData(), {column: self.selectedMetric()});
+                if (!metric) {
+                    return [];
+                }
+                var divisor = metric.group_divisor;
                 var weightedMetric = self.selectedMetric() + '_weighted';
                 var grouped = {'all' : self.allData()};
                 return self.weightedAverage(grouped, divisor, weightedMetric)[0][self.selectedMetric()];
-            });
+            })
+                .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.entities = ko.computed(function () {
                 if (self.dataLevel() == 'School') {

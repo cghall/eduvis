@@ -145,17 +145,30 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
             }).extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 150}});
 
 
+            this.style = function() {
+                return {
+                    backgroundColor: 'white',
+                    border: '1px solid #777777',
+                    padding: '2px',
+                    'border-radius': '5px',
+                    opacity: '0.9'
+                }
+            };
+
             this.nationalAverageLine = ko.pureComputed(function () {
                 return dataModel.showNationalAverage() && {
                         id: 'nat',
-                        color: 'rgb(255, 204, 0)',
+                        color: 'rgb(230, 170, 0)',
                         width: 2,
                         value: dataModel.nationalAverage(),
                         zIndex: 5,
+                        dashStyle: 'dash',
                         label: {
                             align: 'center',
                             verticalAlign: 'middle',
-                            text: 'national'
+                            text: 'national',
+                            style: self.style(),
+                            useHTML: true
                         }
                     };
             });
@@ -163,15 +176,18 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
             this.top10Line = ko.pureComputed(function () {
                 return dataModel.showTop10Percent() && {
                         id: 'top',
-                        color: 'rgb(51, 204, 51)',
+                        color: 'rgb(0, 163, 101)',
                         width: 2,
                         value: dataModel.top10Percent(),
                         zIndex: 5,
+                        dashStyle: 'dash',
                         label: {
                             text: 'top 10%',
                             align: 'right',
                             verticalAlign: 'bottom',
-                            y: -5
+                            y: -5,
+                            style: self.style(),
+                            useHTML: true
                         }
                     };
             });
@@ -179,13 +195,16 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
             this.bottom10Line = ko.pureComputed(function () {
                 return dataModel.showBottom10Percent() && {
                         id: 'bot',
-                        color: 'rgb(255, 51, 0)',
+                        color: 'rgb(149, 46, 0)',
                         width: 2,
                         value: dataModel.bottom10Percent(),
                         zIndex: 5,
+                        dashStyle: 'dash',
                         label: {
                             text: 'bottom 10%',
-                            verticalAlign: 'top'
+                            verticalAlign: 'top',
+                            style: self.style(),
+                            useHTML: true
                         }
                     };
             });
