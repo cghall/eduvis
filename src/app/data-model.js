@@ -193,6 +193,14 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
                 $.each(grouped, function(groupName, schools) {
 
+                    schools = _.filter(schools, function(school) {
+                        return $.isNumeric(school[weightedMetric]) && $.isNumeric(school[divisor]);
+                    });
+
+                    if (schools.length == 0) {
+                        return;
+                    }
+
                     var weightedMetricSum = _.reduce(schools, function(memo, school){
                         var value = $.isNumeric(school[weightedMetric]) ? school[weightedMetric] : 0;
                         return memo + value;
@@ -207,6 +215,8 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                     group[self.selectedMetric()] = Math.round((weightedMetricSum / divisorSum) * multiplier);
                     groups.push(group);
                 });
+
+                console.log(groups)
 
                 return groups;
             };
