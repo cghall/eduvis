@@ -61,9 +61,10 @@ def add_region(row, df):
 merged_df['REGION'] = merged_df.apply (lambda row: add_region(row, lea_codes), axis = 1)
                          
 # Replace LEA codes with descriptive code
-lea_codes['NAME'] = lea_codes['LEA_NAME'] +' '+'('+lea_codes['LEA_CODE'].astype(str)+')'
-lea_dict = lea_codes.set_index('LEA_CODE')['NAME'].to_dict()
-merged_df = merged_df.replace({'LEA': lea_dict})
+##lea_codes['NAME'] = lea_codes['LEA_NAME'] +' '+'('+lea_codes['LEA_CODE'].astype(str)+')'
+lea_dict = lea_codes.set_index('LEA_CODE')['LEA_NAME'].to_dict()
+merged_df['LEA_NAME'] = merged_df['LEA']
+merged_df = merged_df.replace({'LEA_NAME': lea_dict})
 
 # Function that parses percentage columns into float or None
 def parse_percentage(value):
