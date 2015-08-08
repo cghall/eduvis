@@ -67,6 +67,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.apsMax = ko.observable(30);
 
             this.fsmSummary = ko.pureComputed(function() {
+                if (self.fsmMin() === self.fsmMax()) {
+                    return self.fsmMax() + '% of pupils disadvantaged';
+                }
                 if (self.fsmMin() > 0 && self.fsmMax() < 100){
                    return self.fsmMin() + ' - ' + self.fsmMax() + '% of pupils disadvantaged';
                 } if (self.fsmMin() > 0 && self.fsmMax() === 100){
@@ -78,6 +81,9 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             });
 
             this.apsSummary = ko.pureComputed(function() {
+                if (self.apsMin() === self.apsMax()) {
+                    return 'an APS of ' + self.apsMin();
+                }
                 if (self.apsMin() > 0 && self.apsMax() < 30){
                    return self.apsMin() + ' - ' + self.apsMax() + 'APS';
                 } if (self.apsMin() > 15 && self.apsMax() === 30){
