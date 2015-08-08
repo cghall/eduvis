@@ -51,7 +51,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                         var region = self.selectedRegion();
                         return !region || (region && school.REGION === region);
                     })
-                    .pluck('LEA')
+                    .pluck('LEA_NAME')
                     .sortBy(_.identity)
                     .uniq(true)
                     .value();
@@ -78,13 +78,12 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 .extend({rateLimit: {method: "notifyWhenChangesStop", timeout: 50}});
 
             this.pupilGroups = ko.pureComputed(function () {
-                var groups = _(self.metaData())
+                return _(self.metaData())
                     .where({metric: self.selectedMeasure()})
                     .pluck('pupils')
                     .filter(_.identity)
                     .sortBy(_.identity)
                     .value();
-                return groups;
             });
             this.selectedPupilGroup = ko.observable();
 
@@ -138,7 +137,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                     if (self.viewLevel() == 'Region' && self.selectedRegion()) {
                         filtered = _.where(self.allData(), { REGION: self.selectedRegion() });
                     } else if (self.viewLevel() == 'LEA') {
-                        filtered = _.where(self.allData(), { LEA: self.selectedLea() })
+                        filtered = _.where(self.allData(), { LEA_NAME: self.selectedLea() })
                     }
 
                     var partitioned = _.partition(filtered, self.hasNumericData);
@@ -238,7 +237,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
 
                 } else if (self.selectedMetric()){
 
-                    var grouping = self.dataLevel() === 'LEA' ? 'LEA' : 'REGION';
+                    var grouping = self.dataLevel() === 'LEA' ? 'LEA_NAME' : 'REGION';
                     var byGroup = _.groupBy(self.schools(), grouping);
                     var divisor = _.findWhere(self.metaData(), {column: self.selectedMetric()}).group_divisor;
                     var weightedMetric = self.selectedMetric() + '_weighted';
