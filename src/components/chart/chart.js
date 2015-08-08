@@ -26,10 +26,15 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
 
             this.chart = ko.observable();
 
+            this.verticalChart = dataModel.verticalChart;
+
+            this.filterSummary = dataModel.filterSummary;
+
             this.updateBar = ko.computed(function () {
                 var schoolNames = self.entityNames();
                 var schoolSeries = self.entitySeries();
-                var verticalChart = dataModel.verticalChart();
+                var verticalChart = self.verticalChart();
+                var filterSummary = self.filterSummary();
 
                 if (!params.isSelected()) {
                     return;
@@ -50,6 +55,9 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                     fontSize: 15,
                                     fontWeight: "bold"
                                 }
+                            },
+                            subtitle: {
+                                text: filterSummary
                             },
                             xAxis: {
                                 categories: schoolNames,
@@ -123,16 +131,10 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                     }
                                 }
                             };
-                            chartOptions.subtitle = {
-                                text: "Use the navigation bar at the bottom to zoom and scroll."
-                            };
                         } else {
                             chartOptions.chart.type = 'bar';
                             chartOptions.scrollbar = {
                                 enabled: true
-                            };
-                            chartOptions.subtitle = {
-                                text: "Click and drag to zoom. Use the scroll bar at the bottom to scroll. Click 'Reset Zoom' to reset selection."
                             };
                         }
 

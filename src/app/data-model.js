@@ -66,6 +66,56 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
             this.apsMin = ko.observable(15);
             this.apsMax = ko.observable(30);
 
+            this.fsmSummary = ko.pureComputed(function() {
+                if (self.fsmMin() > 0 && self.fsmMax() < 100){
+                   return self.fsmMin() + ' - ' + self.fsmMax() + '% of pupils disadvantaged';
+                } if (self.fsmMin() > 0 && self.fsmMax() === 100){
+                    return 'more than ' + self.fsmMin() + '% of pupils disadvantaged';
+                } if (self.fsmMin() === 0 && self.fsmMax() < 100){
+                    return 'less than ' + self.fsmMax() + '% of pupils disadvantaged';
+                }
+                return '';
+            });
+
+            this.apsSummary = ko.pureComputed(function() {
+                if (self.apsMin() > 0 && self.apsMax() < 30){
+                   return self.apsMin() + ' - ' + self.apsMax() + 'APS';
+                } if (self.apsMin() > 15 && self.apsMax() === 30){
+                    return 'an APS of more than ' + self.apsMin();
+                } if (self.apsMin() === 15 && self.apsMax() < 30){
+                    return 'an APS of less than ' + self.apsMax();
+                }
+                return '';
+            });
+
+            this.filterSummary = ko.pureComputed(function() {
+                var includesObject = {
+                    'local authority maintained' : self.includeLaMaintained(),
+                    'free' : self.includeFreeSchools(),
+                    'academy' : self.includeAcademies()
+                };
+                var included = _(includesObject)
+                    .pick(_.identity)
+                    .keys()
+                    .value();
+
+                var includesStr = '';
+                if (included.length < 3 && included.length > 0) {
+                    includesStr = included.join(' and ');
+                }
+
+                var numericFilters = _.filter([self.fsmSummary(), self.apsSummary()], _.identity);
+                var numericStr = numericFilters.join(' and ');
+
+                var summary = '';
+                if (includesStr || numericStr) {
+                    summary = (includesStr + ' schools');
+                    summary += numericStr ? ' with ' + numericStr : '';
+                    return 'Including only ' + summary.trim();
+                }
+                return summary;
+            });
+
             this.measures = ko.pureComputed(function () {
                 return _(self.metaData())
                     .pluck('metric')
