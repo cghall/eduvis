@@ -64,7 +64,8 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./chart.html
                                     text: null
                                 },
                                 min: dataModel.measureMin(),
-                                max: dataModel.measureMax()
+                                max: dataModel.measureMax(),
+                                gridLineColor: '#e9e9e9'
                             },
                             plotOptions: {
                                 series: {
