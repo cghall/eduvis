@@ -6,6 +6,7 @@ var require = {
         "cookie-manager":       "app/cookie-manager",
         "crossroads":           "bower_modules/crossroads/dist/crossroads.min",
         "data-model":           "app/data-model",
+        "datatables":           "bower_modules/DataTables/media/js/jquery.dataTables",
         "hasher":               "bower_modules/hasher/dist/js/hasher.min",
         "gb-map":               "other_vendor/gb-all",
         "highcharts":           "bower_modules/highstock-release/highstock",
@@ -24,7 +25,9 @@ var require = {
         "underscore":           "bower_modules/lodash/lodash.min"
     },
     shim: {
-        "bootstrap": { deps: ["jquery"] },
+        "bootstrap": {
+            deps: ["jquery"]
+        },
         "highcharts": {
             exports: "Highcharts",
             deps: ["jquery", "proj4"]

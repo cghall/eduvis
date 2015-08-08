@@ -16,10 +16,9 @@ define(['jquery', 'knockout', './router', 'bootstrap', 'knockout-projections'], 
     ko.components.register('display-options', { require: 'components/display-options/display-options' });
     ko.components.register('sharing', { require: 'components/sharing/sharing' });
     ko.components.register('chart-description', { require: 'components/chart-description/chart-description' });
-
     ko.components.register('filter', { require: 'components/filter/filter' });
-
     ko.components.register('ukmap', { require: 'components/ukmap/ukmap' });
+    ko.components.register('tableview', { require: 'components/tableview/tableview' });
 
     // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
 

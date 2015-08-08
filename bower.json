@@ -20,7 +20,8 @@
     "lodash": "~3.10.0",
     "highmaps-release": "~1.1.7",
     "proj4": "~2.3.6",
-    "highstock-release": "~2.1.7"
+    "highstock-release": "~2.1.7",
+    "DataTables": "~1.10.7"
   },
   "resolutions": {
     "knockout": "~3.3.0-alpha"
