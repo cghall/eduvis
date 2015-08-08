@@ -28,6 +28,21 @@ define(['knockout', 'underscore', 'data-model', 'text!./selection.html', 'knocko
             this.selectedSchoolsIncludedAlphabetical = ko.pureComputed(function () {
                 return _.sortBy(dataModel.schools(), 'SCHNAME');
             });
+
+            this.updateFromLeaChange = function () {
+               if (self.dataLevel() === 'School' && self.viewLevel() === 'Region' && self.selectedLea()) {
+                   self.viewLevel('LEA');
+               }
+            };
+
+            this.updateFromWithinChange = ko.computed(function () {
+                if (self.dataLevel() === 'LEA' && self.viewLevel() === 'LEA') {
+                    self.viewLevel('Region');
+                }
+                if (self.dataLevel() == 'School' && !self.selectedLea()) {
+                    self.viewLevel('Region');
+                }
+            });
         }
 
         return {viewModel: Selection, template: templateMarkup};

@@ -190,7 +190,7 @@ define(["knockout", "jquery", "underscore", "papaparse", "cookie-manager"],
                 read: function () {
                     var filtered = self.allData();
 
-                    if (self.viewLevel() == 'Region' && self.selectedRegion()) {
+                    if (self.viewLevel() == 'Region' && self.dataLevel() !== 'Region' && self.selectedRegion()) {
                         filtered = _.where(self.allData(), { REGION: self.selectedRegion() });
                     } else if (self.viewLevel() == 'LEA') {
                         filtered = _.where(self.allData(), { LEA_NAME: self.selectedLea() })
