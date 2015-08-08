@@ -19,7 +19,10 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./ukmap.html
                 })
             });
 
+            this.dataLevel = dataModel.dataLevel;
+
             this.updateMap = ko.computed(function () {
+                var filterSummary = dataModel.filterSummary();
 
                 var included_hc_keys = _(dataModel.leas())
                     .map(function(lea) {
@@ -48,6 +51,9 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./ukmap.html
                                 fontWeight: "bold"
                             }
                         },
+                        subtitle: {
+                            text: filterSummary
+                        },
 
                         mapNavigation: {
                             enabled: true
@@ -67,8 +73,10 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./ukmap.html
                             backgroundColor: 'rgba(255,255,255,0.85)',
                             floating: true,
                             align: 'left',
-                            borderWidth: 1,
-                            padding: 10,
+                            //borderWidth: 1,
+                            valueSuffix: '%ss',
+                            valueDecimals: 0,
+                            enabled: true
                         },
 
                         series: [{

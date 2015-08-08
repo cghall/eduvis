@@ -3,5 +3,10 @@
 
 <div style="width:100%;"
      data-bind="visible: entities() && entities().length == 0">
-    <p>No schools matched the selected filters. Please try different parameters.</p>
+    <p data-bind="visible: dataLevel() === 'LEA'">
+        No schools matched the selected filters. Please try different parameters.
+    </p>
+    <p data-bind="visible: dataLevel() !== 'LEA'">
+        Current view not available. New map views are coming soon for entire regions and individual schools.
+    </p>
 </div>
