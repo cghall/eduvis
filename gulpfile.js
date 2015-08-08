@@ -49,8 +49,9 @@ gulp.task('css', function () {
         fontAwesomeCss = gulp.src('src/bower_modules/components-font-awesome/css/font-awesome.min.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
         jqueryuiCss = gulp.src('src/bower_modules/jquery-ui/themes/base/jquery-ui.css'),
+        datatablesCss = gulp.src('src/bower_modules/DataTables/media/css/jquery.dataTables.css'),
         appCss = gulp.src('src/css/*.css'),
-        combinedCss = es.concat(bowerCss, fontAwesomeCss, jqueryuiCss, appCss).pipe(concat('css.css')),
+        combinedCss = es.concat(bowerCss, fontAwesomeCss, jqueryuiCss, datatablesCss, appCss).pipe(concat('css.css')),
         bootstrapFontFiles = gulp.src('./src/bower_modules/bootstrap/dist/fonts/*', { base: './src/bower_modules/bootstrap/dist' }),
         fontAwesomeFontFiles = gulp.src('./src/bower_modules/components-font-awesome/fonts/*', { base: './src/bower_modules/components-font-awesome/' });
     return es.concat(bootstrapFontFiles, fontAwesomeFontFiles, combinedCss)
