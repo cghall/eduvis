@@ -76,8 +76,8 @@ gulp.task('csv', function() {
 });
 
 gulp.task('img', function() {
-    return gulp.src('./src/img/*')
-        .pipe(gulp.dest('./dist/img/'));
+    return gulp.src('./src/images/*')
+        .pipe(gulp.dest('./dist/images/'));
 });
 
 // Removes all files from ./dist/
