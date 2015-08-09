@@ -13,7 +13,9 @@ define(['knockout', 'highcharts', 'underscore', 'data-model', 'text!./ukmap.html
                     return [];
                 }
 
-                return _.each(dataModel.entities(), function (entity) {
+                var entities = _.clone(dataModel.entities());
+
+                return _.each(entities, function (entity) {
                     entity['hc-key'] = hc_keys[entity.SCHNAME];
                     entity['value'] = entity[dataModel.selectedMetric()];
                 })
